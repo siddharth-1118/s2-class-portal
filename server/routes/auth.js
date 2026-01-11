@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../db');
 const { OAuth2Client } = require('google-auth-library');
 
-const ADMIN_EMAIL = 'saisiddharthvooka@gmail.com';
+const ADMIN_EMAILS = ['saisiddharthvooka@gmail.com', 'kothaig2@srmist.edu.in'];
 const STUDENT_DOMAIN = '@srmist.edu.in';
 
 // REGISTER
@@ -17,7 +17,7 @@ router.post('/register', async (req, res) => {
     }
 
     let role = 'student';
-    if (email === ADMIN_EMAIL) {
+    if (ADMIN_EMAILS.includes(email)) {
         role = 'admin';
     } else if (!email.endsWith(STUDENT_DOMAIN)) {
         return res.status(403).json({ message: `Only emails ending in ${STUDENT_DOMAIN} are allowed.` });
@@ -76,7 +76,7 @@ router.post('/google', async (req, res) => {
         const name = payload.name || email.split('@')[0];
 
         let role = 'student';
-        if (email === ADMIN_EMAIL) {
+        if (ADMIN_EMAILS.includes(email)) {
             role = 'admin';
         } else if (!email.endsWith(STUDENT_DOMAIN)) {
             return res.status(403).json({ message: `Only emails ending in ${STUDENT_DOMAIN} are allowed.` });
