@@ -59,6 +59,17 @@ app.get('/', (req, res) => {
     res.send('Homework API is running');
 });
 
+app.get('/api/seed', (req, res) => {
+    try {
+        const seed = require('./scripts/seed_students');
+        seed();
+        res.send('Seeding initiated successfully. Check logs/db.');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error seeding: ' + err.message);
+    }
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/homework', homeworkRoutes);
 app.use('/api/notifications', notifRoutes.router);
