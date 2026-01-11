@@ -32,6 +32,58 @@ const StudentDashboard = () => {
     const [timetable, setTimetable] = useState([]);
     const [isSubscribed, setIsSubscribed] = useState(false);
 
+    // CGPA State
+    const [cgpaCredits, setCgpaCredits] = useState({});
+    const [calculatedCGPA, setCalculatedCGPA] = useState(null);
+
+    const calculateGradePoint = (score, max) => {
+        const percentage = (score / max) * 100;
+        if (percentage >= 90) return 10;
+        if (percentage >= 80) return 9;
+        if (percentage >= 70) return 8;
+        if (percentage >= 60) return 7;
+        if (percentage >= 50) return 6;
+        if (percentage >= 40) return 5;
+        return 0;
+    };
+
+    const getUniqueSubjects = () => {
+        const subjects = {};
+        marks.forEach(m => {
+            if (!subjects[m.subject]) {
+                subjects[m.subject] = { totalScore: 0, totalMax: 0, count: 0 };
+            }
+            subjects[m.subject].totalScore += parseFloat(m.score);
+            subjects[m.subject].totalMax += parseFloat(m.max_marks);
+            subjects[m.subject].count++;
+        });
+        return Object.keys(subjects).map(sub => {
+            const s = subjects[sub];
+            const avgPercentage = (s.totalScore / s.totalMax) * 100;
+            return {
+                subject: sub,
+                percentage: avgPercentage.toFixed(1),
+                gradePoint: calculateGradePoint(s.totalScore, s.totalMax)
+            };
+        });
+    };
+
+    const handleCalculateCGPA = () => {
+        const subjects = getUniqueSubjects();
+        let totalPoints = 0;
+        let totalCredits = 0;
+
+        subjects.forEach(s => {
+            const credit = parseFloat(cgpaCredits[s.subject] || 0);
+            if (credit > 0) {
+                totalPoints += s.gradePoint * credit;
+                totalCredits += credit;
+            }
+        });
+
+        setCalculatedCGPA(totalCredits === 0 ? 0 : (totalPoints / totalCredits).toFixed(2));
+    };
+
     // Profile Lock State
     const [showProfileModal, setShowProfileModal] = useState(false);
     const [mobile, setMobile] = useState('');
@@ -219,6 +271,7 @@ const StudentDashboard = () => {
                             <button onClick={() => setActiveTab('homework')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'homework' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>Assignments</button>
                             <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>My Grades</button>
                             <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'timetable' ? 'bg-orange-500 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>TimeTable</button>
+                            <button onClick={() => setActiveTab('cgpa')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'cgpa' ? 'bg-emerald-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>CGPA</button>
                         </div>
 
                         <button onClick={subscribeToPush} className={`p-3 rounded-full shadow-md transition ${isSubscribed ? 'bg-green-100 text-green-700' : 'bg-white text-indigo-600 hover:bg-indigo-50'}`}>
@@ -319,6 +372,63 @@ const StudentDashboard = () => {
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'cgpa' && (
+                        <div className="glass-card rounded-2xl p-8 bg-white/80 min-h-[500px]">
+                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><GraduationCap className="w-6 h-6 text-emerald-600" /> CGPA Estimator</h2>
+                            <div className="mb-6 bg-emerald-50 border border-emerald-100 p-4 rounded-xl text-emerald-800 text-sm">
+                                <p><strong>How it works:</strong> We calculate your average score percentage for each subject. You assign the credit value (e.g., 3 or 4) for each subject. We then use a standard 10-point grading scale to estimate your CGPA.</p>
+                            </div>
+
+                            <div className="overflow-hidden rounded-xl border border-gray-200 shadow-sm mb-6">
+                                <table className="w-full text-left">
+                                    <thead className="bg-emerald-50">
+                                        <tr>
+                                            <th className="p-4 font-bold text-emerald-800">Subject</th>
+                                            <th className="p-4 font-bold text-emerald-800">Avg %</th>
+                                            <th className="p-4 font-bold text-emerald-800">Grade Point</th>
+                                            <th className="p-4 font-bold text-emerald-800 w-32">Credits</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-100 bg-white">
+                                        {getUniqueSubjects().map((sub, i) => (
+                                            <tr key={i} className="hover:bg-emerald-50/30 transition">
+                                                <td className="p-4 font-semibold text-gray-700">{sub.subject}</td>
+                                                <td className="p-4 text-gray-500">{sub.percentage}%</td>
+                                                <td className="p-4 font-bold text-emerald-600">{sub.gradePoint}</td>
+                                                <td className="p-4">
+                                                    <input
+                                                        type="number"
+                                                        min="1" max="10"
+                                                        className="w-full border border-gray-300 rounded px-2 py-1 focus:ring-emerald-500 focus:border-emerald-500"
+                                                        value={cgpaCredits[sub.subject] || ''}
+                                                        onChange={(e) => setCgpaCredits({ ...cgpaCredits, [sub.subject]: e.target.value })}
+                                                        placeholder="e.g 4"
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-6 bg-emerald-900 rounded-2xl text-white shadow-xl">
+                                <div className="text-center md:text-left">
+                                    <h3 className="text-xl font-bold opacity-90">Estimated CGPA</h3>
+                                    <div className="text-4xl font-extrabold mt-1 text-emerald-400">
+                                        {calculatedCGPA !== null ? calculatedCGPA : '-.--'}
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={handleCalculateCGPA}
+                                    className="bg-white text-emerald-900 font-bold py-3 px-8 rounded-xl hover:bg-emerald-100 transition shadow-lg"
+                                >
+                                    Calculate Now
+                                </button>
+                            </div>
+                            {getUniqueSubjects().length === 0 && <p className="text-center text-gray-400 py-10 mt-4">No marks recorded to calculate CGPA.</p>}
                         </div>
                     )}
                 </main>
