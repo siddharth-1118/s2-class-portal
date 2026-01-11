@@ -25,37 +25,59 @@ router.post('/subscribe', (req, res) => {
 
     try {
         const stmt = db.prepare('INSERT OR REPLACE INTO subscriptions (user_email, endpoint, keys) VALUES (?, ?, ?)');
+        stmt.run(user_email, endpoint, JSON.stringify(keys));
+        res.status(201).json({ message: 'Subscribed' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error subscribing' });
     }
 });
 
-// Function to send notifications to ALL subscribers (or filter by email)
+// Helper to send to a specific subscription
+const sendToSubscription = (sub, payload) => {
+    try {
+        const pushSubscription = {
+            endpoint: sub.endpoint,
+            keys: JSON.parse(sub.keys)
+        };
+        console.log(`Sending to ${sub.user_email}...`);
+
+        webpush.sendNotification(pushSubscription, JSON.stringify(payload))
+            .then(res => console.log("Sent successfully to", sub.user_email))
+            .catch(err => {
+                console.error("Error sending notification to", sub.user_email, err);
+                if (err.statusCode === 410) {
+                    console.log("Subscription expired, deleting...");
+                    db.prepare('DELETE FROM subscriptions WHERE id = ?').run(sub.id);
+                }
+            });
+    } catch (e) {
+        console.error("Error parsing subscription keys for", sub.id, e);
+    }
+};
+
+// Function to send notifications to ALL subscribers
 const sendNotificationToAll = async (payload) => {
-    console.log("Sending Nofitications...", payload);
+    console.log("Sending Notifications to ALL...", payload);
     const stmt = db.prepare('SELECT * FROM subscriptions');
     const subscriptions = stmt.all();
     console.log(`Found ${subscriptions.length} subscriptions`);
 
-    subscriptions.forEach(sub => {
-        try {
-            const subscriptionConfig = JSON.parse(sub.keys);
-            console.log(`Sending to ${sub.user_email}...`);
-
-            webpush.sendNotification(subscriptionConfig, JSON.stringify(payload))
-                .then(res => console.log("Sent successfully to", sub.user_email))
-                .catch(err => {
-                    console.error("Error sending notification to", sub.user_email, err);
-                    if (err.statusCode === 410) {
-                        console.log("Subscription expired, deleting...");
-                        db.prepare('DELETE FROM subscriptions WHERE id = ?').run(sub.id);
-                    }
-                });
-        } catch (e) {
-            console.error("Error parsing subscription keys for", sub.id, e);
-        }
-    });
+    subscriptions.forEach(sub => sendToSubscription(sub, payload));
 };
 
-module.exports = { router, sendNotificationToAll };
+// Function to send notification to a SPECIFIC user by Email
+const sendNotificationToUser = async (email, payload) => {
+    console.log(`Sending Notification to ${email}...`, payload);
+    const stmt = db.prepare('SELECT * FROM subscriptions WHERE user_email = ?');
+    const subscriptions = stmt.all(email);
+
+    if (subscriptions.length === 0) {
+        console.log(`No subscription found for user ${email}`);
+        return;
+    }
+
+    subscriptions.forEach(sub => sendToSubscription(sub, payload));
+};
+
+module.exports = { router, sendNotificationToAll, sendNotificationToUser };

@@ -75,9 +75,20 @@ router.post('/', authenticateToken, requireAdmin, (req, res) => {
     const stmt = db.prepare('INSERT INTO marks (student_reg_no, subject, score, max_marks, exam_type) VALUES (?, ?, ?, ?, ?)');
     stmt.run(student_reg_no, subject, score, max_marks, exam_type);
 
-    // Notify logic omitted for brevity (or we can keep it if we read file again, but I'll simplify push for now to robustify core)
-    // Actually, let's keep push logic simple: find ONE subscription for the linked user.
-    // ... skipping push for a second to ensure DB works.
+    // Notify Student
+    try {
+        const user = db.prepare('SELECT email FROM users WHERE linked_reg_no = ?').get(student_reg_no);
+        if (user) {
+            const { sendNotificationToUser } = require('./notifications');
+            sendNotificationToUser(user.email, {
+                title: 'New Grade Posted',
+                description: `You scored ${score}/${max_marks} in ${subject} (${exam_type || 'Exam'}).`
+            });
+        }
+    } catch (e) {
+        console.error("Notification Error:", e);
+    }
+
     res.status(201).json({ message: 'Mark added' });
 });
 
