@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth');
 const homeworkRoutes = require('./routes/homework');
 const notifRoutes = require('./routes/notifications');
 const marksRoutes = require('./routes/marks');
+const timetableRoutes = require('./routes/timetable');
 
 const app = express();
 const server = http.createServer(app);
@@ -74,6 +75,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/homework', homeworkRoutes);
 app.use('/api/notifications', notifRoutes.router);
 app.use('/api/marks', marksRoutes);
+app.use('/api/timetable', timetableRoutes);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {

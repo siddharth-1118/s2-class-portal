@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import { LayoutDashboard, Users, Send, Trash2, LogOut, PlusCircle, Activity, GraduationCap, Search, FileText, Check, Save, Edit2, X, RotateCcw } from 'lucide-react';
+import { LayoutDashboard, Users, Send, Trash2, LogOut, PlusCircle, Activity, GraduationCap, Search, FileText, Check, Save, Edit2, X, RotateCcw, Calendar } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -32,6 +32,10 @@ const AdminDashboard = () => {
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [editForm, setEditForm] = useState({ register_number: '', name: '', mobile: '', section: '' });
 
+    // Timetable State
+    const [timetable, setTimetable] = useState([]);
+    const [ttForm, setTtForm] = useState({ day: 'Monday', period: '1', time_range: '09:00 - 10:00', subject: '', teacher: '' });
+
     const [msg, setMsg] = useState('');
     const [socket, setSocket] = useState(null);
 
@@ -47,6 +51,7 @@ const AdminDashboard = () => {
         fetchHomeworks();
         fetchStudents();
         fetchMarks();
+        fetchTimetable();
 
         return () => newSocket.close();
     }, [user]);
@@ -75,6 +80,26 @@ const AdminDashboard = () => {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             setMarksList(await res.json());
+        } catch (e) { console.error(e); }
+    }
+
+    const fetchTimetable = async () => {
+        try {
+            const res = await fetch(`${API_URL}/api/timetable`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+            setTimetable(await res.json());
+        } catch (e) { console.error(e); }
+    }
+
+    const handleTimetableSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await fetch(`${API_URL}/api/timetable`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                body: JSON.stringify(ttForm)
+            });
+            alert('Schedule Updated');
+            fetchTimetable();
         } catch (e) { console.error(e); }
     }
 
@@ -229,7 +254,8 @@ const AdminDashboard = () => {
                         <div className="flex gap-2 p-1 bg-slate-800 rounded-full border border-slate-700 overflow-x-auto max-w-[90vw]">
                             <button onClick={() => setActiveTab('homework')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'homework' ? 'bg-violet-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><FileText className="w-4 h-4" /> Homework</button>
                             <button onClick={() => setActiveTab('students')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'students' ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><GraduationCap className="w-4 h-4" /> Grading Sheet</button>
-                            <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Activity className="w-4 h-4" /> History</button>
+                            <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Activity className="w-4 h-4" /> History</button>
+                            <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'timetable' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Calendar className="w-4 h-4" /> Timetable</button>
                         </div>
                         <div className="h-6 w-px bg-slate-700 hidden md:block"></div>
                         <div className="flex items-center gap-3">
@@ -470,15 +496,94 @@ const AdminDashboard = () => {
                         </div>
                     </div>
                 )}
-            </div>
 
-            <style jsx global>{`
+                {activeTab === 'timetable' && (
+                    <div className="animate-slide-up space-y-8">
+                        {/* Timetable Form */}
+                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl">
+                            <h2 className="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2"><Calendar className="w-5 h-5" /> Manage Class Schedule</h2>
+                            <form onSubmit={handleTimetableSubmit} className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
+                                <div>
+                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Day</label>
+                                    <select className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.day} onChange={e => setTtForm({ ...ttForm, day: e.target.value })}>
+                                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(d => <option key={d}>{d}</option>)}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Period</label>
+                                    <select className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.period} onChange={e => setTtForm({ ...ttForm, period: e.target.value })}>
+                                        {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <option key={p}>{p}</option>)}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Time</label>
+                                    <input type="text" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.time_range} onChange={e => setTtForm({ ...ttForm, time_range: e.target.value })} />
+                                </div>
+                                <div className="md:col-span-1">
+                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Subject</label>
+                                    <input type="text" placeholder="Maths" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" required value={ttForm.subject} onChange={e => setTtForm({ ...ttForm, subject: e.target.value })} />
+                                </div>
+                                <div className="md:col-span-1">
+                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Teacher</label>
+                                    <input type="text" placeholder="Mr. X" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.teacher} onChange={e => setTtForm({ ...ttForm, teacher: e.target.value })} />
+                                </div>
+                                <button type="submit" className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 rounded-lg transition h-[42px]">Save</button>
+                            </form>
+                        </div>
+
+                        {/* Timetable Grid */}
+                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl overflow-x-auto">
+                            <table className="w-full border-collapse min-w-[800px]">
+                                <thead>
+                                    <tr>
+                                        <th className="p-3 border border-slate-700 bg-slate-900 text-slate-400 w-32">Day / Period</th>
+                                        {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <th key={p} className="p-3 border border-slate-700 bg-slate-900 text-slate-400">Period {p}</th>)}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(day => (
+                                        <tr key={day}>
+                                            <td className="p-3 border border-slate-700 bg-slate-900/50 font-bold text-orange-400">{day}</td>
+                                            {[1, 2, 3, 4, 5, 6, 7, 8].map(period => {
+                                                const entry = timetable.find(t => t.day === day && t.period == period);
+                                                return (
+                                                    <td key={period} className="p-3 border border-slate-700 text-center relative group min-h-[80px]">
+                                                        {entry ? (
+                                                            <div>
+                                                                <div className="font-bold text-white text-sm">{entry.subject}</div>
+                                                                <div className="text-xs text-slate-500">{entry.time_range}</div>
+                                                                <div className="text-xs text-slate-400 italic">{entry.teacher}</div>
+                                                                <button
+                                                                    onClick={async () => {
+                                                                        if (confirm('Delete?')) {
+                                                                            await fetch(`${API_URL}/api/timetable/${entry.id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+                                                                            fetchTimetable();
+                                                                        }
+                                                                    }}
+                                                                    className="absolute top-1 right-1 text-red-400 opacity-0 group-hover:opacity-100 hover:bg-red-500/20 p-1 rounded"
+                                                                >
+                                                                    <Trash2 className="w-3 h-3" />
+                                                                </button>
+                                                            </div>
+                                                        ) : <span className="text-slate-700">-</span>}
+                                                    </td>
+                                                );
+                                            })}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+
+                <style jsx global>{`
                 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: rgba(30, 41, 59, 0.5); }
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(71, 85, 105, 0.8); border-radius: 4px; }
             `}</style>
-        </div>
-    );
+            </div>
+            );
 };
 
-export default AdminDashboard;
+            export default AdminDashboard;

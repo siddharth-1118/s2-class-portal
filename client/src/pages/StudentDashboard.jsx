@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save } from 'lucide-react';
+import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save, Calendar } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -29,6 +29,7 @@ const StudentDashboard = () => {
 
     const [homeworks, setHomeworks] = useState([]);
     const [marks, setMarks] = useState([]);
+    const [timetable, setTimetable] = useState([]);
     const [isSubscribed, setIsSubscribed] = useState(false);
 
     // Profile Lock State
@@ -48,6 +49,7 @@ const StudentDashboard = () => {
         fetchStudentProfile();
         fetchHomeworks();
         fetchMarks();
+        fetchTimetable();
 
         return () => newSocket.close();
     }, [user]);
@@ -105,6 +107,13 @@ const StudentDashboard = () => {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
             setMarks(await res.json());
+        } catch (e) { console.error(e); }
+    };
+
+    const fetchTimetable = async () => {
+        try {
+            const res = await fetch(`${API_URL}/api/timetable`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+            setTimetable(await res.json());
         } catch (e) { console.error(e); }
     };
 
@@ -209,6 +218,7 @@ const StudentDashboard = () => {
                         <div className="bg-white/50 p-1 rounded-full flex gap-1 border border-white/60">
                             <button onClick={() => setActiveTab('homework')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'homework' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>Assignments</button>
                             <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>My Grades</button>
+                            <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'timetable' ? 'bg-orange-500 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>TimeTable</button>
                         </div>
 
                         <button onClick={subscribeToPush} className={`p-3 rounded-full shadow-md transition ${isSubscribed ? 'bg-green-100 text-green-700' : 'bg-white text-indigo-600 hover:bg-indigo-50'}`}>
@@ -221,7 +231,7 @@ const StudentDashboard = () => {
                 </header>
 
                 <main className="animate-slide-up">
-                    {activeTab === 'homework' ? (
+                    {activeTab === 'homework' && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {homeworks.map((hw, i) => (
                                 <div key={i} className="glass-card rounded-2xl p-6 hover:-translate-y-1 transition duration-300 group flex flex-col h-full bg-white/80">
@@ -244,7 +254,9 @@ const StudentDashboard = () => {
                                 </div>
                             )}
                         </div>
-                    ) : (
+                    )}
+
+                    {activeTab === 'marks' && (
                         <div className="glass-card rounded-2xl p-8 bg-white/80 min-h-[500px]">
                             <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><GraduationCap className="w-6 h-6 text-fuchsia-600" /> Academic Performance</h2>
                             <div className="overflow-hidden rounded-xl border border-gray-200 shadow-sm">
@@ -270,6 +282,43 @@ const StudentDashboard = () => {
                                 </table>
                             </div>
                             {marks.length === 0 && <p className="text-center text-gray-400 py-10">No grades available yet.</p>}
+                        </div>
+                    )}
+
+                    {activeTab === 'timetable' && (
+                        <div className="glass-card rounded-2xl p-6 bg-white/80 min-h-[500px]">
+                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><Calendar className="w-6 h-6 text-orange-500" /> Class Schedule</h2>
+                            <div className="overflow-x-auto">
+                                <table className="w-full border-collapse min-w-[800px]">
+                                    <thead>
+                                        <tr>
+                                            <th className="p-3 border-b border-gray-200 bg-gray-50 text-gray-500 font-bold uppercase text-xs w-32">Day</th>
+                                            {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <th key={p} className="p-3 border-b border-gray-200 bg-gray-50 text-gray-500 font-bold uppercase text-xs">Period {p}</th>)}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(day => (
+                                            <tr key={day} className="hover:bg-gray-50/50">
+                                                <td className="p-3 border-b border-gray-100 font-bold text-indigo-600">{day}</td>
+                                                {[1, 2, 3, 4, 5, 6, 7, 8].map(period => {
+                                                    const entry = timetable.find(t => t.day === day && t.period == period);
+                                                    return (
+                                                        <td key={period} className="p-3 border-b border-gray-100 text-center relative border-l border-gray-100">
+                                                            {entry ? (
+                                                                <div className="py-2">
+                                                                    <div className="font-bold text-gray-800 text-sm">{entry.subject}</div>
+                                                                    <div className="text-xs text-gray-500">{entry.time_range}</div>
+                                                                    <div className="text-xs text-orange-500 font-medium">{entry.teacher}</div>
+                                                                </div>
+                                                            ) : <span className="text-gray-300">-</span>}
+                                                        </td>
+                                                    );
+                                                })}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     )}
                 </main>

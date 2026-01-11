@@ -43,6 +43,15 @@ db.exec(`
     mobile TEXT,
     section TEXT
   );
+
+  CREATE TABLE IF NOT EXISTS timetable (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    day TEXT NOT NULL,
+    period TEXT NOT NULL,
+    time_range TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    teacher TEXT
+  );
 `);
 
 // Migration for existing table
