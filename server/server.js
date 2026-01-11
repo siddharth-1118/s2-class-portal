@@ -1,0 +1,70 @@
+const express = require('express');
+const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
+require('dotenv').config();
+
+const db = require('./db');
+const authRoutes = require('./routes/auth');
+const homeworkRoutes = require('./routes/homework');
+const notifRoutes = require('./routes/notifications');
+const marksRoutes = require('./routes/marks');
+
+const app = express();
+const server = http.createServer(app);
+
+// CORS configuration
+const io = new Server(server, {
+    cors: {
+        origin: [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"],
+        methods: ["GET", "POST", "DELETE"]
+    }
+});
+
+app.use(cors({
+    origin: [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"]
+}));
+app.use(express.json());
+
+// Track online users
+const onlineUsers = new Set();
+
+io.on('connection', (socket) => {
+    console.log('User connected:', socket.id);
+
+    socket.on('login', (user) => {
+        if (user) {
+            socket.user = user;
+            onlineUsers.add(user.email);
+            io.emit('online_users', Array.from(onlineUsers));
+        }
+    });
+
+    socket.on('disconnect', () => {
+        if (socket.user) {
+            onlineUsers.delete(socket.user.email);
+            io.emit('online_users', Array.from(onlineUsers));
+        }
+    });
+});
+
+// Pass io to request
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
+
+// Routes
+app.get('/', (req, res) => {
+    res.send('Homework API is running');
+});
+
+app.use('/api/auth', authRoutes);
+app.use('/api/homework', homeworkRoutes);
+app.use('/api/notifications', notifRoutes.router);
+app.use('/api/marks', marksRoutes);
+
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

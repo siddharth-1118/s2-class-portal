@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/10 backdrop-blur-lg border border-white/20;
+  }
+
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/50 shadow-xl;
+  }
+
+  .mesh-gradient {
+    background-color: #ff99cc;
+    background-image:
+      radial-gradient(at 12% 88%, hsla(253, 16%, 7%, 1) 0px, transparent 50%),
+      radial-gradient(at 93% 2%, hsla(245, 71%, 37%, 1) 0px, transparent 50%),
+      radial-gradient(at 6% 3%, hsla(305, 80%, 59%, 1) 0px, transparent 50%),
+      radial-gradient(at 83% 86%, hsla(339, 26%, 75%, 1) 0px, transparent 50%),
+      radial-gradient(at 35% 23%, hsla(271, 76%, 43%, 1) 0px, transparent 50%),
+      radial-gradient(at 49% 91%, hsla(272, 70%, 26%, 1) 0px, transparent 50%);
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
