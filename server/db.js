@@ -14,7 +14,6 @@ db.exec(`
     role TEXT CHECK(role IN ('admin', 'student')) NOT NULL,
     mobile TEXT,
     section TEXT,
-    section TEXT,
     linked_reg_no TEXT
   );
 `);
