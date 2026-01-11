@@ -252,6 +252,7 @@ const StudentDashboard = () => {
                                     <thead className="bg-fuchsia-50">
                                         <tr>
                                             <th className="p-4 font-bold text-fuchsia-800">Subject</th>
+                                            <th className="p-4 font-bold text-fuchsia-800">Exam</th>
                                             <th className="p-4 font-bold text-fuchsia-800">Score</th>
                                             <th className="p-4 font-bold text-fuchsia-800">Date</th>
                                         </tr>
@@ -260,6 +261,7 @@ const StudentDashboard = () => {
                                         {marks.map((m) => (
                                             <tr key={m.id} className="hover:bg-fuchsia-50/30 transition">
                                                 <td className="p-4 font-semibold text-gray-700">{m.subject}</td>
+                                                <td className="p-4 text-gray-500 font-medium">{m.exam_type || '-'}</td>
                                                 <td className="p-4"><span className="bg-fuchsia-100 text-fuchsia-700 px-3 py-1 rounded-full font-bold text-sm">{m.score} / {m.max_marks}</span></td>
                                                 <td className="p-4 text-gray-500 text-sm">{new Date(m.created_at).toLocaleDateString()}</td>
                                             </tr>

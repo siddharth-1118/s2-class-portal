@@ -24,6 +24,7 @@ const AdminDashboard = () => {
     // Bulk Grading State
     const [bulkSubject, setBulkSubject] = useState('');
     const [bulkMaxMarks, setBulkMaxMarks] = useState('100');
+    const [bulkExamType, setBulkExamType] = useState('Internal 1');
     const [searchTerm, setSearchTerm] = useState('');
     const [gradingStatus, setGradingStatus] = useState({});
 
@@ -124,7 +125,7 @@ const AdminDashboard = () => {
             const res = await fetch(`${API_URL}/api/marks`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                body: JSON.stringify({ student_reg_no: regNo, subject: bulkSubject, score: scoreInput, max_marks: bulkMaxMarks })
+                body: JSON.stringify({ student_reg_no: regNo, subject: bulkSubject, score: scoreInput, max_marks: bulkMaxMarks, exam_type: bulkExamType })
             });
 
             if (res.ok) {
@@ -318,6 +319,7 @@ const AdminDashboard = () => {
                                         <tr className="text-slate-400 border-b border-slate-700 text-sm">
                                             <th className="pb-3 pl-2">Student</th>
                                             <th className="pb-3">Subject</th>
+                                            <th className="pb-3">Exam</th>
                                             <th className="pb-3">Score</th>
                                             <th className="pb-3 text-right pr-2">Action</th>
                                         </tr>
@@ -330,6 +332,7 @@ const AdminDashboard = () => {
                                                     <div className="text-xs text-slate-500">{m.student_reg_no}</div>
                                                 </td>
                                                 <td className="py-4">{m.subject}</td>
+                                                <td className="py-4 text-sm text-slate-400">{m.exam_type || '-'}</td>
                                                 <td className="py-4">
                                                     <span className="bg-fuchsia-500/20 text-fuchsia-300 px-2 py-1 rounded text-sm font-bold">
                                                         {m.score} / {m.max_marks}
@@ -369,6 +372,17 @@ const AdminDashboard = () => {
                                     <div className="space-y-1">
                                         <label className="text-xs font-bold text-slate-500 uppercase">Max</label>
                                         <input type="number" placeholder="100" className="bg-slate-800 border-none rounded-lg px-3 py-2 text-white w-full md:w-20 focus:ring-1 focus:ring-emerald-500" value={bulkMaxMarks} onChange={e => setBulkMaxMarks(e.target.value)} />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-xs font-bold text-slate-500 uppercase">Exam Type</label>
+                                        <select className="bg-slate-800 border-none rounded-lg px-3 py-2 text-white w-full md:w-32 focus:ring-1 focus:ring-emerald-500" value={bulkExamType} onChange={e => setBulkExamType(e.target.value)}>
+                                            <option>Internal 1</option>
+                                            <option>Internal 2</option>
+                                            <option>Internal 3</option>
+                                            <option>Model Exam</option>
+                                            <option>Semester</option>
+                                            <option>Assignment</option>
+                                        </select>
                                     </div>
                                     <div className="space-y-1 flex-1">
                                         <label className="text-xs font-bold text-slate-500 uppercase">Search Student</label>

@@ -71,9 +71,9 @@ router.get('/', authenticateToken, (req, res) => {
 
 // POST mark (Admin only)
 router.post('/', authenticateToken, requireAdmin, (req, res) => {
-    const { student_reg_no, subject, score, max_marks } = req.body;
-    const stmt = db.prepare('INSERT INTO marks (student_reg_no, subject, score, max_marks) VALUES (?, ?, ?, ?)');
-    stmt.run(student_reg_no, subject, score, max_marks);
+    const { student_reg_no, subject, score, max_marks, exam_type } = req.body;
+    const stmt = db.prepare('INSERT INTO marks (student_reg_no, subject, score, max_marks, exam_type) VALUES (?, ?, ?, ?, ?)');
+    stmt.run(student_reg_no, subject, score, max_marks, exam_type);
 
     // Notify logic omitted for brevity (or we can keep it if we read file again, but I'll simplify push for now to robustify core)
     // Actually, let's keep push logic simple: find ONE subscription for the linked user.

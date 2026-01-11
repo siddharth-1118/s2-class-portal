@@ -56,10 +56,14 @@ db.exec(`
     subject TEXT,
     score REAL,
     max_marks REAL,
+    exam_type TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(student_reg_no) REFERENCES students_list(register_number)
   );
 `);
+
+// Migration for exam_type
+try { db.prepare('ALTER TABLE marks ADD COLUMN exam_type TEXT').run(); } catch (e) { }
 
 console.log('Database initialized successfully');
 
