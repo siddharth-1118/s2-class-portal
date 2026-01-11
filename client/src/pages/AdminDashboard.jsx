@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import { LayoutDashboard, Users, Send, Trash2, LogOut, PlusCircle, Activity, GraduationCap, Search, FileText, Check, Save, Edit2, X, RotateCcw, Calendar } from 'lucide-react';
+import { LayoutDashboard, Users, Send, Trash2, LogOut, PlusCircle, Activity, GraduationCap, Search, FileText, Check, Save, Edit2, X, RotateCcw, Calendar, BarChart2 } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -35,6 +36,12 @@ const AdminDashboard = () => {
     // Timetable State
     const [timetable, setTimetable] = useState([]);
     const [ttForm, setTtForm] = useState({ day: 'Monday', period: '1', time_range: '09:00 - 10:00', subject: '', teacher: '' });
+
+    // Edit Mark State
+    const [editMarkModalOpen, setEditMarkModalOpen] = useState(false);
+    const [markToEdit, setMarkToEdit] = useState(null);
+
+    const [msg, setMsg] = useState('');
 
     const [msg, setMsg] = useState('');
     const [socket, setSocket] = useState(null);
@@ -205,6 +212,34 @@ const AdminDashboard = () => {
         }
     }
 
+    const handleMarkUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            await fetch(`${API_URL}/api/marks/${markToEdit.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                body: JSON.stringify(markToEdit)
+            });
+            setEditMarkModalOpen(false);
+            fetchMarks();
+            alert("Mark Updated");
+        } catch (e) { console.error(e); }
+    };
+
+    const getSubjectPerformance = () => {
+        const subjects = {};
+        marksList.forEach(m => {
+            if (!subjects[m.subject]) subjects[m.subject] = { total: 0, count: 0, max: 0 };
+            subjects[m.subject].total += parseFloat(m.score);
+            subjects[m.subject].max += parseFloat(m.max_marks);
+            subjects[m.subject].count++;
+        });
+        return Object.keys(subjects).map(s => ({
+            name: s,
+            avg: (subjects[s].total / subjects[s].max * 100).toFixed(1)
+        }));
+    };
+
     const filteredStudents = students.filter(s =>
         s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         s.register_number.toLowerCase().includes(searchTerm.toLowerCase())
@@ -256,6 +291,7 @@ const AdminDashboard = () => {
                             <button onClick={() => setActiveTab('students')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'students' ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><GraduationCap className="w-4 h-4" /> Grading Sheet</button>
                             <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Activity className="w-4 h-4" /> History</button>
                             <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'timetable' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Calendar className="w-4 h-4" /> Timetable</button>
+                            <button onClick={() => setActiveTab('analytics')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'analytics' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><BarChart2 className="w-4 h-4" /> Analytics</button>
                         </div>
                         <div className="h-6 w-px bg-slate-700 hidden md:block"></div>
                         <div className="flex items-center gap-3">
@@ -364,7 +400,10 @@ const AdminDashboard = () => {
                                                         {m.score} / {m.max_marks}
                                                     </span>
                                                 </td>
-                                                <td className="py-4 text-right pr-2">
+                                                <td className="py-4 text-right pr-2 flex justify-end gap-2">
+                                                    <button onClick={() => { setMarkToEdit(m); setEditMarkModalOpen(true); }} className="text-blue-400 hover:bg-blue-500/10 p-2 rounded">
+                                                        <Edit2 className="w-4 h-4" />
+                                                    </button>
                                                     <button onClick={() => handleDeleteMark(m.id)} className="text-red-400 hover:bg-red-500/10 p-2 rounded">
                                                         <Trash2 className="w-4 h-4" />
                                                     </button>
@@ -577,13 +616,69 @@ const AdminDashboard = () => {
                     </div>
                 )}
 
-                <style jsx global>{`
+            </div>
+
+            {editMarkModalOpen && markToEdit && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-sm w-full shadow-2xl animate-fade-in relative">
+                        <h2 className="text-xl font-bold text-white mb-6">Edit Mark</h2>
+                        <form onSubmit={handleMarkUpdate} className="space-y-4">
+                            <div>
+                                <label className="text-xs text-slate-400 uppercase">Exam Type</label>
+                                <select className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white" value={markToEdit.exam_type} onChange={e => setMarkToEdit({ ...markToEdit, exam_type: e.target.value })}>
+                                    <option>Internal 1</option>
+                                    <option>Internal 2</option>
+                                    <option>Internal 3</option>
+                                    <option>Model Exam</option>
+                                    <option>Semester</option>
+                                    <option>Assignment</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="text-xs text-slate-400 uppercase">Score</label>
+                                <input type="number" className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white" value={markToEdit.score} onChange={e => setMarkToEdit({ ...markToEdit, score: e.target.value })} />
+                            </div>
+                            <div>
+                                <label className="text-xs text-slate-400 uppercase">Max Marks</label>
+                                <input type="number" className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white" value={markToEdit.max_marks} onChange={e => setMarkToEdit({ ...markToEdit, max_marks: e.target.value })} />
+                            </div>
+                            <div className="flex gap-2">
+                                <button type="button" onClick={() => setEditMarkModalOpen(false)} className="flex-1 bg-slate-700 text-white font-bold py-3 rounded-xl hover:bg-slate-600 transition">Cancel</button>
+                                <button type="submit" className="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {activeTab === 'analytics' && (
+                <div className="animate-slide-up">
+                    <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-8 shadow-xl min-h-[600px]">
+                        <h2 className="text-xl font-semibold mb-6 text-blue-300 flex items-center gap-2">
+                            <BarChart2 className="w-5 h-5" /> Class Performance Analytics
+                        </h2>
+                        <div className="h-96">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={getSubjectPerformance()}>
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                                    <XAxis dataKey="name" stroke="#94a3b8" />
+                                    <YAxis stroke="#94a3b8" domain={[0, 100]} />
+                                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155' }} />
+                                    <Bar dataKey="avg" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Avg %" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <style jsx global>{`
                 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: rgba(30, 41, 59, 0.5); }
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(71, 85, 105, 0.8); border-radius: 4px; }
             `}</style>
-            </div>
-            );
+        </div>
+    );
 };
 
-            export default AdminDashboard;
+export default AdminDashboard;

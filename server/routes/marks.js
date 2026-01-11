@@ -98,6 +98,14 @@ router.delete('/:id', authenticateToken, requireAdmin, (req, res) => {
     res.json({ message: 'Mark deleted' });
 });
 
+// UPDATE mark (Admin only)
+router.put('/:id', authenticateToken, requireAdmin, (req, res) => {
+    const { score, max_marks, exam_type, subject } = req.body;
+    db.prepare('UPDATE marks SET score = ?, max_marks = ?, exam_type = ?, subject = ? WHERE id = ?')
+        .run(score, max_marks, exam_type, subject, req.params.id);
+    res.json({ message: 'Mark updated' });
+});
+
 // STUDENT PROFILE MANAGEMENT
 
 // GET Profile (Student)
