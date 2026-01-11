@@ -352,7 +352,7 @@ const StudentDashboard = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(day => (
+                                        {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].map(day => (
                                             <tr key={day} className="hover:bg-gray-50/50">
                                                 <td className="p-3 border-b border-gray-100 font-bold text-indigo-600">{day}</td>
                                                 {[1, 2, 3, 4, 5, 6, 7, 8].map(period => {

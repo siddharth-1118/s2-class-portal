@@ -35,7 +35,7 @@ const AdminDashboard = () => {
 
     // Timetable State
     const [timetable, setTimetable] = useState([]);
-    const [ttForm, setTtForm] = useState({ day: 'Monday', period: '1', time_range: '09:00 - 10:00', subject: '', teacher: '' });
+    const [ttForm, setTtForm] = useState({ day: 'Day 1', period: '1', time_range: '09:00 - 10:00', subject: '', teacher: '' });
 
     // Edit Mark State
     const [editMarkModalOpen, setEditMarkModalOpen] = useState(false);
@@ -545,7 +545,7 @@ const AdminDashboard = () => {
                                 <div>
                                     <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Day</label>
                                     <select className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.day} onChange={e => setTtForm({ ...ttForm, day: e.target.value })}>
-                                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(d => <option key={d}>{d}</option>)}
+                                        {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].map(d => <option key={d}>{d}</option>)}
                                     </select>
                                 </div>
                                 <div>
@@ -580,7 +580,7 @@ const AdminDashboard = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(day => (
+                                    {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].map(day => (
                                         <tr key={day}>
                                             <td className="p-3 border border-slate-700 bg-slate-900/50 font-bold text-orange-400">{day}</td>
                                             {[1, 2, 3, 4, 5, 6, 7, 8].map(period => {
