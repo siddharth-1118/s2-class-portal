@@ -167,4 +167,56 @@ router.get('/admin/search', (req, res) => {
     });
 });
 
+// Forgot Password - Generate Link
+router.post('/forgot-password', (req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: 'Email required' });
+
+    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Generate Token
+    const token = require('crypto').randomBytes(32).toString('hex');
+
+    // Save to DB (Cleanup old first)
+    db.prepare('DELETE FROM password_resets WHERE email = ?').run(email);
+    db.prepare('INSERT INTO password_resets (email, token) VALUES (?, ?)').run(email, token);
+
+    // Log Link (Simulation for Dev)
+    const link = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password?token=${token}`;
+    console.log("==========================================");
+    console.log("PASSWORD RESET LINK GENERATED:");
+    console.log(link);
+    console.log("==========================================");
+
+    res.json({ message: 'Reset link sent (check server console)' });
+});
+
+// Reset Password
+router.post('/reset-password', async (req, res) => {
+    const { token, newPassword } = req.body;
+    if (!token || !newPassword) return res.status(400).json({ message: 'Invalid data' });
+
+    const record = db.prepare('SELECT * FROM password_resets WHERE token = ?').get(token);
+    if (!record) return res.status(400).json({ message: 'Invalid or expired token' });
+
+    // Check expiry (1 hour)
+    const created = new Date(record.created_at);
+    const now = new Date();
+    const diffMs = now - created;
+    if (diffMs > 3600000) { // 1 hr
+        db.prepare('DELETE FROM password_resets WHERE email = ?').run(record.email);
+        return res.status(400).json({ message: 'Token expired' });
+    }
+
+    // Update Password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    db.prepare('UPDATE users SET password = ? WHERE email = ?').run(hashedPassword, record.email);
+
+    // Delete Token
+    db.prepare('DELETE FROM password_resets WHERE email = ?').run(record.email);
+
+    res.json({ message: 'Password updated successfully' });
+});
+
 module.exports = router;

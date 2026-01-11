@@ -52,6 +52,12 @@ db.exec(`
     subject TEXT NOT NULL,
     teacher TEXT
   );
+
+  CREATE TABLE IF NOT EXISTS password_resets (
+    email TEXT NOT NULL,
+    token TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 // Migration for existing table
