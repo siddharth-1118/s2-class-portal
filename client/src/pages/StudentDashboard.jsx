@@ -43,6 +43,8 @@ const StudentDashboard = () => {
     const [calculatedSGPA, setCalculatedSGPA] = useState(null);
     const [sgpaCourseCount, setSgpaCourseCount] = useState(5);
 
+    const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+
     const calculateGradePoint = (score, max) => {
         const percentage = (score / max) * 100;
         if (percentage >= 90) return 10;
@@ -269,7 +271,7 @@ const StudentDashboard = () => {
             )}
 
             <div className="max-w-6xl mx-auto">
-                <header className="flex flex-col md:flex-row justify-between items-center mb-10 glass-card p-6 rounded-2xl animate-fade-in gap-4">
+                <header className="flex flex-col md:flex-row justify-between items-center mb-10 glass-card p-6 rounded-2xl animate-fade-in gap-4 relative z-50">
                     <div className="flex items-center gap-4">
                         <div className="bg-indigo-600 rounded-full p-3 shadow-lg">
                             <BookOpen className="text-white w-6 h-6" />
@@ -293,25 +295,34 @@ const StudentDashboard = () => {
                         </div>
 
                         <div className="flex items-center gap-2">
-                            {/* Theme Selector Popover (Simplified) */}
-                            <div className="relative group">
-                                <button className="p-3 rounded-full bg-white text-gray-600 hover:bg-gray-100 shadow-md">
+                            {/* Theme Selector Popover */}
+                            <div className="relative">
+                                <button
+                                    onClick={() => setThemeMenuOpen(!themeMenuOpen)}
+                                    className={`p-3 rounded-full shadow-md transition ${themeMenuOpen ? 'bg-gray-200' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
+                                >
                                     <Palette className="w-5 h-5" />
                                 </button>
-                                <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl p-4 w-48 hidden group-hover:block z-50 border border-gray-100">
-                                    <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Theme</h3>
-                                    <div className="flex gap-2 mb-4">
-                                        <button onClick={() => toggleTheme('light')} className={`w-8 h-8 rounded-full border ${theme === 'light' ? 'border-2 border-indigo-600' : 'border-gray-200'} bg-gray-100`} title="Light"></button>
-                                        <button onClick={() => toggleTheme('dark')} className={`w-8 h-8 rounded-full border ${theme === 'dark' ? 'border-2 border-indigo-600' : 'border-gray-700'} bg-gray-900`} title="Dark"></button>
-                                        <button onClick={() => toggleTheme('color-blind')} className={`w-8 h-8 rounded-full border ${theme === 'color-blind' ? 'border-2 border-indigo-600' : 'border-gray-200'} bg-blue-100`} title="Blue-ish"></button>
-                                    </div>
-                                    <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Accent</h3>
-                                    <div className="grid grid-cols-4 gap-2">
-                                        {['violet', 'indigo', 'blue', 'emerald', 'orange', 'pink', 'red', 'cyan'].map(c => (
-                                            <button key={c} onClick={() => setAccentColor(c)} className={`w-6 h-6 rounded-full bg-${c}-500 ${accentColor === c ? 'ring-2 ring-offset-2 ring-gray-400' : ''}`}></button>
-                                        ))}
-                                    </div>
-                                </div>
+
+                                {themeMenuOpen && (
+                                    <>
+                                        <div className="fixed inset-0 z-40" onClick={() => setThemeMenuOpen(false)}></div>
+                                        <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-2xl p-4 w-52 z-50 border border-gray-100 animate-fade-in">
+                                            <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Theme Mode</h3>
+                                            <div className="flex gap-2 mb-4">
+                                                <button onClick={() => toggleTheme('light')} className={`w-8 h-8 rounded-full border flex items-center justify-center ${theme === 'light' ? 'border-2 border-indigo-600 ring-2 ring-indigo-100' : 'border-gray-200'} bg-white`} title="Light">☀️</button>
+                                                <button onClick={() => toggleTheme('dark')} className={`w-8 h-8 rounded-full border flex items-center justify-center ${theme === 'dark' ? 'border-2 border-indigo-600 ring-2 ring-indigo-100' : 'border-gray-700'} bg-slate-900 text-white`} title="Dark">🌙</button>
+                                                <button onClick={() => toggleTheme('color-blind')} className={`w-8 h-8 rounded-full border flex items-center justify-center ${theme === 'color-blind' ? 'border-2 border-indigo-600 ring-2 ring-indigo-100' : 'border-gray-200'} bg-blue-100 text-blue-800`} title="High Contrast">👁️</button>
+                                            </div>
+                                            <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Accent Color</h3>
+                                            <div className="grid grid-cols-4 gap-2">
+                                                {['violet', 'indigo', 'blue', 'emerald', 'orange', 'pink', 'red', 'cyan'].map(c => (
+                                                    <button key={c} onClick={() => setAccentColor(c)} className={`w-6 h-6 rounded-full bg-${c}-500 hover:scale-110 transition ${accentColor === c ? 'ring-2 ring-offset-2 ring-gray-400 scale-110' : ''}`}></button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
 
                             <button onClick={subscribeToPush} className={`p-3 rounded-full shadow-md transition ${isSubscribed ? 'bg-green-100 text-green-700' : 'bg-white text-indigo-600 hover:bg-indigo-50'}`}>
