@@ -289,7 +289,6 @@ const StudentDashboard = () => {
                             <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>My Grades</button>
                             <button onClick={() => setActiveTab('analytics')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'analytics' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>Analytics</button>
                             <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'timetable' ? 'bg-orange-500 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>TimeTable</button>
-                            <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'timetable' ? 'bg-orange-500 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>TimeTable</button>
                             <button onClick={() => setActiveTab('cgpa')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'cgpa' ? 'bg-emerald-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>CGPA & SGPA</button>
                         </div>
 
@@ -322,6 +321,7 @@ const StudentDashboard = () => {
                                 <LogOut className="w-5 h-5" />
                             </button>
                         </div>
+                    </div>
                 </header>
 
                 <main className="animate-slide-up">

@@ -618,151 +618,157 @@ Student RA2411003010003 got 45 marks"
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
                 )}
 
-                            {activeTab === 'timetable' && (
-                                <div className="animate-slide-up space-y-8">
-                                    {/* Timetable Form */}
-                                    <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl">
-                                        <h2 className="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2"><Calendar className="w-5 h-5" /> Manage Class Schedule</h2>
-                                        <form onSubmit={handleTimetableSubmit} className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
-                                            <div>
-                                                <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Day</label>
-                                                <select className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.day} onChange={e => setTtForm({ ...ttForm, day: e.target.value })}>
-                                                    {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].map(d => <option key={d}>{d}</option>)}
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Period</label>
-                                                <select className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.period} onChange={e => setTtForm({ ...ttForm, period: e.target.value })}>
-                                                    {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <option key={p}>{p}</option>)}
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Time</label>
-                                                <input type="text" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.time_range} onChange={e => setTtForm({ ...ttForm, time_range: e.target.value })} />
-                                            </div>
-                                            <div className="md:col-span-1">
-                                                <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Subject</label>
-                                                <input type="text" placeholder="Maths" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" required value={ttForm.subject} onChange={e => setTtForm({ ...ttForm, subject: e.target.value })} />
-                                            </div>
-                                            <div className="md:col-span-1">
-                                                <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Teacher</label>
-                                                <input type="text" placeholder="Mr. X" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.teacher} onChange={e => setTtForm({ ...ttForm, teacher: e.target.value })} />
-                                            </div>
-                                            <button type="submit" className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 rounded-lg transition h-[42px]">Save</button>
-                                        </form>
-                                    </div>
-
-                                    {/* Timetable Grid */}
-                                    <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl overflow-x-auto">
-                                        <table className="w-full border-collapse min-w-[800px]">
-                                            <thead>
-                                                <tr>
-                                                    <th className="p-3 border border-slate-700 bg-slate-900 text-slate-400 w-32">Day / Period</th>
-                                                    {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <th key={p} className="p-3 border border-slate-700 bg-slate-900 text-slate-400">Period {p}</th>)}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].map(day => (
-                                                    <tr key={day}>
-                                                        <td className="p-3 border border-slate-700 bg-slate-900/50 font-bold text-orange-400">{day}</td>
-                                                        {[1, 2, 3, 4, 5, 6, 7, 8].map(period => {
-                                                            const entry = timetable.find(t => t.day === day && t.period == period);
-                                                            return (
-                                                                <td key={period} className="p-3 border border-slate-700 text-center relative group min-h-[80px]">
-                                                                    {entry ? (
-                                                                        <div>
-                                                                            <div className="font-bold text-white text-sm">{entry.subject}</div>
-                                                                            <div className="text-xs text-slate-500">{entry.time_range}</div>
-                                                                            <div className="text-xs text-slate-400 italic">{entry.teacher}</div>
-                                                                            <button
-                                                                                onClick={async () => {
-                                                                                    if (confirm('Delete?')) {
-                                                                                        await fetch(`${API_URL}/api/timetable/${entry.id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
-                                                                                        fetchTimetable();
-                                                                                    }
-                                                                                }}
-                                                                                className="absolute top-1 right-1 text-red-400 opacity-0 group-hover:opacity-100 hover:bg-red-500/20 p-1 rounded"
-                                                                            >
-                                                                                <Trash2 className="w-3 h-3" />
-                                                                            </button>
-                                                                        </div>
-                                                                    ) : <span className="text-slate-700">-</span>}
-                                                                </td>
-                                                            );
-                                                        })}
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                {activeTab === 'timetable' && (
+                    <div className="animate-slide-up space-y-8">
+                        {/* Timetable Form */}
+                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl">
+                            <h2 className="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2"><Calendar className="w-5 h-5" /> Manage Class Schedule</h2>
+                            <form onSubmit={handleTimetableSubmit} className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
+                                <div>
+                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Day</label>
+                                    <select className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.day} onChange={e => setTtForm({ ...ttForm, day: e.target.value })}>
+                                        {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].map(d => <option key={d}>{d}</option>)}
+                                    </select>
                                 </div>
-                            )}
-
+                                <div>
+                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Period</label>
+                                    <select className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.period} onChange={e => setTtForm({ ...ttForm, period: e.target.value })}>
+                                        {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <option key={p}>{p}</option>)}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Time</label>
+                                    <input type="text" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.time_range} onChange={e => setTtForm({ ...ttForm, time_range: e.target.value })} />
+                                </div>
+                                <div className="md:col-span-1">
+                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Subject</label>
+                                    <input type="text" placeholder="Maths" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" required value={ttForm.subject} onChange={e => setTtForm({ ...ttForm, subject: e.target.value })} />
+                                </div>
+                                <div className="md:col-span-1">
+                                    <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Teacher</label>
+                                    <input type="text" placeholder="Mr. X" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.teacher} onChange={e => setTtForm({ ...ttForm, teacher: e.target.value })} />
+                                </div>
+                                <button type="submit" className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 rounded-lg transition h-[42px]">Save</button>
+                            </form>
                         </div>
 
-                        {editMarkModalOpen && markToEdit && (
-                            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                                <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-sm w-full shadow-2xl animate-fade-in relative">
-                                    <h2 className="text-xl font-bold text-white mb-6">Edit Mark</h2>
-                                    <form onSubmit={handleMarkUpdate} className="space-y-4">
-                                        <div>
-                                            <label className="text-xs text-slate-400 uppercase">Exam Type</label>
-                                            <select className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white" value={markToEdit.exam_type} onChange={e => setMarkToEdit({ ...markToEdit, exam_type: e.target.value })}>
-                                                <option>Internal 1</option>
-                                                <option>Internal 2</option>
-                                                <option>Internal 3</option>
-                                                <option>Model Exam</option>
-                                                <option>Semester</option>
-                                                <option>Assignment</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label className="text-xs text-slate-400 uppercase">Score</label>
-                                            <input type="number" className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white" value={markToEdit.score} onChange={e => setMarkToEdit({ ...markToEdit, score: e.target.value })} />
-                                        </div>
-                                        <div>
-                                            <label className="text-xs text-slate-400 uppercase">Max Marks</label>
-                                            <input type="number" className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white" value={markToEdit.max_marks} onChange={e => setMarkToEdit({ ...markToEdit, max_marks: e.target.value })} />
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <button type="button" onClick={() => setEditMarkModalOpen(false)} className="flex-1 bg-slate-700 text-white font-bold py-3 rounded-xl hover:bg-slate-600 transition">Cancel</button>
-                                            <button type="submit" className="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition">Update</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        )}
+                        {/* Timetable Grid */}
+                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl overflow-x-auto">
+                            <table className="w-full border-collapse min-w-[800px]">
+                                <thead>
+                                    <tr>
+                                        <th className="p-3 border border-slate-700 bg-slate-900 text-slate-400 w-32">Day / Period</th>
+                                        {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <th key={p} className="p-3 border border-slate-700 bg-slate-900 text-slate-400">Period {p}</th>)}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].map(day => (
+                                        <tr key={day}>
+                                            <td className="p-3 border border-slate-700 bg-slate-900/50 font-bold text-orange-400">{day}</td>
+                                            {[1, 2, 3, 4, 5, 6, 7, 8].map(period => {
+                                                const entry = timetable.find(t => t.day === day && t.period == period);
+                                                return (
+                                                    <td key={period} className="p-3 border border-slate-700 text-center relative group min-h-[80px]">
+                                                        {entry ? (
+                                                            <div>
+                                                                <div className="font-bold text-white text-sm">{entry.subject}</div>
+                                                                <div className="text-xs text-slate-500">{entry.time_range}</div>
+                                                                <div className="text-xs text-slate-400 italic">{entry.teacher}</div>
+                                                                <button
+                                                                    onClick={async () => {
+                                                                        if (confirm('Delete?')) {
+                                                                            await fetch(`${API_URL}/api/timetable/${entry.id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+                                                                            fetchTimetable();
+                                                                        }
+                                                                    }}
+                                                                    className="absolute top-1 right-1 text-red-400 opacity-0 group-hover:opacity-100 hover:bg-red-500/20 p-1 rounded"
+                                                                >
+                                                                    <Trash2 className="w-3 h-3" />
+                                                                </button>
+                                                            </div>
+                                                        ) : <span className="text-slate-700">-</span>}
+                                                    </td>
+                                                );
+                                            })}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
 
-                        {activeTab === 'analytics' && (
-                            <div className="animate-slide-up">
-                                <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-8 shadow-xl min-h-[600px]">
-                                    <h2 className="text-xl font-semibold mb-6 text-blue-300 flex items-center gap-2">
-                                        <BarChart2 className="w-5 h-5" /> Class Performance Analytics
-                                    </h2>
-                                    <div className="h-96">
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <BarChart data={getSubjectPerformance()}>
-                                                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                                                <XAxis dataKey="name" stroke="#94a3b8" />
-                                                <YAxis stroke="#94a3b8" domain={[0, 100]} />
-                                                <Tooltip contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155' }} />
-                                                <Bar dataKey="avg" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Avg %" />
-                                            </BarChart>
-                                        </ResponsiveContainer>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+            </div>
 
-                        <style jsx global>{`
+            {
+                editMarkModalOpen && markToEdit && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-sm w-full shadow-2xl animate-fade-in relative">
+                            <h2 className="text-xl font-bold text-white mb-6">Edit Mark</h2>
+                            <form onSubmit={handleMarkUpdate} className="space-y-4">
+                                <div>
+                                    <label className="text-xs text-slate-400 uppercase">Exam Type</label>
+                                    <select className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white" value={markToEdit.exam_type} onChange={e => setMarkToEdit({ ...markToEdit, exam_type: e.target.value })}>
+                                        <option>Internal 1</option>
+                                        <option>Internal 2</option>
+                                        <option>Internal 3</option>
+                                        <option>Model Exam</option>
+                                        <option>Semester</option>
+                                        <option>Assignment</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-xs text-slate-400 uppercase">Score</label>
+                                    <input type="number" className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white" value={markToEdit.score} onChange={e => setMarkToEdit({ ...markToEdit, score: e.target.value })} />
+                                </div>
+                                <div>
+                                    <label className="text-xs text-slate-400 uppercase">Max Marks</label>
+                                    <input type="number" className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white" value={markToEdit.max_marks} onChange={e => setMarkToEdit({ ...markToEdit, max_marks: e.target.value })} />
+                                </div>
+                                <div className="flex gap-2">
+                                    <button type="button" onClick={() => setEditMarkModalOpen(false)} className="flex-1 bg-slate-700 text-white font-bold py-3 rounded-xl hover:bg-slate-600 transition">Cancel</button>
+                                    <button type="submit" className="flex-1 bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )
+            }
+
+            {
+                activeTab === 'analytics' && (
+                    <div className="animate-slide-up">
+                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-8 shadow-xl min-h-[600px]">
+                            <h2 className="text-xl font-semibold mb-6 text-blue-300 flex items-center gap-2">
+                                <BarChart2 className="w-5 h-5" /> Class Performance Analytics
+                            </h2>
+                            <div className="h-96">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={getSubjectPerformance()}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                                        <XAxis dataKey="name" stroke="#94a3b8" />
+                                        <YAxis stroke="#94a3b8" domain={[0, 100]} />
+                                        <Tooltip contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155' }} />
+                                        <Bar dataKey="avg" fill="#8b5cf6" radius={[4, 4, 0, 0]} name="Avg %" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            <style jsx global>{`
                 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: rgba(30, 41, 59, 0.5); }
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(71, 85, 105, 0.8); border-radius: 4px; }
             `}</style>
-                    </div>
-                );
+        </div >
+    );
 };
 
-                export default AdminDashboard;
+export default AdminDashboard;
