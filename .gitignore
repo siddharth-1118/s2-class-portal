@@ -7,3 +7,4 @@ build/
 database.sqlite
 debug_output.txt
 debug_result.txt
+.env.local
