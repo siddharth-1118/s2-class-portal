@@ -610,7 +610,7 @@ const StudentDashboard = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="p-6 rounded-2xl shadow-sm border border-white/10 glass">
                                     <h3 className="text-lg font-bold mb-4 opacity-90 text-[var(--text-primary)]">Subject Average (%)</h3>
-                                    <div className="h-64">
+                                    <div style={{ width: '100%', height: 300 }}>
                                         <ResponsiveContainer width="100%" height="100%">
                                             <BarChart data={getUniqueSubjects()}>
                                                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
@@ -625,7 +625,7 @@ const StudentDashboard = () => {
 
                                 <div className="p-6 rounded-2xl shadow-sm border border-white/10 glass">
                                     <h3 className="text-lg font-bold mb-4 opacity-90 text-[var(--text-primary)]">Marks History</h3>
-                                    <div className="h-64">
+                                    <div style={{ width: '100%', height: 300 }}>
                                         <ResponsiveContainer width="100%" height="100%">
                                             <LineChart data={marks}>
                                                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
