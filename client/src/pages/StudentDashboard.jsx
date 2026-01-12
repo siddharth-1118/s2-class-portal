@@ -396,8 +396,8 @@ const StudentDashboard = () => {
             <div className="max-w-6xl mx-auto">
                 <header className="flex flex-col md:flex-row justify-between items-center mb-10 glass-card p-6 rounded-2xl animate-fade-in gap-4 relative z-50">
                     <div className="flex items-center gap-4">
-                        <div className="rounded-full p-3 shadow-lg" style={{ backgroundColor: 'rgba(var(--accent-color), 0.1)' }}>
-                            <BookOpen className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} />
+                        <div className="rounded-full shadow-lg bg-white overflow-hidden w-12 h-12 flex items-center justify-center border-2 border-[rgba(var(--accent-color),0.3)]">
+                            <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
                         </div>
                         <div>
                             <h1 className="text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">Student Portal</h1>
