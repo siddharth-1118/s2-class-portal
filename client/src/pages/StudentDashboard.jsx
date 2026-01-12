@@ -5,6 +5,7 @@ import io from 'socket.io-client';
 import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save, Calendar, BarChart2, Settings, Palette } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
+import ThemeSelectorMenu from '../components/ThemeSelectorMenu';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
