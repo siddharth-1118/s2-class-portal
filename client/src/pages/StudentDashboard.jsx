@@ -207,7 +207,7 @@ const StudentDashboard = () => {
     };
 
     return (
-        <div className="min-h-screen mesh-gradient p-6 transition-all duration-300">
+        <div className={`min-h-screen p-6 transition-all duration-300 ${bgPattern || 'mesh-gradient'}`}>
             {/* Profile Lock Modal */}
             {showProfileModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -321,10 +321,12 @@ const StudentDashboard = () => {
                                         currentTheme={theme}
                                         currentAccent={accentColor}
                                         currentFont={font}
-                                        onApply={(t, a, f) => {
+                                        currentBg={bgPattern}
+                                        onApply={(t, a, f, b) => {
                                             toggleTheme(t);
                                             setAccentColor(a);
                                             if (setFont && f) setFont(f);
+                                            if (setBgPattern && b) setBgPattern(b);
                                             setThemeMenuOpen(false);
                                         }}
                                         onClose={() => setThemeMenuOpen(false)}
