@@ -41,6 +41,10 @@ const AdminDashboard = () => {
     const [editMarkModalOpen, setEditMarkModalOpen] = useState(false);
     const [markToEdit, setMarkToEdit] = useState(null);
 
+    // Single Mark Entry State
+    const [addMarkModalOpen, setAddMarkModalOpen] = useState(false);
+    const [singleMarkForm, setSingleMarkForm] = useState({ student_reg_no: '', subject: '', score: '', max_marks: '100', exam_type: 'Internal 1' });
+
     // Smart Import State
     const [importModalOpen, setImportModalOpen] = useState(false);
     const [rawImportText, setRawImportText] = useState('');
@@ -136,6 +140,25 @@ const AdminDashboard = () => {
             });
             setMarksList(prev => prev.filter(m => m.id !== id));
         } catch (err) { console.error(err); }
+    };
+
+    const handleSingleMarkSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await fetch(`${API_URL}/api/marks`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                body: JSON.stringify(singleMarkForm)
+            });
+            if (res.ok) {
+                alert('Mark Added');
+                setAddMarkModalOpen(false);
+                setSingleMarkForm({ student_reg_no: '', subject: '', score: '', max_marks: '100', exam_type: 'Internal 1' });
+                fetchMarks();
+            } else {
+                alert('Failed to add mark');
+            }
+        } catch (e) { console.error(e); }
     };
 
     const handleCreateHomework = async (e) => {
@@ -443,8 +466,11 @@ Student RA2411003010003 got 45 marks"
                 {activeTab === 'marks' && (
                     <div className="animate-slide-up">
                         <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl min-h-[600px]">
-                            <h2 className="text-xl font-semibold mb-6 text-pink-300 flex items-center gap-2">
-                                <Activity className="w-5 h-5" /> Detailed Grading History
+                            <h2 className="text-xl font-semibold mb-6 text-pink-300 flex items-center justify-between gap-2">
+                                <span className="flex items-center gap-2"><Activity className="w-5 h-5" /> Detailed Grading History</span>
+                                <button onClick={() => setAddMarkModalOpen(true)} className="bg-pink-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-pink-700 transition flex items-center gap-1 shadow-lg">
+                                    <PlusCircle className="w-4 h-4" /> Add Grade
+                                </button>
                             </h2>
                             <div className="overflow-x-auto custom-scrollbar">
                                 <table className="w-full text-left border-collapse">
