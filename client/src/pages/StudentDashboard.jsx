@@ -130,6 +130,7 @@ const StudentDashboard = () => {
             const res = await fetch(`${API_URL}/api/marks/profile`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
+            if (res.status === 403) { logout(); navigate('/'); return; }
             if (res.ok) {
                 const data = await res.json();
                 setStudentProfile(data);
@@ -152,6 +153,8 @@ const StudentDashboard = () => {
                 body: JSON.stringify({ mobile, section, register_number: regNo })
             });
 
+            if (res.status === 403) { logout(); navigate('/'); return; }
+
             if (res.ok) {
                 setShowProfileModal(false);
                 fetchStudentProfile(); // Refresh to get updated data
@@ -168,6 +171,7 @@ const StudentDashboard = () => {
             const res = await fetch(`${API_URL}/api/homework`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
+            if (res.status === 403) { logout(); navigate('/'); return; }
             setHomeworks(await res.json());
         } catch (e) { console.error(e); }
     };
@@ -190,6 +194,7 @@ const StudentDashboard = () => {
     const fetchTimetable = async () => {
         try {
             const res = await fetch(`${API_URL}/api/timetable`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
+            if (res.status === 403) { logout(); navigate('/'); return; }
             setTimetable(await res.json());
         } catch (e) { console.error(e); }
     };
