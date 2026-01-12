@@ -26,7 +26,7 @@ function urlBase64ToUint8Array(base64String) {
 
 const StudentDashboard = () => {
     const { user, logout } = useAuth();
-    const { theme, toggleTheme, accentColor, setAccentColor } = useTheme();
+    const { theme, toggleTheme, accentColor, setAccentColor, font, setFont } = useTheme();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('homework');
 
@@ -312,9 +312,11 @@ const StudentDashboard = () => {
                                     <ThemeSelectorMenu
                                         currentTheme={theme}
                                         currentAccent={accentColor}
-                                        onApply={(t, a) => {
+                                        currentFont={font}
+                                        onApply={(t, a, f) => {
                                             toggleTheme(t);
                                             setAccentColor(a);
+                                            if (setFont && f) setFont(f);
                                             setThemeMenuOpen(false);
                                         }}
                                         onClose={() => setThemeMenuOpen(false)}
