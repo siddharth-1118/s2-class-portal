@@ -15,15 +15,16 @@ const app = express();
 const server = http.createServer(app);
 
 // CORS configuration
+// CORS configuration
 const io = new Server(server, {
     cors: {
-        origin: [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"],
+        origin: "*", // Allow all origins for simplicity and to fixing Vercel connection
         methods: ["GET", "POST", "DELETE"]
     }
 });
 
 app.use(cors({
-    origin: [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"]
+    origin: "*" // Allow all origins
 }));
 app.use(express.json());
 
