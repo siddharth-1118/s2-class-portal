@@ -209,7 +209,7 @@ const StudentDashboard = () => {
     };
 
     return (
-        <div className="min-h-screen mesh-gradient p-6 font-sans">
+        <div className="min-h-screen mesh-gradient p-6 transition-all duration-300">
             {/* Profile Lock Modal */}
             {showProfileModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -278,7 +278,7 @@ const StudentDashboard = () => {
                             <BookOpen className="text-primary w-6 h-6" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight dark:text-white">Student Portal</h1>
+                            <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight dark:text-gray-100">Student Portal</h1>
                             <p className="text-gray-500 text-sm dark:text-gray-400">
                                 Welcome, <span className="font-semibold text-primary">{user.name}</span>
                                 {studentProfile?.section && <span className="ml-2 bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">{studentProfile.section}</span>}
@@ -300,11 +300,19 @@ const StudentDashboard = () => {
                         </div>
 
                         <div className="flex items-center gap-2">
+                            {/* Direct Dark Mode Toggle */}
+                            <button
+                                onClick={() => toggleTheme(theme === 'dark' ? 'light' : 'dark')}
+                                className="p-3 rounded-full shadow-md bg-white dark:bg-slate-800 text-gray-600 dark:text-yellow-400 hover:scale-105 transition border dark:border-slate-700"
+                            >
+                                {theme === 'dark' ? '🌙' : '☀️'}
+                            </button>
+
                             {/* Theme Selector Popover */}
                             <div className="relative">
                                 <button
                                     onClick={() => setThemeMenuOpen(!themeMenuOpen)}
-                                    className={`p-3 rounded-full shadow-md transition ${themeMenuOpen ? 'bg-gray-200' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
+                                    className={`p-3 rounded-full shadow-md transition ${themeMenuOpen ? 'bg-gray-200' : 'bg-white text-gray-600 hover:bg-gray-100 dark:bg-slate-800 dark:text-gray-300 dark:border-slate-700 border'}`}
                                 >
                                     <Palette className="w-5 h-5" />
                                 </button>
