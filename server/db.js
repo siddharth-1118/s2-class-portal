@@ -82,6 +82,7 @@ db.exec(`
     day TEXT,
     description TEXT NOT NULL,
     type TEXT DEFAULT 'regular',
+    day_order INTEGER,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 
@@ -101,12 +102,13 @@ db.exec(`
 try { db.prepare('ALTER TABLE marks ADD COLUMN exam_type TEXT').run(); } catch (e) { }
 
 // --- SEED TIMETABLE DATA IF EMPTY ---
-const { SUBJECT_MAP, BATCH_1_SCHEDULE, BATCH_2_SCHEDULE, TIME_SLOTS } = require('./utils/timetableData');
+const { SUBJECT_MAP, GROUP_1_SCHEDULE, GROUP_2_SCHEDULE, TIME_SLOTS } = require('./utils/timetableData');
+const { CALENDAR_EVENTS } = require('./utils/calendarData');
 
 const seedTimetable = () => {
   const count = db.prepare('SELECT count(*) as c FROM timetable_entries').get().c;
   if (count === 0) {
-    console.log("Seeding Timetable Data...");
+    console.log("Seeding Timetable Data (Groups 1 & 2)...");
     const insert = db.prepare('INSERT INTO timetable_entries (batch, day, period, subject, staff, type, time_range) VALUES (?, ?, ?, ?, ?, ?, ?)');
 
     const seedBatch = (batchName, schedule) => {
@@ -121,13 +123,27 @@ const seedTimetable = () => {
       });
     };
 
-    seedBatch('BATCH_1', BATCH_1_SCHEDULE);
-    seedBatch('BATCH_2', BATCH_2_SCHEDULE);
-    console.log("Timetable Seeded.");
+    seedBatch('GROUP_1', GROUP_1_SCHEDULE);
+    seedBatch('GROUP_2', GROUP_2_SCHEDULE);
+    console.log("Group Timetables Seeded.");
   }
 };
 
-try { seedTimetable(); } catch (e) { console.error("Seeding Error:", e); }
+const seedCalendar = () => {
+  const count = db.prepare('SELECT count(*) as c FROM academic_calendar').get().c;
+  if (count === 0) {
+    console.log("Seeding Academic Calendar...");
+    const insert = db.prepare('INSERT INTO academic_calendar (date, day, description, type, day_order) VALUES (?, ?, ?, ?, ?)');
+
+    CALENDAR_EVENTS.forEach(event => {
+      insert.run(event.date, event.day, event.description, event.type, event.day_order);
+    });
+    console.log("Calendar Seeded.");
+  }
+};
+
+try { seedTimetable(); } catch (e) { console.error("Seeding Error (Timetable):", e); }
+try { seedCalendar(); } catch (e) { console.error("Seeding Error (Calendar):", e); }
 
 console.log('Database initialized successfully');
 

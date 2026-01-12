@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import { LayoutDashboard, Users, Send, Trash2, LogOut, PlusCircle, Activity, GraduationCap, Search, FileText, Check, Save, Edit2, X, RotateCcw, Calendar, BarChart2, Zap } from 'lucide-react';
+import { LayoutDashboard, Users, Send, Trash2, LogOut, PlusCircle, Activity, GraduationCap, Search, FileText, Check, Save, Edit2, X, RotateCcw, Calendar, BarChart2, Zap, BookOpen } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import CalendarTab from '../components/CalendarTab';
 import TimetableTab from '../components/TimetableTab';
+import GalleryTab from '../components/GalleryTab';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -652,7 +653,7 @@ Student RA2411003010003 got 45 marks"
                     activeTab === 'timetable' && (
                         <div className="animate-slide-up">
                             <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl">
-                                <TimetableTab user={{ ...user, role: 'admin' }} />
+                                <GalleryTab isAdmin={true} />
                             </div>
                         </div>
                     )

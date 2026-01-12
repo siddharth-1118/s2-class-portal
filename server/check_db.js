@@ -1,9 +1,7 @@
-const db = require('./db');
-
-console.log("--- USERS ---");
-const users = db.prepare('SELECT email, role, linked_reg_no FROM users').all();
-console.table(users);
-
-console.log("\n--- STUDENTS ---");
-const students = db.prepare('SELECT register_number, name, mobile, section FROM students_list LIMIT 5').all();
-console.table(students);
+const db = require('better-sqlite3')('database.sqlite');
+const count = db.prepare('SELECT count(*) as c FROM timetable_entries').get().c;
+console.log(`Timetable Entries Count: ${count}`);
+if (count > 0) {
+    const sample = db.prepare('SELECT * FROM timetable_entries LIMIT 1').get();
+    console.log('Sample:', sample);
+}

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Trash2, Edit2, Plus, Calendar as CalendarIcon, Save, X } from 'lucide-react';
+import { Trash2, Edit2, Plus, Calendar as CalendarIcon, Save, X, Coffee, FileText, CheckCircle, Clock } from 'lucide-react';
 import axios from 'axios';
 
-const CalendarTab = ({ user }) => {
+const CalendarTab = ({ user, onDateSelect }) => {
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -21,7 +21,9 @@ const CalendarTab = ({ user }) => {
     const fetchEvents = async () => {
         try {
             const res = await axios.get(`${API_URL}/api/calendar`);
-            setEvents(res.data);
+            // Sort events by date
+            const sorted = res.data.sort((a, b) => new Date(a.date) - new Date(b.date));
+            setEvents(sorted);
             setLoading(false);
         } catch (error) {
             console.error("Failed to fetch calendar", error);
@@ -46,9 +48,7 @@ const CalendarTab = ({ user }) => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            // Auto calculate day if possible
             const dayName = new Date(newEvent.date).toLocaleDateString('en-US', { weekday: 'short' });
-
             await axios.post(`${API_URL}/api/calendar`, { ...newEvent, day: newEvent.day || dayName }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -78,150 +78,165 @@ const CalendarTab = ({ user }) => {
         }
     };
 
-    const getRowColor = (type) => {
+    const getEventIcon = (type) => {
         switch (type) {
-            case 'holiday': return 'bg-red-500/20 text-red-200 border-l-4 border-red-500';
-            case 'exam': return 'bg-yellow-500/20 text-yellow-200 border-l-4 border-yellow-500';
-            default: return 'bg-slate-800/50 border-l-4 border-slate-600';
+            case 'holiday': return <Coffee className="w-5 h-5 text-orange-400" />;
+            case 'exam': return <FileText className="w-5 h-5 text-yellow-400" />;
+            default: return <Clock className="w-5 h-5 text-blue-400" />;
         }
     };
 
+    const getGradient = (type) => {
+        switch (type) {
+            case 'holiday': return 'from-orange-500/20 to-red-500/20 border-orange-500/50';
+            case 'exam': return 'from-yellow-500/20 to-amber-500/20 border-yellow-500/50';
+            default: return 'from-blue-500/20 to-indigo-500/20 border-blue-500/50';
+        }
+    };
+
+    // Group events by Month
+    const groupedEvents = events.reduce((acc, event) => {
+        const date = new Date(event.date);
+        const monthYear = date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+        if (!acc[monthYear]) acc[monthYear] = [];
+        acc[monthYear].push(event);
+        return acc;
+    }, {});
+
     return (
-        <div className="space-y-6 animate-fade-in">
-            <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent flex items-center gap-2">
-                    <CalendarIcon className="w-6 h-6 text-blue-400" />
-                    Academic Calendar
+        <div className="space-y-8 animate-fade-in pb-20">
+            {/* Header */}
+            <div className="flex justify-between items-center sticky top-0 bg-slate-900/90 backdrop-blur z-20 p-4 border-b border-white/10 -mx-4 md:mx-0 md:rounded-xl md:top-4">
+                <h2 className="text-3xl font-extrabold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center gap-3">
+                    <CalendarIcon className="w-8 h-8 text-purple-400" />
+                    Timeline
                 </h2>
                 {isAdmin && (
                     <button
                         onClick={() => setShowAddForm(!showAddForm)}
-                        className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-lg shadow-green-900/20"
+                        className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl flex items-center gap-2 transition-all shadow-lg hover:shadow-indigo-500/25"
                     >
-                        {showAddForm ? <X size={18} /> : <Plus size={18} />}
-                        {showAddForm ? 'Cancel' : 'Add Event'}
+                        {showAddForm ? <X size={20} /> : <Plus size={20} />}
+                        <span className="hidden md:inline">{showAddForm ? 'Cancel' : 'Add Event'}</span>
                     </button>
                 )}
             </div>
 
             {/* ADD FORM */}
             {showAddForm && isAdmin && (
-                <div className="bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-xl mb-4">
-                    <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <input
-                            type="date"
-                            value={newEvent.date}
-                            onChange={e => setNewEvent({ ...newEvent, date: e.target.value })}
-                            className="bg-slate-900 border border-slate-700 rounded p-2 text-white focus:ring-2 focus:ring-blue-500 outline-none"
-                            required
-                        />
-                        <input
-                            type="text"
-                            placeholder="Day (e.g. Mon)"
-                            value={newEvent.day}
-                            onChange={e => setNewEvent({ ...newEvent, day: e.target.value })}
-                            className="bg-slate-900 border border-slate-700 rounded p-2 text-white focus:ring-2 focus:ring-blue-500 outline-none"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Description"
-                            value={newEvent.description}
-                            onChange={e => setNewEvent({ ...newEvent, description: e.target.value })}
-                            className="bg-slate-900 border border-slate-700 rounded p-2 text-white focus:ring-2 focus:ring-blue-500 outline-none"
-                            required
-                        />
-                        <select
-                            value={newEvent.type}
-                            onChange={e => setNewEvent({ ...newEvent, type: e.target.value })}
-                            className="bg-slate-900 border border-slate-700 rounded p-2 text-white focus:ring-2 focus:ring-blue-500 outline-none"
-                        >
-                            <option value="regular">Regular</option>
-                            <option value="holiday">Holiday</option>
-                            <option value="exam">Exam</option>
-                        </select>
-                        <button type="submit" className="col-span-1 md:col-span-4 bg-blue-600 hover:bg-blue-500 text-white py-2 rounded font-bold transition-all">
-                            Save Event
+                <div className="bg-slate-800/80 backdrop-blur p-6 rounded-2xl border border-slate-700 shadow-2xl animate-slide-up">
+                    <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div className="col-span-1 md:col-span-1">
+                            <label className="text-xs font-bold text-slate-400 uppercase mb-1 block">Date</label>
+                            <input
+                                type="date"
+                                value={newEvent.date}
+                                onChange={e => setNewEvent({ ...newEvent, date: e.target.value })}
+                                className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                required
+                            />
+                        </div>
+                        <div className="col-span-1 md:col-span-2">
+                            <label className="text-xs font-bold text-slate-400 uppercase mb-1 block">Description</label>
+                            <input
+                                type="text"
+                                placeholder="Event details..."
+                                value={newEvent.description}
+                                onChange={e => setNewEvent({ ...newEvent, description: e.target.value })}
+                                className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                required
+                            />
+                        </div>
+                        <div className="col-span-1 md:col-span-1">
+                            <label className="text-xs font-bold text-slate-400 uppercase mb-1 block">Type</label>
+                            <select
+                                value={newEvent.type}
+                                onChange={e => setNewEvent({ ...newEvent, type: e.target.value })}
+                                className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                            >
+                                <option value="regular">Regular</option>
+                                <option value="holiday">Holiday</option>
+                                <option value="exam">Exam</option>
+                            </select>
+                        </div>
+                        <button type="submit" className="col-span-1 md:col-span-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white py-3 rounded-xl font-bold transition-all shadow-lg transform hover:scale-[1.01]">
+                            Save to Calendar
                         </button>
                     </form>
                 </div>
             )}
 
-            {/* CALENDAR LIST */}
-            <div className="bg-slate-900/50 backdrop-blur-md rounded-xl border border-white/10 overflow-hidden shadow-2xl">
-                {/* Header */}
-                <div className="grid grid-cols-12 gap-2 p-4 bg-slate-800/80 font-bold text-slate-300 border-b border-white/10">
-                    <div className="col-span-3">Date</div>
-                    <div className="col-span-2">Day</div>
-                    <div className={isAdmin ? "col-span-5" : "col-span-7"}>Description</div>
-                    {isAdmin && <div className="col-span-2 text-right">Actions</div>}
-                </div>
-
+            {/* TIMELINE VIEW */}
+            <div className="relative space-y-16 pl-4 md:pl-8 before:absolute before:inset-0 before:ml-4 md:before:ml-8 before:-translate-x-px md:before:w-0.5 before:bg-gradient-to-b from-transparent via-slate-700 to-transparent">
                 {loading ? (
-                    <div className="p-8 text-center text-slate-400">Loading calendar...</div>
-                ) : events.length === 0 ? (
-                    <div className="p-8 text-center text-slate-400">No events scheduled.</div>
+                    <div className="text-center text-slate-400 py-10">Loading timeline...</div>
+                ) : Object.keys(groupedEvents).length === 0 ? (
+                    <div className="text-center text-slate-500 py-10">No upcoming events found.</div>
                 ) : (
-                    <div className="divide-y divide-white/5">
-                        {events.map((event) => (
-                            <div key={event.id} className={`grid grid-cols-12 gap-2 p-4 items-center transition-colors hover:bg-white/5 ${getRowColor(event.type)}`}>
-                                {isEditing === event.id ? (
-                                    // EDIT MODE
-                                    <>
-                                        <div className="col-span-3">
-                                            <input
-                                                type="date"
-                                                value={editForm.date}
-                                                onChange={e => setEditForm({ ...editForm, date: e.target.value })}
-                                                className="w-full bg-slate-900 border border-slate-600 rounded p-1 text-sm text-white"
-                                            />
-                                        </div>
-                                        <div className="col-span-2">
-                                            <input
-                                                type="text"
-                                                value={editForm.day}
-                                                onChange={e => setEditForm({ ...editForm, day: e.target.value })}
-                                                className="w-full bg-slate-900 border border-slate-600 rounded p-1 text-sm text-white"
-                                            />
-                                        </div>
-                                        <div className="col-span-5 flex gap-2">
-                                            <input
-                                                type="text"
-                                                value={editForm.description}
-                                                onChange={e => setEditForm({ ...editForm, description: e.target.value })}
-                                                className="w-full bg-slate-900 border border-slate-600 rounded p-1 text-sm text-white"
-                                            />
-                                            <select
-                                                value={editForm.type}
-                                                onChange={e => setEditForm({ ...editForm, type: e.target.value })}
-                                                className="bg-slate-900 border border-slate-600 rounded p-1 text-sm text-white"
-                                            >
-                                                <option value="regular">Reg</option>
-                                                <option value="holiday">Hol</option>
-                                                <option value="exam">Exm</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-span-2 flex justify-end gap-2">
-                                            <button onClick={() => handleEditSave(event.id)} className="p-1 bg-green-600 rounded hover:bg-green-500 text-white"><Save size={16} /></button>
-                                            <button onClick={() => setIsEditing(null)} className="p-1 bg-gray-600 rounded hover:bg-gray-500 text-white"><X size={16} /></button>
-                                        </div>
-                                    </>
-                                ) : (
-                                    // VIEW MODE
-                                    <>
-                                        <div className="col-span-3 font-medium opacity-90">{new Date(event.date).toLocaleDateString('en-GB')}</div>
-                                        <div className="col-span-2 opacity-75">{event.day}</div>
-                                        <div className={isAdmin ? "col-span-5" : "col-span-7"}>{event.description}</div>
-                                        {isAdmin && (
-                                            <div className="col-span-2 flex justify-end gap-2 text-right">
-                                                <button onClick={() => startEdit(event)} className="text-blue-400 hover:text-blue-300 transition-colors"><Edit2 size={16} /></button>
-                                                <button onClick={() => handleDelete(event.id)} className="text-red-400 hover:text-red-300 transition-colors"><Trash2 size={16} /></button>
-                                            </div>
-                                        )}
-                                    </>
-                                )}
+                    Object.entries(groupedEvents).map(([month, monthEvents]) => (
+                        <div key={month} className="relative">
+                            {/* Month Marker */}
+                            <div className="sticky top-20 z-10 mb-6">
+                                <span className="relative inline-block bg-slate-900 border border-indigo-500/30 text-indigo-400 px-4 py-1 rounded-full text-sm font-bold shadow-xl">
+                                    {month}
+                                </span>
                             </div>
-                        ))}
-                    </div>
+
+                            <div className="space-y-6">
+                                {monthEvents.map((event) => (
+                                    <div key={event.id} className="relative pl-8 md:pl-12 group">
+                                        {/* Dot on Timeline */}
+                                        <div className={`absolute left-0 top-6 w-3 h-3 rounded-full border-2 border-slate-900 shadow-[0_0_0_4px_rgba(30,41,59,1)] z-10 transition-colors ${event.type === 'holiday' ? 'bg-orange-400' : event.type === 'exam' ? 'bg-yellow-400' : 'bg-blue-400'
+                                            } -translate-x-[5px] md:-translate-x-[5px]`}></div>
+
+                                        {/* Card */}
+                                        <div
+                                            onClick={() => onDateSelect && onDateSelect(event.date)}
+                                            className={`bg-gradient-to-br ${getGradient(event.type)} backdrop-blur-xl border p-5 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] flex flex-col md:flex-row gap-4 items-start md:items-center justify-between cursor-pointer hover:shadow-xl`}>
+                                            {isEditing === event.id ? (
+                                                <div className="w-full grid gap-4 p-2">
+                                                    <input type="date" value={editForm.date} onChange={e => setEditForm({ ...editForm, date: e.target.value })} className="bg-slate-900/50 border border-white/10 rounded p-2 text-white" />
+                                                    <input type="text" value={editForm.description} onChange={e => setEditForm({ ...editForm, description: e.target.value })} className="bg-slate-900/50 border border-white/10 rounded p-2 text-white" />
+                                                    <div className="flex justify-end gap-2">
+                                                        <button onClick={() => handleEditSave(event.id)} className="px-3 py-1 bg-green-600 rounded text-sm">Save</button>
+                                                        <button onClick={() => setIsEditing(null)} className="px-3 py-1 bg-slate-600 rounded text-sm">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <div className="flex items-center gap-4">
+                                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center bg-slate-900/50 border border-white/5`}>
+                                                            <div className="text-center">
+                                                                <div className="text-xs font-bold text-slate-400 uppercase">{new Date(event.date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
+                                                                <div className="text-lg font-black text-white leading-none">{new Date(event.date).getDate()}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <h3 className="text-lg font-bold text-white leading-tight">{event.description}</h3>
+                                                            <div className="flex items-center gap-2 mt-1">
+                                                                <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border border-white/10 ${event.type === 'holiday' ? 'bg-orange-500/20 text-orange-200' : 'bg-slate-800 text-slate-400'}`}>{event.type}</span>
+                                                                {event.day_order && (
+                                                                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded border border-blue-500/30 bg-blue-500/20 text-blue-200 flex items-center gap-1">
+                                                                        <Clock size={10} /> Day Order {event.day_order}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {isAdmin && (
+                                                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity self-end md:self-center">
+                                                            <button onClick={() => startEdit(event)} className="p-2 hover:bg-slate-800 rounded-lg text-blue-300"><Edit2 size={16} /></button>
+                                                            <button onClick={() => handleDelete(event.id)} className="p-2 hover:bg-slate-800 rounded-lg text-red-300"><Trash2 size={16} /></button>
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))
                 )}
             </div>
         </div>
