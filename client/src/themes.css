@@ -392,29 +392,74 @@
 
 /* --- SELECTION ANIMATION KEYFRAMES --- */
 
-/* Rocket Launch (Space) */
+/* ISRO Style Rocket Launch */
 @keyframes rocket-launch {
     0% {
-        transform: translateY(100vh) scale(0.5);
+        transform: translateY(110vh) scale(0.8);
         opacity: 0;
     }
 
-    20% {
+    10% {
         opacity: 1;
+        transform: translateY(80vh) scale(0.8);
     }
 
-    50% {
-        transform: translateY(0) scale(1.5);
+    /* Ignition */
+    30% {
+        transform: translateY(50vh) scale(1);
     }
 
+    /* Lift off */
+    60% {
+        transform: translateY(0vh) scale(1.5);
+    }
+
+    /* Center stage hover */
+    70% {
+        transform: translateY(0vh) scale(1.5);
+    }
+
+    /* Pause for glory */
     100% {
-        transform: translateY(-100vh) scale(0.5);
+        transform: translateY(-120vh) scale(0.5);
         opacity: 0;
     }
+
+    /* Blast off */
 }
 
 .anim-rocket-launch {
-    animation: rocket-launch 2s ease-in-out forwards;
+    animation: rocket-launch 2.5s ease-in-out forwards;
+}
+
+/* Generic Hero Rise (for all others) */
+@keyframes hero-rise {
+    0% {
+        transform: translateY(110vh) scale(0.5);
+        opacity: 0;
+    }
+
+    40% {
+        transform: translateY(0vh) scale(1.5) rotate(0deg);
+        opacity: 1;
+    }
+
+    /* Rise to center */
+    60% {
+        transform: translateY(0vh) scale(1.5) rotate(0deg);
+    }
+
+    /* Hover */
+    100% {
+        transform: translateY(-120vh) scale(0.5) rotate(10deg);
+        opacity: 0;
+    }
+
+    /* Fly up away */
+}
+
+.anim-rise {
+    animation: hero-rise 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* Generic Pop Up */
