@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const jwt = require('jsonwebtoken');
+const { SUBJECT_MAP, BATCH_1_SCHEDULE, BATCH_2_SCHEDULE, TIME_SLOTS } = require('../utils/timetableData');
 
 // Middleware
 const authenticateToken = (req, res, next) => {
@@ -15,48 +16,61 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-const requireAdmin = (req, res, next) => {
-    if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admins only' });
-    next();
-};
-
-// GET Timetable (Public/Auth)
+// GET Dynamic Timetable
 router.get('/', authenticateToken, (req, res) => {
-    const stmt = db.prepare('SELECT * FROM timetable ORDER BY day, period');
-    const schedule = stmt.all();
-    res.json(schedule);
-});
-
-// POST Timetable Entry (Admin)
-router.post('/', authenticateToken, requireAdmin, (req, res) => {
-    const { day, period, time_range, subject, teacher } = req.body;
-
-    // Check if entry exists for this day/period, if so update it, else insert
-    // Actually simplicity: just insert. UI will handle display.
-    // Better: UPSERT logic or DELETE then INSERT to avoid duplicates for same slot?
-    // Let's do simple Delete old for that slot then Insert new.
-
     try {
-        db.prepare('DELETE FROM timetable WHERE day = ? AND period = ?').run(day, period);
-        const stmt = db.prepare('INSERT INTO timetable (day, period, time_range, subject, teacher) VALUES (?, ?, ?, ?, ?)');
-        stmt.run(day, period, time_range, subject, teacher);
+        // 1. Get User Registration Number
+        const user = db.prepare('SELECT linked_reg_no FROM users WHERE email = ?').get(req.user.email);
+        const regNo = user?.linked_reg_no;
 
-        // Real-time update
-        if (req.io) {
-            req.io.emit('new_timetable', { day, period, time_range, subject, teacher });
+        let isBatch1 = false;
+        let batchName = "Batch 2 (General)";
+
+        // 2. Determine Batch Logic
+        if (regNo) {
+            const lastThree = parseInt(regNo.slice(-3), 10);
+            if (!isNaN(lastThree)) {
+                // "from 869 to 906 is batch-1"
+                if (lastThree >= 869 && lastThree <= 906) {
+                    isBatch1 = true;
+                    batchName = "Batch 1 (869-906)";
+                }
+                // "till 940 and 603 is batch 2" -> Default/Else case
+            }
         }
 
-        res.json({ message: 'Timetable updated' });
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({ message: 'Error updating timetable' });
-    }
-});
+        const scheduleData = isBatch1 ? BATCH_1_SCHEDULE : BATCH_2_SCHEDULE;
+        const fullTimetable = [];
 
-// DELETE Entry
-router.delete('/:id', authenticateToken, requireAdmin, (req, res) => {
-    db.prepare('DELETE FROM timetable WHERE id = ?').run(req.params.id);
-    res.json({ message: 'Deleted' });
+        // 3. Construct Response
+        Object.keys(scheduleData).forEach(day => {
+            const periods = scheduleData[day];
+            periods.forEach((slotCode, index) => {
+                if (slotCode === 'LUNCH') return; // Skip lunch for clean JSON or handle on frontend
+
+                const subjectInfo = SUBJECT_MAP[slotCode] || { name: slotCode, code: '', staff: '' };
+
+                fullTimetable.push({
+                    day: `Day ${day}`,
+                    period: `${index + 1}`,
+                    time_range: TIME_SLOTS[index] || '00:00 - 00:00',
+                    subject: subjectInfo.name,
+                    teacher: subjectInfo.staff,
+                    type: subjectInfo.type || 'Theory'
+                });
+            });
+        });
+
+        // Add metadata for frontend to show which batch is active
+        res.json({
+            meta: { batch: batchName, regNo: regNo || 'Not Linked' },
+            schedule: fullTimetable
+        });
+
+    } catch (error) {
+        console.error("Timetable Error:", error);
+        res.status(500).json({ message: 'Server Error' });
+    }
 });
 
 module.exports = router;
