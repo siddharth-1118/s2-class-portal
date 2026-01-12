@@ -71,7 +71,8 @@ router.get('/', authenticateToken, (req, res) => {
 
 // POST mark (Admin only)
 router.post('/', authenticateToken, requireAdmin, (req, res) => {
-    const { student_reg_no, subject, score, max_marks, exam_type } = req.body;
+    let { student_reg_no, subject, score, max_marks, exam_type } = req.body;
+    student_reg_no = student_reg_no.trim().toUpperCase();
     const stmt = db.prepare('INSERT INTO marks (student_reg_no, subject, score, max_marks, exam_type) VALUES (?, ?, ?, ?, ?)');
     stmt.run(student_reg_no, subject, score, max_marks, exam_type);
 

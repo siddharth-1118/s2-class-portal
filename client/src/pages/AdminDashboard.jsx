@@ -119,7 +119,7 @@ const AdminDashboard = () => {
             });
             setHomeworks(prev => prev.filter(h => h.id !== id));
             setMsg('Homework deleted');
-            setTimeout(() => setMsg(''), 3000);
+            setTimeout(() => setMsg(''), 8000);
         } catch (err) { console.error(err); }
     };
 
@@ -146,7 +146,7 @@ const AdminDashboard = () => {
                 setMsg('Posted!');
                 setTitle(''); setDescription('');
             }
-            setTimeout(() => setMsg(''), 3000);
+            setTimeout(() => setMsg(''), 8000);
         } catch (err) { console.error(err); }
     };
 

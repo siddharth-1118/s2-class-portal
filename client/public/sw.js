@@ -5,6 +5,7 @@ self.addEventListener('push', e => {
     console.log('Push Received...');
     self.registration.showNotification(data.title, {
         body: data.description || 'New Homework Posted!',
-        icon: 'https://cdn-icons-png.flaticon.com/512/299/299901.png' // Generic icon
+        icon: 'https://cdn-icons-png.flaticon.com/512/299/299901.png', // Generic icon
+        requireInteraction: true
     });
 });
