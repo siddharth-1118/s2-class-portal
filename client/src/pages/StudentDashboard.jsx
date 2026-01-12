@@ -274,14 +274,14 @@ const StudentDashboard = () => {
             <div className="max-w-6xl mx-auto">
                 <header className="flex flex-col md:flex-row justify-between items-center mb-10 glass-card p-6 rounded-2xl animate-fade-in gap-4 relative z-50">
                     <div className="flex items-center gap-4">
-                        <div className="bg-primary/10 rounded-full p-3 shadow-lg">
-                            <BookOpen className="text-primary w-6 h-6" />
+                        <div className="rounded-full p-3 shadow-lg" style={{ backgroundColor: 'rgba(var(--accent-color), 0.1)' }}>
+                            <BookOpen className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} />
                         </div>
                         <div>
                             <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight dark:text-gray-100">Student Portal</h1>
                             <p className="text-gray-500 text-sm dark:text-gray-400">
-                                Welcome, <span className="font-semibold text-primary">{user.name}</span>
-                                {studentProfile?.section && <span className="ml-2 bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">{studentProfile.section}</span>}
+                                Welcome, <span className="font-semibold" style={{ color: 'rgb(var(--accent-color))' }}>{user.name}</span>
+                                {studentProfile?.section && <span className="ml-2 text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(var(--accent-color), 0.1)', color: 'rgb(var(--accent-color))' }}>{studentProfile.section}</span>}
                             </p>
                         </div>
                     </div>
@@ -292,7 +292,8 @@ const StudentDashboard = () => {
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
-                                    className={`px-4 py-2 rounded-full text-sm font-bold transition capitalize ${activeTab === tab ? 'bg-primary text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-white/40 dark:hover:bg-slate-700'}`}
+                                    className={`px-4 py-2 rounded-full text-sm font-bold transition capitalize ${activeTab === tab ? 'text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-white/40 dark:hover:bg-slate-700'}`}
+                                    style={activeTab === tab ? { backgroundColor: 'rgb(var(--accent-color))' } : {}}
                                 >
                                     {tab === 'cgpa' ? 'CGPA & SGPA' : tab === 'marks' ? 'My Grades' : tab === 'homework' ? 'Assignments' : tab}
                                 </button>
