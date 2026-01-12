@@ -8,12 +8,15 @@
   }
 
   body {
-    @apply bg-gray-50 text-gray-900 transition-colors duration-300;
+    @apply text-gray-900 transition-colors duration-300;
+    background-color: transparent;
+    color: var(--text-primary, #111827);
   }
 
   /* Dark Mode Overrides */
   .dark body {
-    @apply bg-slate-950 text-slate-100;
+    @apply text-slate-100;
+    color: var(--text-primary, #f1f5f9);
   }
 }
 
@@ -23,7 +26,9 @@
   }
 
   .glass-card {
-    @apply bg-white/70 backdrop-blur-md border border-white/50 shadow-xl;
+    @apply backdrop-blur-md border border-white/10 shadow-xl;
+    background-color: var(--bg-secondary, rgba(255, 255, 255, 0.7));
+    color: var(--text-primary, #111827);
   }
 
   .mesh-gradient {

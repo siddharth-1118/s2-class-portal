@@ -358,8 +358,8 @@ const StudentDashboard = () => {
                             <BookOpen className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight dark:text-gray-100">Student Portal</h1>
-                            <p className="text-gray-500 text-sm dark:text-gray-400">
+                            <h1 className="text-3xl font-extrabold tracking-tight text-[var(--text-primary)]">Student Portal</h1>
+                            <p className="text-sm opacity-80 text-[var(--text-primary)]">
                                 Welcome, <span className="font-semibold" style={{ color: 'rgb(var(--accent-color))' }}>{user.name}</span>
                                 {studentProfile?.section && <span className="ml-2 text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(var(--accent-color), 0.1)', color: 'rgb(var(--accent-color))' }}>{studentProfile.section}</span>}
                             </p>
@@ -367,12 +367,12 @@ const StudentDashboard = () => {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="bg-white/50 p-1 rounded-full flex gap-1 border border-white/60 dark:bg-slate-800/50 dark:border-slate-700">
+                        <div className="bg-white/10 p-1 rounded-full flex gap-1 border border-white/20">
                             {['homework', 'marks', 'analytics', 'timetable', 'cgpa'].map((tab) => (
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
-                                    className={`px-4 py-2 rounded-full text-sm font-bold transition capitalize ${activeTab === tab ? 'text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-white/40 dark:hover:bg-slate-700'}`}
+                                    className={`px-4 py-2 rounded-full text-sm font-bold transition capitalize ${activeTab === tab ? 'text-white shadow-md' : 'text-[var(--text-primary)] hover:bg-white/10'}`}
                                     style={activeTab === tab ? { backgroundColor: 'rgb(var(--accent-color))' } : {}}
                                 >
                                     {tab === 'cgpa' ? 'CGPA & SGPA' : tab === 'marks' ? 'My Grades' : tab === 'homework' ? 'Assignments' : tab}
@@ -406,17 +406,17 @@ const StudentDashboard = () => {
                     {activeTab === 'homework' && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {homeworks.map((hw, i) => (
-                                <div key={i} className="glass-card rounded-2xl p-6 hover:-translate-y-1 transition duration-300 group flex flex-col h-full bg-white/80">
+                                <div key={i} className="glass-card rounded-2xl p-6 hover:-translate-y-1 transition duration-300 group flex flex-col h-full">
                                     <div className="flex justify-between items-start mb-4">
-                                        <div className="bg-indigo-100 text-indigo-700 p-2 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition">
+                                        <div className="bg-indigo-100 text-indigo-700 p-2 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition" style={{ backgroundColor: 'rgba(var(--accent-color), 0.1)', color: 'rgb(var(--accent-color))' }}>
                                             <BookOpen className="w-6 h-6" />
                                         </div>
-                                        <span className="flex items-center gap-1 text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                                        <span className="flex items-center gap-1 text-xs font-medium opacity-70 bg-white/20 px-2 py-1 rounded-full text-[var(--text-primary)]">
                                             <Clock className="w-3 h-3" /> {new Date(hw.created_at).toLocaleDateString()}
                                         </span>
                                     </div>
-                                    <h3 className="text-xl font-bold text-gray-800 mb-2 leading-tight group-hover:text-indigo-600 transition">{hw.title}</h3>
-                                    <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-grow">{hw.description}</p>
+                                    <h3 className="text-xl font-bold mb-2 leading-tight group-hover:opacity-80 transition text-[var(--text-primary)]">{hw.title}</h3>
+                                    <p className="text-sm leading-relaxed mb-6 flex-grow opacity-80 text-[var(--text-primary)]">{hw.description}</p>
                                 </div>
                             ))}
                             {homeworks.length === 0 && (
@@ -429,60 +429,60 @@ const StudentDashboard = () => {
                     )}
 
                     {activeTab === 'marks' && (
-                        <div className="glass-card rounded-2xl p-8 bg-white/80 min-h-[500px]">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><GraduationCap className="w-6 h-6 text-fuchsia-600" /> Academic Performance</h2>
-                            <div className="overflow-hidden rounded-xl border border-gray-200 shadow-sm">
+                        <div className="glass-card rounded-2xl p-8 min-h-[500px]">
+                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><GraduationCap className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> Academic Performance</h2>
+                            <div className="overflow-hidden rounded-xl border border-white/10 shadow-sm">
                                 <table className="w-full text-left">
-                                    <thead className="bg-fuchsia-50">
+                                    <thead style={{ backgroundColor: 'rgba(var(--accent-color), 0.1)' }}>
                                         <tr>
-                                            <th className="p-4 font-bold text-fuchsia-800">Subject</th>
-                                            <th className="p-4 font-bold text-fuchsia-800">Exam</th>
-                                            <th className="p-4 font-bold text-fuchsia-800">Score</th>
-                                            <th className="p-4 font-bold text-fuchsia-800">Date</th>
+                                            <th className="p-4 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>Subject</th>
+                                            <th className="p-4 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>Exam</th>
+                                            <th className="p-4 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>Score</th>
+                                            <th className="p-4 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>Date</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-gray-100 bg-white">
+                                    <tbody className="divide-y divide-white/10">
                                         {marks.map((m) => (
-                                            <tr key={m.id} className="hover:bg-fuchsia-50/30 transition">
-                                                <td className="p-4 font-semibold text-gray-700">{m.subject}</td>
-                                                <td className="p-4 text-gray-500 font-medium">{m.exam_type || '-'}</td>
-                                                <td className="p-4"><span className="bg-fuchsia-100 text-fuchsia-700 px-3 py-1 rounded-full font-bold text-sm">{m.score} / {m.max_marks}</span></td>
-                                                <td className="p-4 text-gray-500 text-sm">{new Date(m.created_at).toLocaleDateString()}</td>
+                                            <tr key={m.id} className="hover:bg-white/5 transition">
+                                                <td className="p-4 font-semibold text-[var(--text-primary)]">{m.subject}</td>
+                                                <td className="p-4 font-medium opacity-80 text-[var(--text-primary)]">{m.exam_type || '-'}</td>
+                                                <td className="p-4"><span className="px-3 py-1 rounded-full font-bold text-sm" style={{ backgroundColor: 'rgba(var(--accent-color), 0.15)', color: 'rgb(var(--accent-color))' }}>{m.score} / {m.max_marks}</span></td>
+                                                <td className="p-4 text-sm opacity-60 text-[var(--text-primary)]">{new Date(m.created_at).toLocaleDateString()}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                             </div>
-                            {marks.length === 0 && <p className="text-center text-gray-400 py-10">No grades available yet.</p>}
+                            {marks.length === 0 && <p className="text-center py-10 opacity-50 text-[var(--text-primary)]">No grades available yet.</p>}
                         </div>
                     )}
 
                     {activeTab === 'timetable' && (
-                        <div className="glass-card rounded-2xl p-6 bg-white/80 min-h-[500px]">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><Calendar className="w-6 h-6 text-orange-500" /> Class Schedule</h2>
+                        <div className="glass-card rounded-2xl p-6 min-h-[500px]">
+                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><Calendar className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> Class Schedule</h2>
                             <div className="overflow-x-auto">
                                 <table className="w-full border-collapse min-w-[800px]">
                                     <thead>
                                         <tr>
-                                            <th className="p-3 border-b border-gray-200 bg-gray-50 text-gray-500 font-bold uppercase text-xs w-32">Day</th>
-                                            {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <th key={p} className="p-3 border-b border-gray-200 bg-gray-50 text-gray-500 font-bold uppercase text-xs">Period {p}</th>)}
+                                            <th className="p-3 border-b border-white/10 font-bold uppercase text-xs w-32" style={{ backgroundColor: 'rgba(var(--accent-color), 0.05)', color: 'rgb(var(--accent-color))' }}>Day</th>
+                                            {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <th key={p} className="p-3 border-b border-white/10 font-bold uppercase text-xs opacity-70 text-[var(--text-primary)]" style={{ backgroundColor: 'rgba(var(--accent-color), 0.05)' }}>Period {p}</th>)}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].map(day => (
-                                            <tr key={day} className="hover:bg-gray-50/50">
-                                                <td className="p-3 border-b border-gray-100 font-bold text-indigo-600">{day}</td>
+                                            <tr key={day} className="hover:bg-white/5">
+                                                <td className="p-3 border-b border-white/10 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>{day}</td>
                                                 {[1, 2, 3, 4, 5, 6, 7, 8].map(period => {
                                                     const entry = timetable.find(t => t.day === day && t.period == period);
                                                     return (
-                                                        <td key={period} className="p-3 border-b border-gray-100 text-center relative border-l border-gray-100">
+                                                        <td key={period} className="p-3 border-b border-white/10 text-center relative border-l border-white/5">
                                                             {entry ? (
                                                                 <div className="py-2">
-                                                                    <div className="font-bold text-gray-800 text-sm">{entry.subject}</div>
-                                                                    <div className="text-xs text-gray-500">{entry.time_range}</div>
-                                                                    <div className="text-xs text-orange-500 font-medium">{entry.teacher}</div>
+                                                                    <div className="font-bold text-[var(--text-primary)] text-sm">{entry.subject}</div>
+                                                                    <div className="text-xs opacity-60 text-[var(--text-primary)]">{entry.time_range}</div>
+                                                                    <div className="text-xs font-medium opacity-80" style={{ color: 'rgb(var(--accent-color))' }}>{entry.teacher}</div>
                                                                 </div>
-                                                            ) : <span className="text-gray-300">-</span>}
+                                                            ) : <span className="opacity-20 text-[var(--text-primary)]">-</span>}
                                                         </td>
                                                     );
                                                 })}
@@ -495,35 +495,35 @@ const StudentDashboard = () => {
                     )}
 
                     {activeTab === 'analytics' && (
-                        <div className="glass-card rounded-2xl p-8 bg-white/80 min-h-[500px]">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><BarChart2 className="w-6 h-6 text-blue-600" /> Performance Analytics</h2>
+                        <div className="glass-card rounded-2xl p-8 min-h-[500px]">
+                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><BarChart2 className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> Performance Analytics</h2>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                                    <h3 className="text-lg font-bold text-gray-700 mb-4">Subject Average (%)</h3>
+                                <div className="p-6 rounded-2xl shadow-sm border border-white/10 glass">
+                                    <h3 className="text-lg font-bold mb-4 opacity-90 text-[var(--text-primary)]">Subject Average (%)</h3>
                                     <div className="h-64">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <BarChart data={getUniqueSubjects()}>
-                                                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                                                <XAxis dataKey="subject" tick={{ fontSize: 12 }} />
-                                                <YAxis domain={[0, 100]} />
-                                                <Tooltip />
-                                                <Bar dataKey="percentage" fill="#4f46e5" radius={[4, 4, 0, 0]} />
+                                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                                                <XAxis dataKey="subject" tick={{ fontSize: 12, fill: 'var(--text-primary)' }} stroke="var(--text-primary)" />
+                                                <YAxis domain={[0, 100]} tick={{ fill: 'var(--text-primary)' }} stroke="var(--text-primary)" />
+                                                <Tooltip contentStyle={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'rgba(255,255,255,0.1)', color: 'var(--text-primary)' }} />
+                                                <Bar dataKey="percentage" fill="rgb(var(--accent-color))" radius={[4, 4, 0, 0]} />
                                             </BarChart>
                                         </ResponsiveContainer>
                                     </div>
                                 </div>
 
-                                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                                    <h3 className="text-lg font-bold text-gray-700 mb-4">Marks History</h3>
+                                <div className="p-6 rounded-2xl shadow-sm border border-white/10 glass">
+                                    <h3 className="text-lg font-bold mb-4 opacity-90 text-[var(--text-primary)]">Marks History</h3>
                                     <div className="h-64">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <LineChart data={marks}>
-                                                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                                                <XAxis dataKey="subject" tick={{ fontSize: 10 }} />
-                                                <YAxis domain={[0, 100]} />
-                                                <Tooltip />
-                                                <Line type="monotone" dataKey="score" stroke="#db2777" strokeWidth={2} dot={{ r: 4 }} />
+                                                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                                                <XAxis dataKey="subject" tick={{ fontSize: 10, fill: 'var(--text-primary)' }} stroke="var(--text-primary)" />
+                                                <YAxis domain={[0, 100]} tick={{ fill: 'var(--text-primary)' }} stroke="var(--text-primary)" />
+                                                <Tooltip contentStyle={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'rgba(255,255,255,0.1)', color: 'var(--text-primary)' }} />
+                                                <Line type="monotone" dataKey="score" stroke="rgb(var(--accent-color))" strokeWidth={2} dot={{ r: 4, fill: 'var(--text-primary)' }} />
                                             </LineChart>
                                         </ResponsiveContainer>
                                     </div>
@@ -533,33 +533,34 @@ const StudentDashboard = () => {
                     )}
 
                     {activeTab === 'cgpa' && (
-                        <div className="glass-card rounded-2xl p-8 bg-white/80 min-h-[500px]">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><GraduationCap className="w-6 h-6 text-emerald-600" /> CGPA Estimator</h2>
-                            <div className="mb-6 bg-emerald-50 border border-emerald-100 p-4 rounded-xl text-emerald-800 text-sm">
-                                <p><strong>How it works:</strong> We calculate your average score percentage for each subject. You assign the credit value (e.g., 3 or 4) for each subject. We then use a standard 10-point grading scale to estimate your CGPA.</p>
+                        <div className="glass-card rounded-2xl p-8 min-h-[500px]">
+                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><GraduationCap className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> CGPA Estimator</h2>
+                            <div className="mb-6 border border-white/10 p-4 rounded-xl text-sm opacity-80 text-[var(--text-primary)]" style={{ backgroundColor: 'rgba(var(--accent-color), 0.05)' }}>
+                                <p><strong>How it works:</strong> We calculate your average score percentage for each subject. You assign the credit value (e.g., 3 or 4) for each subject.</p>
                             </div>
 
-                            <div className="overflow-hidden rounded-xl border border-gray-200 shadow-sm mb-6">
+                            <div className="overflow-hidden rounded-xl border border-white/10 shadow-sm mb-6">
                                 <table className="w-full text-left">
-                                    <thead className="bg-emerald-50">
+                                    <thead style={{ backgroundColor: 'rgba(var(--accent-color), 0.1)' }}>
                                         <tr>
-                                            <th className="p-4 font-bold text-emerald-800">Subject</th>
-                                            <th className="p-4 font-bold text-emerald-800">Avg %</th>
-                                            <th className="p-4 font-bold text-emerald-800">Grade Point</th>
-                                            <th className="p-4 font-bold text-emerald-800 w-32">Credits</th>
+                                            <th className="p-4 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>Subject</th>
+                                            <th className="p-4 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>Avg %</th>
+                                            <th className="p-4 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>Grade Point</th>
+                                            <th className="p-4 font-bold w-32" style={{ color: 'rgb(var(--accent-color))' }}>Credits</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-gray-100 bg-white">
+                                    <tbody className="divide-y divide-white/10">
                                         {getUniqueSubjects().map((sub, i) => (
-                                            <tr key={i} className="hover:bg-emerald-50/30 transition">
-                                                <td className="p-4 font-semibold text-gray-700">{sub.subject}</td>
-                                                <td className="p-4 text-gray-500">{sub.percentage}%</td>
-                                                <td className="p-4 font-bold text-emerald-600">{sub.gradePoint}</td>
+                                            <tr key={i} className="hover:bg-white/5 transition">
+                                                <td className="p-4 font-semibold text-[var(--text-primary)]">{sub.subject}</td>
+                                                <td className="p-4 opacity-80 text-[var(--text-primary)]">{sub.percentage}%</td>
+                                                <td className="p-4 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>{sub.gradePoint}</td>
                                                 <td className="p-4">
                                                     <input
                                                         type="number"
                                                         min="1" max="10"
-                                                        className="w-full border border-gray-300 rounded px-2 py-1 focus:ring-emerald-500 focus:border-emerald-500"
+                                                        className="w-full border border-white/20 rounded px-2 py-1 bg-transparent text-[var(--text-primary)] focus:ring-2 focus:outline-none"
+                                                        style={{ focusRing: 'rgb(var(--accent-color))' }}
                                                         value={cgpaCredits[sub.subject] || ''}
                                                         onChange={(e) => setCgpaCredits({ ...cgpaCredits, [sub.subject]: e.target.value })}
                                                         placeholder="e.g 4"
@@ -571,52 +572,53 @@ const StudentDashboard = () => {
                                 </table>
                             </div>
 
-                            <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-6 bg-emerald-900 rounded-2xl text-white shadow-xl">
-                                <div className="text-center md:text-left">
-                                    <h3 className="text-xl font-bold opacity-90">Estimated CGPA</h3>
-                                    <div className="text-4xl font-extrabold mt-1 text-emerald-400">
+                            <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-6 rounded-2xl text-white shadow-xl relative overflow-hidden">
+                                <div className="absolute inset-0 opacity-90" style={{ backgroundColor: 'rgb(var(--accent-color))' }}></div>
+                                <div className="text-center md:text-left relative z-10">
+                                    <h3 className="text-xl font-bold opacity-90 text-white">Estimated CGPA</h3>
+                                    <div className="text-4xl font-extrabold mt-1 text-white">
                                         {calculatedCGPA !== null ? calculatedCGPA : '-.--'}
                                     </div>
                                 </div>
                                 <button
                                     onClick={handleCalculateCGPA}
-                                    className="bg-white text-emerald-900 font-bold py-3 px-8 rounded-xl hover:bg-emerald-100 transition shadow-lg"
+                                    className="bg-white/20 hover:bg-white/30 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg backdrop-blur-sm border border-white/30 relative z-10"
                                 >
                                     Calculate Now
                                 </button>
                             </div>
-                            {getUniqueSubjects().length === 0 && <p className="text-center text-gray-400 py-10 mt-4">No marks recorded to calculate CGPA.</p>}
+                            {getUniqueSubjects().length === 0 && <p className="text-center py-10 mt-4 opacity-50 text-[var(--text-primary)]">No marks recorded to calculate CGPA.</p>}
 
                             {/* SGPA Section */}
-                            <div className="mt-12 pt-8 border-t border-gray-200">
-                                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><GraduationCap className="w-6 h-6 text-emerald-600" /> SGPA Calculator</h2>
-                                <p className="text-sm text-gray-500 mb-4">Estimate GPA for a specific semester by manually entering expected grades and credits.</p>
+                            <div className="mt-12 pt-8 border-t border-white/10">
+                                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><GraduationCap className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> SGPA Calculator</h2>
+                                <p className="text-sm opacity-60 mb-4 text-[var(--text-primary)]">Estimate GPA for a specific semester by manually entering expected grades and credits.</p>
 
                                 <div className="space-y-4 mb-6">
                                     {Array.from({ length: sgpaCourseCount }).map((_, i) => (
                                         <div key={i} className="flex gap-4">
-                                            <select className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2" onChange={e => {
+                                            <select className="flex-1 bg-transparent border border-white/20 rounded-lg px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[rgb(var(--accent-color))]" onChange={e => {
                                                 const val = parseInt(e.target.value);
                                                 setSgpaCredits(prev => ({ ...prev, [`grade-${i}`]: val }));
                                             }}>
-                                                <option value="0">Select Grade</option>
-                                                <option value="10">O (10)</option>
-                                                <option value="9">A+ (9)</option>
-                                                <option value="8">A (8)</option>
-                                                <option value="7">B+ (7)</option>
-                                                <option value="6">B (6)</option>
-                                                <option value="5">C (5)</option>
-                                                <option value="0">RA (0)</option>
+                                                <option className="bg-gray-800 text-white" value="0">Select Grade</option>
+                                                <option className="bg-gray-800 text-white" value="10">O (10)</option>
+                                                <option className="bg-gray-800 text-white" value="9">A+ (9)</option>
+                                                <option className="bg-gray-800 text-white" value="8">A (8)</option>
+                                                <option className="bg-gray-800 text-white" value="7">B+ (7)</option>
+                                                <option className="bg-gray-800 text-white" value="6">B (6)</option>
+                                                <option className="bg-gray-800 text-white" value="5">C (5)</option>
+                                                <option className="bg-gray-800 text-white" value="0">RA (0)</option>
                                             </select>
                                             <input
                                                 type="number"
-                                                placeholder="Credits (e.g., 4)"
-                                                className="w-24 bg-white border border-gray-300 rounded-lg px-3 py-2"
+                                                placeholder="Credits"
+                                                className="w-24 bg-transparent border border-white/20 rounded-lg px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[rgb(var(--accent-color))]"
                                                 onChange={e => setSgpaCredits(prev => ({ ...prev, [`credit-${i}`]: parseFloat(e.target.value || 0) }))}
                                             />
                                         </div>
                                     ))}
-                                    <button onClick={() => setSgpaCourseCount(c => c + 1)} className="text-sm text-indigo-600 font-bold hover:underline">+ Add Course</button>
+                                    <button onClick={() => setSgpaCourseCount(c => c + 1)} className="text-sm font-bold hover:underline" style={{ color: 'rgb(var(--accent-color))' }}>+ Add Course</button>
                                 </div>
 
                                 <button onClick={() => {
@@ -631,14 +633,15 @@ const StudentDashboard = () => {
                                         }
                                     }
                                     setCalculatedSGPA(totalCredits === 0 ? 0 : (totalPoints / totalCredits).toFixed(2));
-                                }} className="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition">
+                                }} className="w-full text-white font-bold py-3 rounded-xl transition shadow-lg opacity-90 hover:opacity-100" style={{ backgroundColor: 'rgb(var(--accent-color))' }}>
                                     Calculate SGPA
                                 </button>
 
                                 {calculatedSGPA && (
-                                    <div className="mt-6 text-center bg-emerald-900 rounded-2xl p-6 text-white shadow-xl">
-                                        <h3 className="text-xl font-bold opacity-90">Estimated SGPA</h3>
-                                        <div className="text-4xl font-extrabold mt-1 text-emerald-400">{calculatedSGPA}</div>
+                                    <div className="mt-6 text-center rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
+                                        <div className="absolute inset-0" style={{ backgroundColor: 'rgb(var(--accent-color))', opacity: 0.2 }}></div>
+                                        <h3 className="text-xl font-bold opacity-90 relative z-10 text-[var(--text-primary)]">Estimated SGPA</h3>
+                                        <div className="text-4xl font-extrabold mt-1 relative z-10" style={{ color: 'rgb(var(--accent-color))' }}>{calculatedSGPA}</div>
                                     </div>
                                 )}
                             </div>
