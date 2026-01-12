@@ -9,31 +9,33 @@ export const ThemeProvider = ({ children }) => {
     const [accentColor, setAccentColor] = useState(localStorage.getItem('app-accent') || 'violet');
     const [font, setFont] = useState(localStorage.getItem('app-font') || 'sans');
     const [bgPattern, setBgPattern] = useState(localStorage.getItem('app-bg') || 'mesh-gradient');
-    const [character, setCharacter] = useState(localStorage.getItem('app-character') || null);
+    const [character, setCharacter] = useState(() => {
+        const saved = localStorage.getItem('app-character');
+        try { return saved ? JSON.parse(saved) : null; } catch { return null; }
+    });
 
     useEffect(() => {
         const root = window.document.documentElement;
-        root.classList.remove('light', 'dark', 'cyberpunk', 'fantasy', 'space', 'ocean');
+        root.classList.remove('light', 'dark', 'cyberpunk', 'fantasy', 'space', 'ocean', 'jungle', 'candy', 'steampunk', 'horror', 'pixel', 'samurai', 'superhero', 'magic');
         root.classList.add(theme);
         localStorage.setItem('app-theme', theme);
-        if (character) localStorage.setItem('app-character', character);
+        if (character) localStorage.setItem('app-character', JSON.stringify(character));
 
         // Handle Accent Color (If Custom Hex or Predefined)
         const colorMap = {
             'violet': '124, 58, 237',
-            'indigo': '79, 70, 229',
-            'blue': '37, 99, 235',
-            'emerald': '5, 150, 105',
-            'orange': '234, 88, 12',
-            'pink': '219, 39, 119',
-            'red': '220, 38, 38',
-            'pink': '219, 39, 119',
-            'red': '220, 38, 38',
-            'cyan': '8, 145, 178',
             'neon': '57, 255, 20', // Cyberpunk
             'gold': '255, 215, 0', // Fantasy
             'starlight': '147, 197, 253', // Space
-            'teal': '20, 184, 166' // Ocean
+            'teal': '20, 184, 166', // Ocean
+            'leaf': '74, 222, 128', // Jungle
+            'pink': '236, 72, 153', // Candy
+            'bronze': '212, 163, 115', // Steampunk
+            'blood': '239, 68, 68', // Horror
+            '8bit': '59, 130, 246', // Pixel
+            'crimson': '220, 38, 38', // Samurai
+            'hero': '250, 204, 21', // Superhero
+            'magic-purple': '192, 132, 252' // Magic
         };
 
         const hexToRgb = (hex) => {

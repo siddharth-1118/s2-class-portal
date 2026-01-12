@@ -1,8 +1,13 @@
+/* --- THEMES --- */
+
+/* 1. Cyberpunk */
 .cyberpunk {
     --bg-primary: #0f0e17;
     --bg-secondary: #2e2f3e;
     --text-primary: #fffffe;
-    --accent: #ff00ff;
+    --accent: #57ff14;
+    /* Neon Green */
+    --accent-rgb: 87, 255, 20;
     --font-heading: 'Orbitron', sans-serif;
     background-color: #050505;
     background-image:
@@ -11,20 +16,26 @@
     background-size: 30px 30px;
 }
 
+/* 2. Fantasy */
 .fantasy {
     --bg-primary: #2c1a1d;
     --bg-secondary: #4a2b32;
     --text-primary: #f8e1b4;
-    --accent: #d4af37;
+    --accent: #ffd700;
+    /* Gold */
+    --accent-rgb: 255, 215, 0;
     --font-heading: 'Cinzel', serif;
     background: radial-gradient(circle at top, #2b1d0e, #0e0500);
 }
 
+/* 3. Space */
 .space {
     --bg-primary: #0b0d17;
     --bg-secondary: #1c1e2e;
     --text-primary: #d0d6f9;
-    --accent: #38bdf8;
+    --accent: #93c5fd;
+    /* Starlight Blue */
+    --accent-rgb: 147, 197, 253;
     background-color: #000;
     background-image: radial-gradient(white, rgba(255, 255, 255, .2) 2px, transparent 40px),
         radial-gradient(white, rgba(255, 255, 255, .15) 1px, transparent 30px),
@@ -33,15 +44,111 @@
     background-position: 0 0, 40px 60px, 130px 270px;
 }
 
+/* 4. Ocean */
 .ocean {
     --bg-primary: #001e3c;
     --bg-secondary: #0a2e52;
     --text-primary: #e0f7fa;
-    --accent: #00bcd4;
+    --accent: #14b8a6;
+    /* Teal */
+    --accent-rgb: 20, 184, 166;
     background: linear-gradient(180deg, #020024 0%, #090979 35%, #00d4ff 100%);
 }
 
-/* Moving Creatures Animations */
+/* 5. Jungle */
+.jungle {
+    --bg-primary: #1a2f16;
+    --bg-secondary: #2f4f25;
+    --text-primary: #e8f5e9;
+    --accent: #4ade80;
+    /* Leaf Green */
+    --accent-rgb: 74, 222, 128;
+    background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+}
+
+/* 6. Candy */
+.candy {
+    --bg-primary: #fff0f5;
+    --bg-secondary: #ffe4e1;
+    --text-primary: #d81b60;
+    --accent: #ec4899;
+    /* Pink */
+    --accent-rgb: 236, 72, 153;
+    background: radial-gradient(circle at 50% 50%, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+}
+
+/* 7. Steampunk */
+.steampunk {
+    --bg-primary: #3e2723;
+    --bg-secondary: #5d4037;
+    --text-primary: #d7ccc8;
+    --accent: #d4a373;
+    /* Bronze */
+    --accent-rgb: 212, 163, 115;
+    background: repeating-linear-gradient(45deg, #3e2723, #3e2723 10px, #4e342e 10px, #4e342e 20px);
+}
+
+/* 8. Horror */
+.horror {
+    --bg-primary: #000000;
+    --bg-secondary: #1a1a1a;
+    --text-primary: #cfcfcf;
+    --accent: #ef4444;
+    /* Blood Red */
+    --accent-rgb: 239, 68, 68;
+    background: linear-gradient(to bottom, #000000 0%, #434343 100%);
+}
+
+/* 9. Pixel */
+.pixel {
+    --bg-primary: #2d2d2d;
+    --bg-secondary: #404040;
+    --text-primary: #ffffff;
+    --accent: #3b82f6;
+    /* 8-bit Blue */
+    --accent-rgb: 59, 130, 246;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #e5e5f7;
+    background-image: linear-gradient(#444cf7 2px, transparent 2px), linear-gradient(90deg, #444cf7 2px, transparent 2px), linear-gradient(#444cf7 1px, transparent 1px), linear-gradient(90deg, #444cf7 1px, transparent 1px);
+    background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+    background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}
+
+/* 10. Samurai */
+.samurai {
+    --bg-primary: #1f1f1f;
+    --bg-secondary: #333333;
+    --text-primary: #f5f5f5;
+    --accent: #dc2626;
+    /* Crimson */
+    --accent-rgb: 220, 38, 38;
+    background: radial-gradient(circle, #800000, #000000);
+}
+
+/* 11. Superhero */
+.superhero {
+    --bg-primary: #1e3a8a;
+    --bg-secondary: #1d4ed8;
+    --text-primary: #ffffff;
+    --accent: #facc15;
+    /* Hero Yellow */
+    --accent-rgb: 250, 204, 21;
+    background: conic-gradient(from 180deg at 50% 50%, #D4145A 0deg, #FBB03B 120deg, #3D4EAF 240deg, #D4145A 360deg);
+    filter: saturate(1.2);
+}
+
+/* 12. Magic */
+.magic {
+    --bg-primary: #3b0764;
+    --bg-secondary: #581c87;
+    --text-primary: #e9d5ff;
+    --accent: #c084fc;
+    /* Purple Magic */
+    --accent-rgb: 192, 132, 252;
+    background: radial-gradient(circle at center, #632c65 0%, #2a0a2e 100%);
+}
+
+/* --- ANIMATIONS --- */
 @keyframes float {
     0% {
         transform: translateY(0px);
@@ -82,14 +189,105 @@
     }
 }
 
+@keyframes swim {
+    0% {
+        transform: translateX(0px) rotate(0deg);
+    }
+
+    25% {
+        transform: translateX(10px) rotate(5deg);
+    }
+
+    50% {
+        transform: translateX(0px) rotate(0deg);
+    }
+
+    75% {
+        transform: translateX(-10px) rotate(-5deg);
+    }
+
+    100% {
+        transform: translateX(0px) rotate(0deg);
+    }
+}
+
+@keyframes bounce-fast {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes ghost-float {
+    0% {
+        opacity: 0.5;
+        transform: translateY(0);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: translateY(-30px);
+    }
+
+    100% {
+        opacity: 0.5;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse-glow {
+    0% {
+        filter: drop-shadow(0 0 5px var(--accent));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 20px var(--accent));
+    }
+
+    100% {
+        filter: drop-shadow(0 0 5px var(--accent));
+    }
+}
+
 .creature-float {
     animation: float 6s ease-in-out infinite;
 }
 
 .creature-glitch {
-    animation: glitch 1s infinite;
+    animation: glitch 0.5s infinite;
 }
 
 .creature-swim {
-    animation: float 4s ease-in-out infinite alternate-reverse;
+    animation: swim 4s ease-in-out infinite;
+}
+
+.creature-bounce {
+    animation: bounce-fast 0.5s infinite;
+}
+
+.creature-ghost {
+    animation: ghost-float 5s ease-in-out infinite;
+}
+
+.creature-spin {
+    animation: spin-slow 10s linear infinite;
+}
+
+.creature-pulse {
+    animation: pulse-glow 2s infinite;
 }

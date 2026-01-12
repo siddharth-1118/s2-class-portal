@@ -5,11 +5,14 @@ const db = require('../db');
 
 // Configure web-push
 if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+    console.log("VAPID Keys found. WebPush authorized.");
     webpush.setVapidDetails(
         'mailto:saisiddharthvooka@gmail.com',
         process.env.VAPID_PUBLIC_KEY,
         process.env.VAPID_PRIVATE_KEY
     );
+} else {
+    console.warn("WARNING: VAPID Keys missing! Notifications will not work.");
 }
 
 // Subscribe Route

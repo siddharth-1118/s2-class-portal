@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save, Calendar, BarChart2, Settings, Palette } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
-import ThemeSelectorMenu from '../components/ThemeSelectorMenu';
+
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -44,7 +44,7 @@ const StudentDashboard = () => {
     const [sgpaCourseCount, setSgpaCourseCount] = useState(5);
     const [showCharacterModal, setShowCharacterModal] = useState(false);
 
-    const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+
 
     useEffect(() => {
         if (!character) setShowCharacterModal(true);
@@ -209,6 +209,11 @@ const StudentDashboard = () => {
             try {
                 const register = await navigator.serviceWorker.ready;
                 const publicVapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+                if (!publicVapidKey) {
+                    alert('Error: VITE_VAPID_PUBLIC_KEY is missing in client environment!');
+                    console.error('VITE_VAPID_PUBLIC_KEY is missing');
+                    return;
+                }
                 const subscription = await register.pushManager.subscribe({
                     userVisibleOnly: true,
                     applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
@@ -219,7 +224,11 @@ const StudentDashboard = () => {
                     headers: { 'Content-Type': 'application/json' }
                 });
                 setIsSubscribed(true);
-            } catch (error) { console.error(error); }
+                alert("Successfully subscribed to notifications!");
+            } catch (error) {
+                console.error("Subscription Error:", error);
+                alert("Failed to subscribe to notifications: " + error.message);
+            }
         }
     };
 
@@ -287,19 +296,28 @@ const StudentDashboard = () => {
             )}
 
             {/* Character Selection Modal */}
+            {/* Character Selection Modal (Creature Gallery) */}
             {showCharacterModal && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in">
-                    <div className="bg-slate-900 rounded-3xl p-8 max-w-4xl w-full shadow-2xl border border-slate-700 relative overflow-hidden">
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in overflow-y-auto">
+                    <div className="bg-slate-900 rounded-3xl p-8 max-w-6xl w-full shadow-2xl border border-slate-700 relative my-auto">
                         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500"></div>
-                        <h2 className="text-3xl font-extrabold text-white text-center mb-2">Choose Your Companion</h2>
-                        <p className="text-gray-400 text-center mb-8">Your companion determines your realm's theme and follows you on your journey.</p>
+                        <h2 className="text-4xl font-extrabold text-white text-center mb-2 tracking-tight">Choose Your Companion</h2>
+                        <p className="text-gray-400 text-center mb-8">Each creature unlocks a unique realm. Select wisely!</p>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[70vh] overflow-y-auto p-2 custom-scrollbar">
                             {[
-                                { id: 'cyberpunk', name: 'Neon Glitch', emoji: '👾', desc: 'A futuristic hacker bot from 2077.', theme: 'cyberpunk', accent: 'neon' },
-                                { id: 'fantasy', name: 'Golden Dragon', emoji: '🐉', desc: 'A legendary guardian of the ancient treasure.', theme: 'fantasy', accent: 'gold' },
-                                { id: 'space', name: 'Star Voyager', emoji: '🚀', desc: 'Exploring the outer rim of the galaxy.', theme: 'space', accent: 'starlight' },
-                                { id: 'ocean', name: 'Abyss Diver', emoji: '🐙', desc: 'Master of the deep blue secrets.', theme: 'ocean', accent: 'teal' },
+                                { id: 'cyberpunk', name: 'Neon Glitch', emoji: '👾', desc: 'Futuristic hacker bot.', theme: 'cyberpunk', accent: 'neon', anim: 'creature-glitch' },
+                                { id: 'fantasy', name: 'Golden Dragon', emoji: '🐉', desc: 'Guardian of treasure.', theme: 'fantasy', accent: 'gold', anim: 'creature-float' },
+                                { id: 'space', name: 'Star Voyager', emoji: '🚀', desc: 'Explorer of galaxies.', theme: 'space', accent: 'starlight', anim: 'creature-float' },
+                                { id: 'ocean', name: 'Abyss Diver', emoji: '🐙', desc: 'Master of the deep.', theme: 'ocean', accent: 'teal', anim: 'creature-swim' },
+                                { id: 'jungle', name: 'Safari Guide', emoji: '🦜', desc: 'Wild nature spirit.', theme: 'jungle', accent: 'leaf', anim: 'creature-float' },
+                                { id: 'candy', name: 'Sweet Dreams', emoji: '🦄', desc: 'Magical sugar rush.', theme: 'candy', accent: 'pink', anim: 'creature-bounce' },
+                                { id: 'steampunk', name: 'Gear Grind', emoji: '🤖', desc: 'Brass & steam power.', theme: 'steampunk', accent: 'bronze', anim: 'creature-spin' },
+                                { id: 'horror', name: 'Ghostly', emoji: '👻', desc: 'Spooky hauntings.', theme: 'horror', accent: 'blood', anim: 'creature-ghost' },
+                                { id: 'pixel', name: '8-Bit Hero', emoji: '🕹️', desc: 'Retro arcade fun.', theme: 'pixel', accent: '8bit', anim: 'creature-bounce' },
+                                { id: 'samurai', name: 'Ronin', emoji: '👹', desc: 'Honor and blade.', theme: 'samurai', accent: 'crimson', anim: 'creature-float' },
+                                { id: 'superhero', name: 'Justice', emoji: '⚡', desc: 'Saving the day.', theme: 'superhero', accent: 'hero', anim: 'creature-pulse' },
+                                { id: 'magic', name: 'Wizardry', emoji: '🧙‍♂️', desc: 'Arcane spells.', theme: 'magic', accent: 'magic-purple', anim: 'creature-float' },
                             ].map((char) => (
                                 <button
                                     key={char.id}
@@ -309,24 +327,25 @@ const StudentDashboard = () => {
                                         setAccentColor(char.accent);
                                         setShowCharacterModal(false);
                                     }}
-                                    className="group relative bg-slate-800 rounded-xl p-6 hover:bg-slate-700 transition-all duration-300 hover:scale-105 border border-slate-700 hover:border-white/20 text-left"
+                                    className="group relative bg-slate-800 rounded-xl p-6 hover:bg-slate-700 transition-all duration-300 hover:scale-105 border border-slate-700 hover:border-white/20 text-left overflow-hidden"
                                 >
-                                    <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">{char.emoji}</div>
-                                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400">{char.name}</h3>
+                                    <div className={`text-5xl mb-4 transition-transform duration-300 group-hover:scale-110 ${char.anim} origin-center inline-block`}>{char.emoji}</div>
+                                    <h3 className="text-lg font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400">{char.name}</h3>
                                     <p className="text-xs text-slate-400">{char.desc}</p>
                                     <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 rounded-xl transition-opacity"></div>
                                 </button>
                             ))}
                         </div>
+                        <button onClick={() => setShowCharacterModal(false)} className="mt-6 w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-xl font-bold transition">Close Gallery</button>
                     </div>
                 </div>
             )}
 
             {/* Floating Creature */}
             {character && (
-                <div className={`fixed bottom-10 right-10 z-40 pointer-events-none ${character.id === 'ocean' ? 'creature-swim' : character.id === 'cyberpunk' ? 'creature-glitch' : 'creature-float'}`}>
+                <div className={`fixed bottom-10 right-10 z-40 pointer-events-none ${character.anim || 'creature-float'}`}>
                     <div className="text-6xl filter drop-shadow-2xl opacity-90 hover:scale-110 transition cursor-pointer pointer-events-auto" onClick={() => setShowCharacterModal(true)} title="Change Companion">
-                        {typeof character === 'object' ? character.emoji : '👻'}
+                        {character.emoji}
                     </div>
                 </div>
             )}
@@ -361,40 +380,16 @@ const StudentDashboard = () => {
                         </div>
 
                         <div className="flex items-center gap-2">
-                            {/* Direct Dark Mode Toggle */}
+                            {/* Creature Gallery Toggle */}
                             <button
-                                onClick={() => toggleTheme(theme === 'dark' ? 'light' : 'dark')}
-                                className="p-3 rounded-full shadow-md bg-white dark:bg-slate-800 text-gray-600 dark:text-yellow-400 hover:scale-105 transition border dark:border-slate-700"
+                                onClick={() => setShowCharacterModal(true)}
+                                className="p-3 rounded-full shadow-md transition bg-white text-gray-600 hover:bg-gray-100 dark:bg-slate-800 dark:text-gray-300 dark:border-slate-700 border"
+                                title="Change Theme/Creature"
                             >
-                                {theme === 'dark' ? '🌙' : '☀️'}
+                                <Palette className="w-5 h-5" />
                             </button>
 
-                            {/* Theme Selector Popover */}
-                            <div className="relative">
-                                <button
-                                    onClick={() => setThemeMenuOpen(!themeMenuOpen)}
-                                    className={`p-3 rounded-full shadow-md transition ${themeMenuOpen ? 'bg-gray-200' : 'bg-white text-gray-600 hover:bg-gray-100 dark:bg-slate-800 dark:text-gray-300 dark:border-slate-700 border'}`}
-                                >
-                                    <Palette className="w-5 h-5" />
-                                </button>
 
-                                {themeMenuOpen && (
-                                    <ThemeSelectorMenu
-                                        currentTheme={theme}
-                                        currentAccent={accentColor}
-                                        currentFont={font}
-                                        currentBg={bgPattern}
-                                        onApply={(t, a, f, b) => {
-                                            toggleTheme(t);
-                                            setAccentColor(a);
-                                            if (setFont && f) setFont(f);
-                                            if (setBgPattern && b) setBgPattern(b);
-                                            setThemeMenuOpen(false);
-                                        }}
-                                        onClose={() => setThemeMenuOpen(false)}
-                                    />
-                                )}
-                            </div>
 
                             <button onClick={subscribeToPush} className={`p-3 rounded-full shadow-md transition ${isSubscribed ? 'bg-green-100 text-green-700' : 'bg-white text-indigo-600 hover:bg-indigo-50'}`}>
                                 {isSubscribed ? <CheckCircle className="w-5 h-5" /> : <Bell className="w-5 h-5" />}
@@ -649,8 +644,8 @@ const StudentDashboard = () => {
                         </div>
                     )}
                 </main>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 
