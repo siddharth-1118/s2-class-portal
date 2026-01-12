@@ -9,12 +9,14 @@ export const ThemeProvider = ({ children }) => {
     const [accentColor, setAccentColor] = useState(localStorage.getItem('app-accent') || 'violet');
     const [font, setFont] = useState(localStorage.getItem('app-font') || 'sans');
     const [bgPattern, setBgPattern] = useState(localStorage.getItem('app-bg') || 'mesh-gradient');
+    const [character, setCharacter] = useState(localStorage.getItem('app-character') || null);
 
     useEffect(() => {
         const root = window.document.documentElement;
-        root.classList.remove('light', 'dark', 'color-blind');
+        root.classList.remove('light', 'dark', 'cyberpunk', 'fantasy', 'space', 'ocean');
         root.classList.add(theme);
         localStorage.setItem('app-theme', theme);
+        if (character) localStorage.setItem('app-character', character);
 
         // Handle Accent Color (If Custom Hex or Predefined)
         const colorMap = {
@@ -25,7 +27,13 @@ export const ThemeProvider = ({ children }) => {
             'orange': '234, 88, 12',
             'pink': '219, 39, 119',
             'red': '220, 38, 38',
-            'cyan': '8, 145, 178'
+            'pink': '219, 39, 119',
+            'red': '220, 38, 38',
+            'cyan': '8, 145, 178',
+            'neon': '57, 255, 20', // Cyberpunk
+            'gold': '255, 215, 0', // Fantasy
+            'starlight': '147, 197, 253', // Space
+            'teal': '20, 184, 166' // Ocean
         };
 
         const hexToRgb = (hex) => {
@@ -43,14 +51,14 @@ export const ThemeProvider = ({ children }) => {
 
         localStorage.setItem('app-bg', bgPattern);
 
-    }, [theme, accentColor, font, bgPattern]);
+    }, [theme, accentColor, font, bgPattern, character]);
 
     const toggleTheme = (newTheme) => {
         setTheme(newTheme);
     };
 
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme, accentColor, setAccentColor, font, setFont, bgPattern, setBgPattern }}>
+        <ThemeContext.Provider value={{ theme, toggleTheme, accentColor, setAccentColor, font, setFont, bgPattern, setBgPattern, character, setCharacter }}>
             {children}
         </ThemeContext.Provider>
     );

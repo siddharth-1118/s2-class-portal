@@ -80,6 +80,9 @@ app.use('/api/marks', marksRoutes);
 app.use('/api/timetable', timetableRoutes);
 
 const PORT = process.env.PORT || 5000;
+const seed = require('./scripts/seed_students');
+seed(); // Auto-seed on startup
+
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

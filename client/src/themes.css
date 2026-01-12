@@ -1,0 +1,95 @@
+.cyberpunk {
+    --bg-primary: #0f0e17;
+    --bg-secondary: #2e2f3e;
+    --text-primary: #fffffe;
+    --accent: #ff00ff;
+    --font-heading: 'Orbitron', sans-serif;
+    background-color: #050505;
+    background-image:
+        linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+.fantasy {
+    --bg-primary: #2c1a1d;
+    --bg-secondary: #4a2b32;
+    --text-primary: #f8e1b4;
+    --accent: #d4af37;
+    --font-heading: 'Cinzel', serif;
+    background: radial-gradient(circle at top, #2b1d0e, #0e0500);
+}
+
+.space {
+    --bg-primary: #0b0d17;
+    --bg-secondary: #1c1e2e;
+    --text-primary: #d0d6f9;
+    --accent: #38bdf8;
+    background-color: #000;
+    background-image: radial-gradient(white, rgba(255, 255, 255, .2) 2px, transparent 40px),
+        radial-gradient(white, rgba(255, 255, 255, .15) 1px, transparent 30px),
+        radial-gradient(white, rgba(255, 255, 255, .1) 2px, transparent 40px);
+    background-size: 550px 550px, 350px 350px, 250px 250px;
+    background-position: 0 0, 40px 60px, 130px 270px;
+}
+
+.ocean {
+    --bg-primary: #001e3c;
+    --bg-secondary: #0a2e52;
+    --text-primary: #e0f7fa;
+    --accent: #00bcd4;
+    background: linear-gradient(180deg, #020024 0%, #090979 35%, #00d4ff 100%);
+}
+
+/* Moving Creatures Animations */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes glitch {
+    0% {
+        translate: 0
+    }
+
+    20% {
+        translate: -2px 2px
+    }
+
+    40% {
+        translate: -2px -2px
+    }
+
+    60% {
+        translate: 2px 2px
+    }
+
+    80% {
+        translate: 2px -2px
+    }
+
+    100% {
+        translate: 0
+    }
+}
+
+.creature-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.creature-glitch {
+    animation: glitch 1s infinite;
+}
+
+.creature-swim {
+    animation: float 4s ease-in-out infinite alternate-reverse;
+}

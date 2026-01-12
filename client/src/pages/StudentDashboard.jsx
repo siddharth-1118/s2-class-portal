@@ -27,7 +27,7 @@ function urlBase64ToUint8Array(base64String) {
 
 const StudentDashboard = () => {
     const { user, logout } = useAuth();
-    const { theme, toggleTheme, accentColor, setAccentColor, font, setFont, bgPattern, setBgPattern } = useTheme();
+    const { theme, toggleTheme, accentColor, setAccentColor, font, setFont, bgPattern, setBgPattern, character, setCharacter } = useTheme();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('homework');
 
@@ -42,8 +42,13 @@ const StudentDashboard = () => {
     const [sgpaCredits, setSgpaCredits] = useState({});
     const [calculatedSGPA, setCalculatedSGPA] = useState(null);
     const [sgpaCourseCount, setSgpaCourseCount] = useState(5);
+    const [showCharacterModal, setShowCharacterModal] = useState(false);
 
     const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+
+    useEffect(() => {
+        if (!character) setShowCharacterModal(true);
+    }, [character]);
 
     const calculateGradePoint = (score, max) => {
         const percentage = (score / max) * 100;
@@ -277,6 +282,51 @@ const StudentDashboard = () => {
                                 <Save className="w-5 h-5" /> Save & Lock Profile
                             </button>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Character Selection Modal */}
+            {showCharacterModal && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in">
+                    <div className="bg-slate-900 rounded-3xl p-8 max-w-4xl w-full shadow-2xl border border-slate-700 relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500"></div>
+                        <h2 className="text-3xl font-extrabold text-white text-center mb-2">Choose Your Companion</h2>
+                        <p className="text-gray-400 text-center mb-8">Your companion determines your realm's theme and follows you on your journey.</p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {[
+                                { id: 'cyberpunk', name: 'Neon Glitch', emoji: '👾', desc: 'A futuristic hacker bot from 2077.', theme: 'cyberpunk', accent: 'neon' },
+                                { id: 'fantasy', name: 'Golden Dragon', emoji: '🐉', desc: 'A legendary guardian of the ancient treasure.', theme: 'fantasy', accent: 'gold' },
+                                { id: 'space', name: 'Star Voyager', emoji: '🚀', desc: 'Exploring the outer rim of the galaxy.', theme: 'space', accent: 'starlight' },
+                                { id: 'ocean', name: 'Abyss Diver', emoji: '🐙', desc: 'Master of the deep blue secrets.', theme: 'ocean', accent: 'teal' },
+                            ].map((char) => (
+                                <button
+                                    key={char.id}
+                                    onClick={() => {
+                                        setCharacter(char);
+                                        toggleTheme(char.theme);
+                                        setAccentColor(char.accent);
+                                        setShowCharacterModal(false);
+                                    }}
+                                    className="group relative bg-slate-800 rounded-xl p-6 hover:bg-slate-700 transition-all duration-300 hover:scale-105 border border-slate-700 hover:border-white/20 text-left"
+                                >
+                                    <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">{char.emoji}</div>
+                                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400">{char.name}</h3>
+                                    <p className="text-xs text-slate-400">{char.desc}</p>
+                                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 rounded-xl transition-opacity"></div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Floating Creature */}
+            {character && (
+                <div className={`fixed bottom-10 right-10 z-40 pointer-events-none ${character.id === 'ocean' ? 'creature-swim' : character.id === 'cyberpunk' ? 'creature-glitch' : 'creature-float'}`}>
+                    <div className="text-6xl filter drop-shadow-2xl opacity-90 hover:scale-110 transition cursor-pointer pointer-events-auto" onClick={() => setShowCharacterModal(true)} title="Change Companion">
+                        {typeof character === 'object' ? character.emoji : '👻'}
                     </div>
                 </div>
             )}
