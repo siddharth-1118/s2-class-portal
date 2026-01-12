@@ -233,7 +233,7 @@ const StudentDashboard = () => {
     };
 
     return (
-        <div className={`min-h-screen p-6 transition-all duration-300 ${bgPattern || 'mesh-gradient'}`}>
+        <div className={`min-h-screen p-6 transition-all duration-300 ${!character ? (bgPattern || 'mesh-gradient') : 'bg-transparent'}`}>
             {/* Profile Lock Modal */}
             {showProfileModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -325,6 +325,7 @@ const StudentDashboard = () => {
                                         setCharacter(char);
                                         toggleTheme(char.theme);
                                         setAccentColor(char.accent);
+                                        setBgPattern(''); // Clear confusing background patterns
                                         setShowCharacterModal(false);
                                     }}
                                     className="group relative bg-slate-800 rounded-xl p-6 hover:bg-slate-700 transition-all duration-300 hover:scale-105 border border-slate-700 hover:border-white/20 text-left overflow-hidden"
