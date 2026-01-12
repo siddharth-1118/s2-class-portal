@@ -47,7 +47,13 @@ export const ThemeProvider = ({ children }) => {
         root.style.setProperty('--accent-color', rgb);
 
         // Handle Font
-        root.classList.remove('font-sans', 'font-serif', 'font-mono');
+        const fontClasses = [
+            'font-sans', 'font-serif', 'font-mono', 'font-inter', 'font-roboto', 'font-open-sans', 'font-lato', 'font-montserrat',
+            'font-oswald', 'font-raleway', 'font-poppins', 'font-nunito', 'font-ubuntu', 'font-merriweather', 'font-playfair',
+            'font-lora', 'font-roboto-slab', 'font-arvo', 'font-pacifico', 'font-dancing', 'font-indie', 'font-amatic',
+            'font-shadows', 'font-orbitron', 'font-press-start', 'font-creepster', 'font-cinzel', 'font-bangers', 'font-righteous', 'font-fredericka'
+        ];
+        root.classList.remove(...fontClasses);
         root.classList.add(`font-${font}`);
         localStorage.setItem('app-font', font);
 

@@ -43,6 +43,7 @@ const StudentDashboard = () => {
     const [calculatedSGPA, setCalculatedSGPA] = useState(null);
     const [sgpaCourseCount, setSgpaCourseCount] = useState(5);
     const [showCharacterModal, setShowCharacterModal] = useState(false);
+    const [showFontModal, setShowFontModal] = useState(false);
 
 
 
@@ -395,12 +396,79 @@ const StudentDashboard = () => {
                             <button onClick={subscribeToPush} className={`p-3 rounded-full shadow-md transition ${isSubscribed ? 'bg-green-100 text-green-700' : 'bg-white text-indigo-600 hover:bg-indigo-50'}`}>
                                 {isSubscribed ? <CheckCircle className="w-5 h-5" /> : <Bell className="w-5 h-5" />}
                             </button>
+
+                            {/* Font Studio Toggle */}
+                            <button
+                                onClick={() => setShowFontModal(true)}
+                                className="p-3 rounded-full shadow-md transition bg-white text-gray-600 hover:bg-gray-100 dark:bg-slate-800 dark:text-gray-300 dark:border-slate-700 border"
+                                title="Change Font Style"
+                            >
+                                <span className="text-lg font-serif italic">Aa</span>
+                            </button>
+
                             <button onClick={() => { logout(); navigate('/'); }} className="bg-white text-gray-400 hover:text-red-500 p-3 rounded-full shadow-md transition">
                                 <LogOut className="w-5 h-5" />
                             </button>
                         </div>
                     </div>
                 </header>
+
+                {/* Font Studio Modal */}
+                {showFontModal && (
+                    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in overflow-y-auto">
+                        <div className="bg-slate-900 rounded-3xl p-8 max-w-5xl w-full shadow-2xl border border-slate-700 relative my-auto">
+                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-teal-500 to-green-500"></div>
+                            <h2 className="text-3xl font-extrabold text-white text-center mb-2">Font Studio</h2>
+                            <p className="text-gray-400 text-center mb-8">Select a typography style to personalize your portal.</p>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 max-h-[60vh] overflow-y-auto p-2 custom-scrollbar">
+                                {[
+                                    { name: 'Inter', id: 'inter', type: 'Sans' },
+                                    { name: 'Roboto', id: 'roboto', type: 'Sans' },
+                                    { name: 'Open Sans', id: 'open-sans', type: 'Sans' },
+                                    { name: 'Lato', id: 'lato', type: 'Sans' },
+                                    { name: 'Montserrat', id: 'montserrat', type: 'Sans' },
+                                    { name: 'Oswald', id: 'oswald', type: 'Sans' },
+                                    { name: 'Raleway', id: 'raleway', type: 'Sans' },
+                                    { name: 'Poppins', id: 'poppins', type: 'Sans' },
+                                    { name: 'Nunito', id: 'nunito', type: 'Sans' },
+                                    { name: 'Ubuntu', id: 'ubuntu', type: 'Sans' },
+                                    { name: 'Merriweather', id: 'merriweather', type: 'Serif' },
+                                    { name: 'Playfair', id: 'playfair', type: 'Serif' },
+                                    { name: 'Lora', id: 'lora', type: 'Serif' },
+                                    { name: 'Roboto Slab', id: 'roboto-slab', type: 'Serif' },
+                                    { name: 'Arvo', id: 'arvo', type: 'Serif' },
+                                    { name: 'Pacifico', id: 'pacifico', type: 'Handwriting' },
+                                    { name: 'Dancing', id: 'dancing', type: 'Handwriting' },
+                                    { name: 'Indie Flower', id: 'indie', type: 'Handwriting' },
+                                    { name: 'Amatic SC', id: 'amatic', type: 'Handwriting' },
+                                    { name: 'Shadows Into Light', id: 'shadows', type: 'Handwriting' },
+                                    { name: 'Orbitron', id: 'orbitron', type: 'Display' },
+                                    { name: 'Press Start', id: 'press-start', type: 'Display' },
+                                    { name: 'Creepster', id: 'creepster', type: 'Display' },
+                                    { name: 'Cinzel', id: 'cinzel', type: 'Display' },
+                                    { name: 'Bangers', id: 'bangers', type: 'Display' },
+                                    { name: 'Righteous', id: 'righteous', type: 'Display' },
+                                    { name: 'Fredericka', id: 'fredericka', type: 'Display' },
+                                ].map((f) => (
+                                    <button
+                                        key={f.id}
+                                        onClick={() => {
+                                            setFont(f.id);
+                                            setShowFontModal(false);
+                                        }}
+                                        className={`group relative bg-slate-800 rounded-xl p-4 hover:bg-slate-700 transition-all duration-300 hover:scale-105 border border-slate-700 hover:border-white/20 text-center font-${f.id}`}
+                                    >
+                                        <span className="text-3xl block mb-2">Aa</span>
+                                        <span className="text-sm font-bold text-gray-300 group-hover:text-white">{f.name}</span>
+                                        <span className="text-[10px] text-gray-500 block uppercase mt-1">{f.type}</span>
+                                    </button>
+                                ))}
+                            </div>
+                            <button onClick={() => setShowFontModal(false)} className="mt-6 w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-xl font-bold transition">Close Studio</button>
+                        </div>
+                    </div>
+                )}
 
                 <main className="animate-slide-up">
                     {activeTab === 'homework' && (

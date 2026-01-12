@@ -31,6 +31,115 @@
     color: var(--text-primary, #111827);
   }
 
+  /* --- FONTS --- */
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .font-roboto {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  .font-open-sans {
+    font-family: 'Open Sans', sans-serif;
+  }
+
+  .font-lato {
+    font-family: 'Lato', sans-serif;
+  }
+
+  .font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .font-oswald {
+    font-family: 'Oswald', sans-serif;
+  }
+
+  .font-raleway {
+    font-family: 'Raleway', sans-serif;
+  }
+
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .font-nunito {
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .font-ubuntu {
+    font-family: 'Ubuntu', sans-serif;
+  }
+
+  .font-merriweather {
+    font-family: 'Merriweather', serif;
+  }
+
+  .font-playfair {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .font-lora {
+    font-family: 'Lora', serif;
+  }
+
+  .font-roboto-slab {
+    font-family: 'Roboto Slab', serif;
+  }
+
+  .font-arvo {
+    font-family: 'Arvo', serif;
+  }
+
+  .font-pacifico {
+    font-family: 'Pacifico', cursive;
+  }
+
+  .font-dancing {
+    font-family: 'Dancing Script', cursive;
+  }
+
+  .font-indie {
+    font-family: 'Indie Flower', cursive;
+  }
+
+  .font-amatic {
+    font-family: 'Amatic SC', cursive;
+  }
+
+  .font-shadows {
+    font-family: 'Shadows Into Light', cursive;
+  }
+
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  .font-press-start {
+    font-family: 'Press Start 2P', cursive;
+  }
+
+  .font-creepster {
+    font-family: 'Creepster', cursive;
+  }
+
+  .font-cinzel {
+    font-family: 'Cinzel', serif;
+  }
+
+  .font-bangers {
+    font-family: 'Bangers', cursive;
+  }
+
+  .font-righteous {
+    font-family: 'Righteous', cursive;
+  }
+
+  .font-fredericka {
+    font-family: 'Fredericka the Great', cursive;
+  }
+
   .mesh-gradient {
     background-color: #ff99cc;
     background-image:
