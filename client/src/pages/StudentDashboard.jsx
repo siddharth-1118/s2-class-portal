@@ -410,7 +410,7 @@ const StudentDashboard = () => {
 
                     <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
                         <div className="bg-white/10 p-1 rounded-3xl flex flex-wrap justify-center gap-1 border border-white/20 w-full md:w-auto">
-                            {['homework', 'marks', 'analytics', 'timetable', 'cgpa'].map((tab) => (
+                            {['homework', 'marks', 'analytics', 'timetable', 'calendar', 'cgpa'].map((tab) => (
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
@@ -569,39 +569,11 @@ const StudentDashboard = () => {
                     {activeTab === 'timetable' && (
                         <div className="glass-card rounded-2xl p-6 min-h-[500px]">
                             <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><Calendar className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> Class Schedule</h2>
-                            <div className="overflow-x-auto">
-                                <table className="w-full border-collapse min-w-[800px]">
-                                    <thead>
-                                        <tr>
-                                            <th className="p-3 border-b border-white/10 font-bold uppercase text-xs w-32" style={{ backgroundColor: 'rgba(var(--accent-color), 0.05)', color: 'rgb(var(--accent-color))' }}>Day</th>
-                                            {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <th key={p} className="p-3 border-b border-white/10 font-bold uppercase text-xs opacity-70 text-[var(--text-primary)]" style={{ backgroundColor: 'rgba(var(--accent-color), 0.05)' }}>Period {p}</th>)}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].map(day => (
-                                            <tr key={day} className="hover:bg-white/5">
-                                                <td className="p-3 border-b border-white/10 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>{day}</td>
-                                                {[1, 2, 3, 4, 5, 6, 7, 8].map(period => {
-                                                    const entry = timetable.find(t => t.day === day && t.period == period);
-                                                    return (
-                                                        <td key={period} className="p-3 border-b border-white/10 text-center relative border-l border-white/5">
-                                                            {entry ? (
-                                                                <div className="py-2">
-                                                                    <div className="font-bold text-[var(--text-primary)] text-sm">{entry.subject}</div>
-                                                                    <div className="text-xs opacity-60 text-[var(--text-primary)]">{entry.time_range}</div>
-                                                                    <div className="text-xs font-medium opacity-80" style={{ color: 'rgb(var(--accent-color))' }}>{entry.teacher}</div>
-                                                                </div>
-                                                            ) : <span className="opacity-20 text-[var(--text-primary)]">-</span>}
-                                                        </td>
-                                                    );
-                                                })}
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                            <TimetableTab user={user} />
                         </div>
                     )}
+
+                    {activeTab === 'calendar' && <CalendarTab user={user} />}
 
                     {activeTab === 'analytics' && (
                         <div className="glass-card rounded-2xl p-8 min-h-[500px]">
