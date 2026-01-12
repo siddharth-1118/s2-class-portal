@@ -298,13 +298,13 @@ const StudentDashboard = () => {
             {/* Character Selection Modal */}
             {/* Character Selection Modal (Creature Gallery) */}
             {showCharacterModal && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-fade-in overflow-y-auto">
-                    <div className="bg-slate-900 rounded-3xl p-8 max-w-6xl w-full shadow-2xl border border-slate-700 relative my-auto">
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-md p-2 md:p-4 animate-fade-in overflow-y-auto">
+                    <div className="bg-slate-900 rounded-2xl md:rounded-3xl p-4 md:p-8 max-w-6xl w-full shadow-2xl border border-slate-700 relative my-auto">
                         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500"></div>
-                        <h2 className="text-4xl font-extrabold text-white text-center mb-2 tracking-tight">Choose Your Companion</h2>
-                        <p className="text-gray-400 text-center mb-8">Each creature unlocks a unique realm. Select wisely!</p>
+                        <h2 className="text-2xl md:text-4xl font-extrabold text-white text-center mb-2 tracking-tight">Choose Your Companion</h2>
+                        <p className="text-gray-400 text-center mb-4 md:mb-8 text-sm md:text-base">Each creature unlocks a unique realm. Select wisely!</p>
 
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[70vh] overflow-y-auto p-2 custom-scrollbar">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 max-h-[75vh] overflow-y-auto p-1 custom-scrollbar">
                             {[
                                 { id: 'cyberpunk', name: 'Neon Glitch', emoji: '👾', desc: 'Futuristic hacker bot.', theme: 'cyberpunk', accent: 'neon', anim: 'creature-glitch' },
                                 { id: 'fantasy', name: 'Golden Dragon', emoji: '🐉', desc: 'Guardian of treasure.', theme: 'fantasy', accent: 'gold', anim: 'creature-float' },
@@ -366,8 +366,8 @@ const StudentDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <div className="bg-white/10 p-1 rounded-full flex gap-1 border border-white/20">
+                    <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+                        <div className="bg-white/10 p-1 rounded-3xl flex flex-wrap justify-center gap-1 border border-white/20 w-full md:w-auto">
                             {['homework', 'marks', 'analytics', 'timetable', 'cgpa'].map((tab) => (
                                 <button
                                     key={tab}
@@ -429,10 +429,10 @@ const StudentDashboard = () => {
                     )}
 
                     {activeTab === 'marks' && (
-                        <div className="glass-card rounded-2xl p-8 min-h-[500px]">
-                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><GraduationCap className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> Academic Performance</h2>
-                            <div className="overflow-hidden rounded-xl border border-white/10 shadow-sm">
-                                <table className="w-full text-left">
+                        <div className="glass-card rounded-2xl p-4 md:p-8 min-h-[500px]">
+                            <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><GraduationCap className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> Academic Performance</h2>
+                            <div className="overflow-x-auto rounded-xl border border-white/10 shadow-sm">
+                                <table className="w-full text-left min-w-[600px]">
                                     <thead style={{ backgroundColor: 'rgba(var(--accent-color), 0.1)' }}>
                                         <tr>
                                             <th className="p-4 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>Subject</th>
@@ -533,14 +533,14 @@ const StudentDashboard = () => {
                     )}
 
                     {activeTab === 'cgpa' && (
-                        <div className="glass-card rounded-2xl p-8 min-h-[500px]">
-                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><GraduationCap className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> CGPA Estimator</h2>
+                        <div className="glass-card rounded-2xl p-4 md:p-8 min-h-[500px]">
+                            <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><GraduationCap className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> CGPA Estimator</h2>
                             <div className="mb-6 border border-white/10 p-4 rounded-xl text-sm opacity-80 text-[var(--text-primary)]" style={{ backgroundColor: 'rgba(var(--accent-color), 0.05)' }}>
                                 <p><strong>How it works:</strong> We calculate your average score percentage for each subject. You assign the credit value (e.g., 3 or 4) for each subject.</p>
                             </div>
 
-                            <div className="overflow-hidden rounded-xl border border-white/10 shadow-sm mb-6">
-                                <table className="w-full text-left">
+                            <div className="overflow-x-auto rounded-xl border border-white/10 shadow-sm mb-6">
+                                <table className="w-full text-left min-w-[600px]">
                                     <thead style={{ backgroundColor: 'rgba(var(--accent-color), 0.1)' }}>
                                         <tr>
                                             <th className="p-4 font-bold" style={{ color: 'rgb(var(--accent-color))' }}>Subject</th>
@@ -594,9 +594,9 @@ const StudentDashboard = () => {
                                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><GraduationCap className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> SGPA Calculator</h2>
                                 <p className="text-sm opacity-60 mb-4 text-[var(--text-primary)]">Estimate GPA for a specific semester by manually entering expected grades and credits.</p>
 
-                                <div className="space-y-4 mb-6">
+                                <div className="space-y-4 mb-6 overflow-x-auto pb-2">
                                     {Array.from({ length: sgpaCourseCount }).map((_, i) => (
-                                        <div key={i} className="flex gap-4">
+                                        <div key={i} className="flex gap-4 min-w-[300px]">
                                             <select className="flex-1 bg-transparent border border-white/20 rounded-lg px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[rgb(var(--accent-color))]" onChange={e => {
                                                 const val = parseInt(e.target.value);
                                                 setSgpaCredits(prev => ({ ...prev, [`grade-${i}`]: val }));
