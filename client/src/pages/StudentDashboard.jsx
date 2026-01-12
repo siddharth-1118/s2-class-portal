@@ -44,6 +44,7 @@ const StudentDashboard = () => {
     const [sgpaCourseCount, setSgpaCourseCount] = useState(5);
     const [showCharacterModal, setShowCharacterModal] = useState(false);
     const [showFontModal, setShowFontModal] = useState(false);
+    const [selectionAnim, setSelectionAnim] = useState({ show: false, id: '', emoji: '', theme: '' });
 
 
 
@@ -297,48 +298,86 @@ const StudentDashboard = () => {
             )}
 
             {/* Character Selection Modal */}
+            {/* Selection Animation Overlay */}
+            {selectionAnim.show && (
+                <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center overflow-hidden">
+                    <div className={`text-9xl ${selectionAnim.anim} relative`}>
+                        {selectionAnim.emoji}
+                        {selectionAnim.id === 'space' && <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-6xl animate-pulse">🔥</div>}
+                    </div>
+                    <div className="absolute bottom-10 w-full text-center">
+                        <h2 className="text-4xl md:text-6xl font-black text-white bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600 animate-pulse">
+                            ENTERING {selectionAnim.theme ? selectionAnim.theme.toUpperCase() : 'REALM'}...
+                        </h2>
+                    </div>
+                </div>
+            )}
+
             {/* Character Selection Modal (Creature Gallery) */}
             {showCharacterModal && (
                 <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-md p-2 md:p-4 animate-fade-in overflow-y-auto">
-                    <div className="bg-slate-900 rounded-2xl md:rounded-3xl p-4 md:p-8 max-w-6xl w-full shadow-2xl border border-slate-700 relative my-auto">
+                    <div className="bg-slate-900 rounded-2xl md:rounded-3xl p-4 md:p-8 max-w-6xl w-full shadow-2xl border-2 border-slate-700 relative my-auto">
                         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500"></div>
                         <h2 className="text-2xl md:text-4xl font-extrabold text-white text-center mb-2 tracking-tight">Choose Your Companion</h2>
                         <p className="text-gray-400 text-center mb-4 md:mb-8 text-sm md:text-base">Each creature unlocks a unique realm. Select wisely!</p>
 
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 max-h-[75vh] overflow-y-auto p-1 custom-scrollbar">
                             {[
-                                { id: 'cyberpunk', name: 'Neon Glitch', emoji: '👾', desc: 'Futuristic hacker bot.', theme: 'cyberpunk', accent: 'neon', anim: 'creature-glitch' },
-                                { id: 'fantasy', name: 'Golden Dragon', emoji: '🐉', desc: 'Guardian of treasure.', theme: 'fantasy', accent: 'gold', anim: 'creature-float' },
-                                { id: 'space', name: 'Star Voyager', emoji: '🚀', desc: 'Explorer of galaxies.', theme: 'space', accent: 'starlight', anim: 'creature-float' },
-                                { id: 'ocean', name: 'Abyss Diver', emoji: '🐙', desc: 'Master of the deep.', theme: 'ocean', accent: 'teal', anim: 'creature-swim' },
-                                { id: 'jungle', name: 'Safari Guide', emoji: '🦜', desc: 'Wild nature spirit.', theme: 'jungle', accent: 'leaf', anim: 'creature-float' },
-                                { id: 'candy', name: 'Sweet Dreams', emoji: '🦄', desc: 'Magical sugar rush.', theme: 'candy', accent: 'pink', anim: 'creature-bounce' },
-                                { id: 'steampunk', name: 'Gear Grind', emoji: '🤖', desc: 'Brass & steam power.', theme: 'steampunk', accent: 'bronze', anim: 'creature-spin' },
-                                { id: 'horror', name: 'Ghostly', emoji: '👻', desc: 'Spooky hauntings.', theme: 'horror', accent: 'blood', anim: 'creature-ghost' },
-                                { id: 'pixel', name: '8-Bit Hero', emoji: '🕹️', desc: 'Retro arcade fun.', theme: 'pixel', accent: '8bit', anim: 'creature-bounce' },
-                                { id: 'samurai', name: 'Ronin', emoji: '👹', desc: 'Honor and blade.', theme: 'samurai', accent: 'crimson', anim: 'creature-float' },
-                                { id: 'superhero', name: 'Justice', emoji: '⚡', desc: 'Saving the day.', theme: 'superhero', accent: 'hero', anim: 'creature-pulse' },
-                                { id: 'magic', name: 'Wizardry', emoji: '🧙‍♂️', desc: 'Arcane spells.', theme: 'magic', accent: 'magic-purple', anim: 'creature-float' },
+                                // EXISTING THEMES
+                                { id: 'cyberpunk', name: 'Neon Glitch', emoji: '👾', desc: 'Futuristic hacker bot.', theme: 'cyberpunk', accent: 'neon', anim: 'creature-glitch', entryAnim: 'anim-glitch' },
+                                { id: 'fantasy', name: 'Golden Dragon', emoji: '🐉', desc: 'Guardian of treasure.', theme: 'fantasy', accent: 'gold', anim: 'creature-float', entryAnim: 'anim-spin' },
+                                { id: 'space', name: 'Cosmic Rocket', emoji: '🚀', desc: 'Voyager of stars.', theme: 'space', accent: 'starlight', anim: 'creature-pulse', entryAnim: 'anim-rocket-launch' },
+                                { id: 'ocean', name: 'Abyss Squid', emoji: '🦑', desc: 'Deep sea mystery.', theme: 'ocean', accent: 'teal', anim: 'creature-float', entryAnim: 'anim-pop' },
+                                { id: 'jungle', name: 'Wild Tiger', emoji: '🐯', desc: 'King of the wild.', theme: 'jungle', accent: 'leaf', anim: 'creature-bounce', entryAnim: 'anim-slide' },
+                                { id: 'candy', name: 'Sugar Bear', emoji: '🧸', desc: 'Sweet and cuddly.', theme: 'candy', accent: 'pink', anim: 'creature-bounce', entryAnim: 'anim-pop' },
+                                { id: 'steampunk', name: 'Gear Golem', emoji: '⚙️', desc: 'Steam-powered giant.', theme: 'steampunk', accent: 'bronze', anim: 'creature-spin', entryAnim: 'anim-spin' },
+                                { id: 'horror', name: 'Night Ghost', emoji: '👻', desc: 'Haunter of shadows.', theme: 'horror', accent: 'blood', anim: 'creature-ghost', entryAnim: 'anim-ghost' },
+                                { id: 'pixel', name: '8-Bit Hero', emoji: '🕹️', desc: 'Retro gamer saving the world.', theme: 'pixel', accent: '8bit', anim: 'creature-bounce', entryAnim: 'anim-glitch' },
+                                { id: 'samurai', name: 'Ronin Blade', emoji: '⚔️', desc: 'Honor bound warrior.', theme: 'samurai', accent: 'crimson', anim: 'creature-pulse', entryAnim: 'anim-slide' },
+                                { id: 'superhero', name: 'Captain Bolt', emoji: '⚡', desc: 'Faster than light.', theme: 'superhero', accent: 'hero', anim: 'creature-float', entryAnim: 'anim-rocket-launch' },
+                                { id: 'magic', name: 'Mystic Orb', emoji: '🔮', desc: 'Seer of futures.', theme: 'magic', accent: 'magic-purple', anim: 'creature-pulse', entryAnim: 'anim-pop' },
+
+                                // NEW THEMES (8)
+                                { id: 'western', name: 'Sheriff Star', emoji: '🤠', desc: 'Law of the land.', theme: 'western', accent: 'bronze', anim: 'creature-bounce', entryAnim: 'anim-pop' },
+                                { id: 'music', name: 'Beat Master', emoji: '🎧', desc: 'Rhythm of the soul.', theme: 'music', accent: 'music-pink', anim: 'creature-pulse', entryAnim: 'anim-pop' },
+                                { id: 'sports', name: 'Ace striker', emoji: '⚽', desc: 'Champion of the field.', theme: 'sports', accent: 'grass', anim: 'creature-bounce', entryAnim: 'anim-slide' },
+                                { id: 'winter', name: 'Frosty', emoji: '☃️', desc: 'Cold but friendly.', theme: 'winter', accent: '8bit', anim: 'creature-bounce', entryAnim: 'anim-pop' },
+                                { id: 'dino', name: 'T-Rex', emoji: '🦖', desc: 'Ancient predator.', theme: 'dino', accent: 'swamp', anim: 'creature-bounce', entryAnim: 'anim-slide' },
+                                { id: 'robot', name: 'Mecha-Z', emoji: '🤖', desc: 'Future intelligence.', theme: 'robot', accent: 'electric', anim: 'creature-glitch', entryAnim: 'anim-glitch' },
+                                { id: 'pirate', name: 'Skull King', emoji: '☠️', desc: 'Terror of the seas.', theme: 'pirate', accent: 'gold', anim: 'creature-float', entryAnim: 'anim-ghost' },
+                                { id: 'alien', name: 'Zorg', emoji: '👽', desc: 'Visitor from beyond.', theme: 'alien', accent: 'leaf', anim: 'creature-float', entryAnim: 'anim-rocket-launch' },
+
                             ].map((char) => (
                                 <button
                                     key={char.id}
                                     onClick={() => {
-                                        setCharacter(char);
-                                        toggleTheme(char.theme);
-                                        setAccentColor(char.accent);
-                                        setBgPattern(''); // Clear confusing background patterns
+                                        // 1. Trigger Animation
+                                        setSelectionAnim({ show: true, id: char.id, emoji: char.emoji, theme: char.theme, anim: char.entryAnim || 'anim-pop' });
                                         setShowCharacterModal(false);
+
+                                        // 2. Wait for animation, then set theme
+                                        setTimeout(() => {
+                                            setCharacter(char);
+                                            toggleTheme(char.theme);
+                                            setAccentColor(char.accent);
+                                            setBgPattern(''); // Clear explicit bg pattern to let theme show
+                                            setSelectionAnim({ show: false, id: '', emoji: '', theme: '', anim: '' });
+                                        }, 2000);
                                     }}
-                                    className="group relative bg-slate-800 rounded-xl p-6 hover:bg-slate-700 transition-all duration-300 hover:scale-105 border border-slate-700 hover:border-white/20 text-left overflow-hidden"
+                                    className={`group relative bg-slate-800 rounded-2xl p-4 hover:bg-slate-700 transition-all duration-300 hover:scale-105 border border-slate-700 hover:border-${char.id === 'cyberpunk' ? 'green-400' : 'blue-400'} flex flex-col items-center text-center`}
                                 >
-                                    <div className={`text-5xl mb-4 transition-transform duration-300 group-hover:scale-110 ${char.anim} origin-center inline-block`}>{char.emoji}</div>
-                                    <h3 className="text-lg font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-400">{char.name}</h3>
-                                    <p className="text-xs text-slate-400">{char.desc}</p>
-                                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 rounded-xl transition-opacity"></div>
+                                    <div className={`text-5xl md:text-6xl mb-3 drop-shadow-lg transition-transform duration-500 group-hover:scale-110 ${char.anim}`}>
+                                        {char.emoji}
+                                    </div>
+                                    <h3 className="text-white font-bold text-lg">{char.name}</h3>
+                                    <p className="text-gray-400 text-xs mt-1 line-clamp-2">{char.desc}</p>
+                                    <div className="mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-gray-300 group-hover:bg-white group-hover:text-black transition-colors">
+                                        Select
+                                    </div>
                                 </button>
                             ))}
                         </div>
-                        <button onClick={() => setShowCharacterModal(false)} className="mt-6 w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-xl font-bold transition">Close Gallery</button>
+                        <button onClick={() => setShowCharacterModal(false)} className="mt-6 w-full py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-xl font-bold transition border border-red-500/20">Cancel Selection</button>
                     </div>
                 </div>
             )}

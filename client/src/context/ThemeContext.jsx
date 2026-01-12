@@ -16,7 +16,12 @@ export const ThemeProvider = ({ children }) => {
 
     useEffect(() => {
         const root = window.document.documentElement;
-        root.classList.remove('light', 'dark', 'cyberpunk', 'fantasy', 'space', 'ocean', 'jungle', 'candy', 'steampunk', 'horror', 'pixel', 'samurai', 'superhero', 'magic');
+        // Expanded theme list cleanup
+        const themes = [
+            'light', 'dark', 'cyberpunk', 'fantasy', 'space', 'ocean', 'jungle', 'candy', 'steampunk', 'horror',
+            'pixel', 'samurai', 'superhero', 'magic', 'western', 'music', 'sports', 'winter', 'dino', 'robot', 'pirate', 'alien'
+        ];
+        root.classList.remove(...themes);
         root.classList.add(theme);
         localStorage.setItem('app-theme', theme);
         if (character) localStorage.setItem('app-character', JSON.stringify(character));
@@ -25,17 +30,21 @@ export const ThemeProvider = ({ children }) => {
         const colorMap = {
             'violet': '124, 58, 237',
             'neon': '57, 255, 20', // Cyberpunk
-            'gold': '255, 215, 0', // Fantasy
+            'gold': '255, 215, 0', // Fantasy, Pirate
             'starlight': '147, 197, 253', // Space
             'teal': '20, 184, 166', // Ocean
-            'leaf': '74, 222, 128', // Jungle
+            'leaf': '74, 222, 128', // Jungle, Alien
             'pink': '236, 72, 153', // Candy
-            'bronze': '212, 163, 115', // Steampunk
+            'bronze': '212, 163, 115', // Steampunk, Western
             'blood': '239, 68, 68', // Horror
-            '8bit': '59, 130, 246', // Pixel
+            '8bit': '59, 130, 246', // Pixel, Winter
             'crimson': '220, 38, 38', // Samurai
             'hero': '250, 204, 21', // Superhero
-            'magic-purple': '192, 132, 252' // Magic
+            'magic-purple': '192, 132, 252', // Magic
+            'music-pink': '233, 69, 96', // Music
+            'grass': '34, 197, 94', // Sports
+            'swamp': '101, 163, 13', // Dino
+            'electric': '56, 189, 248' // Robot
         };
 
         const hexToRgb = (hex) => {
