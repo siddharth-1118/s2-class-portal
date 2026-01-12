@@ -75,6 +75,15 @@ db.exec(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(student_reg_no) REFERENCES students_list(register_number)
   );
+
+  CREATE TABLE IF NOT EXISTS academic_calendar (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT NOT NULL,
+    day TEXT,
+    description TEXT NOT NULL,
+    type TEXT DEFAULT 'regular',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 // Migration for exam_type

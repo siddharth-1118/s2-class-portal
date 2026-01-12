@@ -78,6 +78,7 @@ app.use('/api/homework', homeworkRoutes);
 app.use('/api/notifications', notifRoutes.router);
 app.use('/api/marks', marksRoutes);
 app.use('/api/timetable', timetableRoutes);
+app.use('/api/calendar', require('./routes/calendar'));
 
 const PORT = process.env.PORT || 5000;
 const seed = require('./scripts/seed_students');
