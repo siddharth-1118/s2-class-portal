@@ -84,10 +84,50 @@ db.exec(`
     type TEXT DEFAULT 'regular',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS timetable_entries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    batch TEXT NOT NULL, -- 'BATCH_1' or 'BATCH_2'
+    day TEXT NOT NULL,
+    period INTEGER NOT NULL,
+    subject TEXT,
+    staff TEXT,
+    type TEXT, -- 'Theory', 'Lab', 'Online'
+    time_range TEXT
+  );
 `);
 
 // Migration for exam_type
 try { db.prepare('ALTER TABLE marks ADD COLUMN exam_type TEXT').run(); } catch (e) { }
+
+// --- SEED TIMETABLE DATA IF EMPTY ---
+const { SUBJECT_MAP, BATCH_1_SCHEDULE, BATCH_2_SCHEDULE, TIME_SLOTS } = require('./utils/timetableData');
+
+const seedTimetable = () => {
+  const count = db.prepare('SELECT count(*) as c FROM timetable_entries').get().c;
+  if (count === 0) {
+    console.log("Seeding Timetable Data...");
+    const insert = db.prepare('INSERT INTO timetable_entries (batch, day, period, subject, staff, type, time_range) VALUES (?, ?, ?, ?, ?, ?, ?)');
+
+    const seedBatch = (batchName, schedule) => {
+      Object.keys(schedule).forEach(dayNum => {
+        const dayStr = `Day ${dayNum}`;
+        const periods = schedule[dayNum];
+        periods.forEach((slotCode, idx) => {
+          if (slotCode === 'LUNCH') return;
+          const info = SUBJECT_MAP[slotCode] || { name: slotCode, type: 'Theory', staff: '' };
+          insert.run(batchName, dayStr, idx + 1, info.name, info.staff, info.type, TIME_SLOTS[idx]);
+        });
+      });
+    };
+
+    seedBatch('BATCH_1', BATCH_1_SCHEDULE);
+    seedBatch('BATCH_2', BATCH_2_SCHEDULE);
+    console.log("Timetable Seeded.");
+  }
+};
+
+try { seedTimetable(); } catch (e) { console.error("Seeding Error:", e); }
 
 console.log('Database initialized successfully');
 
