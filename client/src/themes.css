@@ -432,37 +432,160 @@
     animation: rocket-launch 2.5s ease-in-out forwards;
 }
 
-/* Generic Hero Rise (for all others) */
-@keyframes hero-rise {
+/* Snow Drop (Winter) */
+@keyframes snow-drop {
     0% {
-        transform: translateY(110vh) scale(0.5);
+        transform: translateY(-100vh) rotate(0deg);
         opacity: 0;
     }
 
     40% {
-        transform: translateY(0vh) scale(1.5) rotate(0deg);
+        transform: translateY(0) rotate(360deg);
         opacity: 1;
     }
 
-    /* Rise to center */
     60% {
-        transform: translateY(0vh) scale(1.5) rotate(0deg);
+        transform: translateY(0) rotate(360deg);
     }
 
-    /* Hover */
     100% {
-        transform: translateY(-120vh) scale(0.5) rotate(10deg);
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+.anim-snow-drop {
+    animation: snow-drop 2.5s ease-in-out forwards;
+}
+
+/* UFO Land (Alien) */
+@keyframes ufo-land {
+    0% {
+        transform: translateY(-100vh) scale(0.2);
         opacity: 0;
     }
 
-    /* Fly up away */
+    40% {
+        transform: translateY(0) scale(1.5);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translateY(0) scale(1.5);
+    }
+
+    100% {
+        transform: translateY(-100vh) scale(3);
+        opacity: 0;
+    }
+
+    /* Abduct viewer */
 }
 
-.anim-rise {
-    animation: hero-rise 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+.anim-ufo-land {
+    animation: ufo-land 2.5s ease-in-out forwards;
 }
 
-/* Generic Pop Up */
+/* Bubble Rise (Ocean) */
+@keyframes bubble-rise {
+    0% {
+        transform: translateY(100vh) scale(0.5) translateX(-20px);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+        transform: translateY(50vh) scale(1) translateX(20px);
+    }
+
+    40% {
+        transform: translateY(0) scale(1.5) translateX(-10px);
+    }
+
+    60% {
+        transform: translateY(0) scale(1.5) translateX(0);
+    }
+
+    100% {
+        transform: translateY(-100vh) scale(0.5) translateX(20px);
+        opacity: 0;
+    }
+}
+
+.anim-bubble {
+    animation: bubble-rise 3s ease-in-out forwards;
+}
+
+/* Bounce In (Sports, Candy) */
+@keyframes bounce-in {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    40% {
+        transform: scale(1.8);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    60% {
+        transform: scale(1.5);
+    }
+
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+.anim-bounce-in {
+    animation: bounce-in 2s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+/* Dino Stomp */
+@keyframes dino-stomp {
+    0% {
+        transform: scale(5) translateY(-50px);
+        opacity: 0;
+    }
+
+    30% {
+        transform: scale(1.5) translateY(0);
+        opacity: 1;
+    }
+
+    /* STOMP */
+    35% {
+        transform: scale(1.5) rotate(-5deg);
+    }
+
+    40% {
+        transform: scale(1.5) rotate(5deg);
+    }
+
+    45% {
+        transform: scale(1.5) rotate(-5deg);
+    }
+
+    50% {
+        transform: scale(1.5) rotate(0);
+    }
+
+    100% {
+        transform: scale(1) translateX(100vw);
+        opacity: 0;
+    }
+}
+
+.anim-stomp {
+    animation: dino-stomp 2s ease-out forwards;
+}
+
+/* Generic Pop (Music, Magic, Western) */
 @keyframes pop-center {
     0% {
         transform: scale(0);
@@ -485,7 +608,7 @@
     animation: pop-center 1.5s ease-out forwards;
 }
 
-/* Spin In */
+/* Spin In (Fantasy, Steampunk) */
 @keyframes spin-in {
     0% {
         transform: rotate(-360deg) scale(0);
@@ -493,37 +616,40 @@
     }
 
     50% {
-        transform: rotate(0deg) scale(1);
+        transform: rotate(0deg) scale(1.5);
         opacity: 1;
     }
 
     100% {
-        transform: scale(1.5);
+        transform: scale(0);
         opacity: 0;
     }
+
+    /* Implode */
 }
 
 .anim-spin {
-    animation: spin-in 1.5s ease-out forwards;
+    animation: spin-in 2s ease-out forwards;
 }
 
-/* Slide Right (Dino/Runners) */
+/* Slide Right (Jungle, Samurai) */
 @keyframes slide-right {
     0% {
-        transform: translateX(-100vw);
+        transform: translateX(-100vw) scale(1.5);
         opacity: 0;
     }
 
     40% {
         opacity: 1;
+        transform: translateX(0) scale(1.5);
     }
 
     60% {
-        transform: translateX(0);
+        transform: translateX(0) scale(1.5);
     }
 
     100% {
-        transform: translateX(100vw);
+        transform: translateX(100vw) scale(1.5);
         opacity: 0;
     }
 }
@@ -532,29 +658,30 @@
     animation: slide-right 2s linear forwards;
 }
 
-/* Fade Ghost */
+/* Fade Ghost (Horror, Pirate) */
 @keyframes ghost-fade {
     0% {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(50px) scale(0.5);
     }
 
     50% {
         opacity: 0.8;
-        transform: translateY(-20px);
+        transform: translateY(-20px) scale(1.5);
     }
 
     100% {
         opacity: 0;
-        transform: translateY(-50px);
+        transform: translateY(-100px) scale(2);
+        filter: blur(20px);
     }
 }
 
 .anim-ghost {
-    animation: ghost-fade 2s ease-in-out forwards;
+    animation: ghost-fade 2.5s ease-in-out forwards;
 }
 
-/* Cyber Glitch Entry */
+/* Cyber Glitch Entry (Cyberpunk, Robot, Pixel) */
 @keyframes glitch-enter {
     0% {
         transform: skewX(-20deg) scale(0.8);
@@ -562,19 +689,23 @@
     }
 
     20% {
-        transform: skewX(20deg) scale(1.1);
+        transform: skewX(20deg) scale(1.5);
         opacity: 1;
     }
 
     40% {
-        transform: skewX(-5deg);
+        transform: skewX(-5deg) scale(1.5);
         filter: hue-rotate(90deg);
     }
 
-    100% {
+    60% {
         transform: scale(1.5);
+    }
+
+    100% {
+        transform: scale(2);
         opacity: 0;
-        filter: blur(5px);
+        filter: blur(10px) invert(1);
     }
 }
 

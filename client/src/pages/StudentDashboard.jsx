@@ -324,35 +324,35 @@ const StudentDashboard = () => {
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 max-h-[75vh] overflow-y-auto p-1 custom-scrollbar">
                             {[
                                 // EXISTING THEMES
-                                { id: 'cyberpunk', name: 'Neon Glitch', emoji: '👾', desc: 'Futuristic hacker bot.', theme: 'cyberpunk', accent: 'neon', anim: 'creature-glitch', entryAnim: 'anim-rise' },
-                                { id: 'fantasy', name: 'Golden Dragon', emoji: '🐉', desc: 'Guardian of treasure.', theme: 'fantasy', accent: 'gold', anim: 'creature-float', entryAnim: 'anim-rise' },
+                                { id: 'cyberpunk', name: 'Neon Glitch', emoji: '👾', desc: 'Futuristic hacker bot.', theme: 'cyberpunk', accent: 'neon', anim: 'creature-glitch', entryAnim: 'anim-glitch' },
+                                { id: 'fantasy', name: 'Golden Dragon', emoji: '🐉', desc: 'Guardian of treasure.', theme: 'fantasy', accent: 'gold', anim: 'creature-float', entryAnim: 'anim-spin' },
                                 { id: 'space', name: 'Cosmic Rocket', emoji: '🚀', desc: 'Voyager of stars.', theme: 'space', accent: 'starlight', anim: 'creature-pulse', entryAnim: 'anim-rocket-launch' },
-                                { id: 'ocean', name: 'Abyss Squid', emoji: '🦑', desc: 'Deep sea mystery.', theme: 'ocean', accent: 'teal', anim: 'creature-float', entryAnim: 'anim-rise' },
-                                { id: 'jungle', name: 'Wild Tiger', emoji: '🐯', desc: 'King of the wild.', theme: 'jungle', accent: 'leaf', anim: 'creature-bounce', entryAnim: 'anim-rise' },
-                                { id: 'candy', name: 'Sugar Bear', emoji: '🧸', desc: 'Sweet and cuddly.', theme: 'candy', accent: 'pink', anim: 'creature-bounce', entryAnim: 'anim-rise' },
-                                { id: 'steampunk', name: 'Gear Golem', emoji: '⚙️', desc: 'Steam-powered giant.', theme: 'steampunk', accent: 'bronze', anim: 'creature-spin', entryAnim: 'anim-rise' },
-                                { id: 'horror', name: 'Night Ghost', emoji: '👻', desc: 'Haunter of shadows.', theme: 'horror', accent: 'blood', anim: 'creature-ghost', entryAnim: 'anim-rise' },
-                                { id: 'pixel', name: '8-Bit Hero', emoji: '🕹️', desc: 'Retro gamer saving the world.', theme: 'pixel', accent: '8bit', anim: 'creature-bounce', entryAnim: 'anim-rise' },
-                                { id: 'samurai', name: 'Ronin Blade', emoji: '⚔️', desc: 'Honor bound warrior.', theme: 'samurai', accent: 'crimson', anim: 'creature-pulse', entryAnim: 'anim-rise' },
+                                { id: 'ocean', name: 'Abyss Squid', emoji: '🦑', desc: 'Deep sea mystery.', theme: 'ocean', accent: 'teal', anim: 'creature-float', entryAnim: 'anim-bubble' },
+                                { id: 'jungle', name: 'Wild Tiger', emoji: '🐯', desc: 'King of the wild.', theme: 'jungle', accent: 'leaf', anim: 'creature-bounce', entryAnim: 'anim-slide' },
+                                { id: 'candy', name: 'Sugar Bear', emoji: '🧸', desc: 'Sweet and cuddly.', theme: 'candy', accent: 'pink', anim: 'creature-bounce', entryAnim: 'anim-bounce-in' },
+                                { id: 'steampunk', name: 'Gear Golem', emoji: '⚙️', desc: 'Steam-powered giant.', theme: 'steampunk', accent: 'bronze', anim: 'creature-spin', entryAnim: 'anim-spin' },
+                                { id: 'horror', name: 'Night Ghost', emoji: '👻', desc: 'Haunter of shadows.', theme: 'horror', accent: 'blood', anim: 'creature-ghost', entryAnim: 'anim-ghost' },
+                                { id: 'pixel', name: '8-Bit Hero', emoji: '🕹️', desc: 'Retro gamer saving the world.', theme: 'pixel', accent: '8bit', anim: 'creature-bounce', entryAnim: 'anim-glitch' },
+                                { id: 'samurai', name: 'Ronin Blade', emoji: '⚔️', desc: 'Honor bound warrior.', theme: 'samurai', accent: 'crimson', anim: 'creature-pulse', entryAnim: 'anim-slide' },
                                 { id: 'superhero', name: 'Captain Bolt', emoji: '⚡', desc: 'Faster than light.', theme: 'superhero', accent: 'hero', anim: 'creature-float', entryAnim: 'anim-rocket-launch' },
-                                { id: 'magic', name: 'Mystic Orb', emoji: '🔮', desc: 'Seer of futures.', theme: 'magic', accent: 'magic-purple', anim: 'creature-pulse', entryAnim: 'anim-rise' },
+                                { id: 'magic', name: 'Mystic Orb', emoji: '🔮', desc: 'Seer of futures.', theme: 'magic', accent: 'magic-purple', anim: 'creature-pulse', entryAnim: 'anim-pop' },
 
                                 // NEW THEMES (8)
-                                { id: 'western', name: 'Sheriff Star', emoji: '🤠', desc: 'Law of the land.', theme: 'western', accent: 'bronze', anim: 'creature-bounce', entryAnim: 'anim-rise' },
-                                { id: 'music', name: 'Beat Master', emoji: '🎧', desc: 'Rhythm of the soul.', theme: 'music', accent: 'music-pink', anim: 'creature-pulse', entryAnim: 'anim-rise' },
-                                { id: 'sports', name: 'Ace striker', emoji: '⚽', desc: 'Champion of the field.', theme: 'sports', accent: 'grass', anim: 'creature-bounce', entryAnim: 'anim-rise' },
-                                { id: 'winter', name: 'Frosty', emoji: '☃️', desc: 'Cold but friendly.', theme: 'winter', accent: '8bit', anim: 'creature-bounce', entryAnim: 'anim-rise' },
-                                { id: 'dino', name: 'T-Rex', emoji: '🦖', desc: 'Ancient predator.', theme: 'dino', accent: 'swamp', anim: 'creature-bounce', entryAnim: 'anim-rise' },
-                                { id: 'robot', name: 'Mecha-Z', emoji: '🤖', desc: 'Future intelligence.', theme: 'robot', accent: 'electric', anim: 'creature-glitch', entryAnim: 'anim-rise' },
-                                { id: 'pirate', name: 'Skull King', emoji: '☠️', desc: 'Terror of the seas.', theme: 'pirate', accent: 'gold', anim: 'creature-float', entryAnim: 'anim-rise' },
-                                { id: 'alien', name: 'Zorg', emoji: '👽', desc: 'Visitor from beyond.', theme: 'alien', accent: 'leaf', anim: 'creature-float', entryAnim: 'anim-rocket-launch' },
+                                { id: 'western', name: 'Sheriff Star', emoji: '🤠', desc: 'Law of the land.', theme: 'western', accent: 'bronze', anim: 'creature-bounce', entryAnim: 'anim-pop' },
+                                { id: 'music', name: 'Beat Master', emoji: '🎧', desc: 'Rhythm of the soul.', theme: 'music', accent: 'music-pink', anim: 'creature-pulse', entryAnim: 'anim-pop' },
+                                { id: 'sports', name: 'Ace striker', emoji: '⚽', desc: 'Champion of the field.', theme: 'sports', accent: 'grass', anim: 'creature-bounce', entryAnim: 'anim-bounce-in' },
+                                { id: 'winter', name: 'Frosty', emoji: '☃️', desc: 'Cold but friendly.', theme: 'winter', accent: '8bit', anim: 'creature-bounce', entryAnim: 'anim-snow-drop' },
+                                { id: 'dino', name: 'T-Rex', emoji: '🦖', desc: 'Ancient predator.', theme: 'dino', accent: 'swamp', anim: 'creature-bounce', entryAnim: 'anim-stomp' },
+                                { id: 'robot', name: 'Mecha-Z', emoji: '🤖', desc: 'Future intelligence.', theme: 'robot', accent: 'electric', anim: 'creature-glitch', entryAnim: 'anim-glitch' },
+                                { id: 'pirate', name: 'Skull King', emoji: '☠️', desc: 'Terror of the seas.', theme: 'pirate', accent: 'gold', anim: 'creature-float', entryAnim: 'anim-ghost' },
+                                { id: 'alien', name: 'Zorg', emoji: '👽', desc: 'Visitor from beyond.', theme: 'alien', accent: 'leaf', anim: 'creature-float', entryAnim: 'anim-ufo-land' },
 
                             ].map((char) => (
                                 <button
                                     key={char.id}
                                     onClick={() => {
                                         // 1. Trigger Animation
-                                        setSelectionAnim({ show: true, id: char.id, emoji: char.emoji, theme: char.theme, anim: char.entryAnim || 'anim-rise' });
+                                        setSelectionAnim({ show: true, id: char.id, emoji: char.emoji, theme: char.theme, anim: char.entryAnim || 'anim-pop' });
                                         setShowCharacterModal(false);
 
                                         // 2. Wait for animation, then set theme
@@ -362,7 +362,7 @@ const StudentDashboard = () => {
                                             setAccentColor(char.accent);
                                             setBgPattern(''); // Clear explicit bg pattern to let theme show
                                             setSelectionAnim({ show: false, id: '', emoji: '', theme: '', anim: '' });
-                                        }, 2400); // 2.4s to match 2.5s animation
+                                        }, 2500); // 2.5s universal wait for consistency
                                     }}
                                     className={`group relative bg-slate-800 rounded-2xl p-4 hover:bg-slate-700 transition-all duration-300 hover:scale-105 border border-slate-700 hover:border-${char.id === 'cyberpunk' ? 'green-400' : 'blue-400'} flex flex-col items-center text-center`}
                                 >
