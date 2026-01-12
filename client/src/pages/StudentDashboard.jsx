@@ -273,25 +273,29 @@ const StudentDashboard = () => {
             <div className="max-w-6xl mx-auto">
                 <header className="flex flex-col md:flex-row justify-between items-center mb-10 glass-card p-6 rounded-2xl animate-fade-in gap-4 relative z-50">
                     <div className="flex items-center gap-4">
-                        <div className="bg-indigo-600 rounded-full p-3 shadow-lg">
-                            <BookOpen className="text-white w-6 h-6" />
+                        <div className="bg-primary/10 rounded-full p-3 shadow-lg">
+                            <BookOpen className="text-primary w-6 h-6" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight">Student Portal</h1>
-                            <p className="text-gray-500 text-sm">
-                                Welcome, <span className="font-semibold text-indigo-600">{user.name}</span>
-                                {studentProfile?.section && <span className="ml-2 bg-indigo-100 text-indigo-800 text-xs px-2 py-0.5 rounded-full">{studentProfile.section}</span>}
+                            <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight dark:text-white">Student Portal</h1>
+                            <p className="text-gray-500 text-sm dark:text-gray-400">
+                                Welcome, <span className="font-semibold text-primary">{user.name}</span>
+                                {studentProfile?.section && <span className="ml-2 bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">{studentProfile.section}</span>}
                             </p>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="bg-white/50 p-1 rounded-full flex gap-1 border border-white/60">
-                            <button onClick={() => setActiveTab('homework')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'homework' ? 'bg-indigo-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>Assignments</button>
-                            <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>My Grades</button>
-                            <button onClick={() => setActiveTab('analytics')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'analytics' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>Analytics</button>
-                            <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'timetable' ? 'bg-orange-500 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>TimeTable</button>
-                            <button onClick={() => setActiveTab('cgpa')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'cgpa' ? 'bg-emerald-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>CGPA & SGPA</button>
+                        <div className="bg-white/50 p-1 rounded-full flex gap-1 border border-white/60 dark:bg-slate-800/50 dark:border-slate-700">
+                            {['homework', 'marks', 'analytics', 'timetable', 'cgpa'].map(tab => (
+                                <button
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    className={`px-4 py-2 rounded-full text-sm font-bold transition capitalize ${activeTab === tab ? 'bg-primary text-white shadow-md' : 'text-gray-600 dark:text-gray-300 hover:bg-white/40 dark:hover:bg-slate-700'}`}
+                                >
+                                    {tab === 'cgpa' ? 'CGPA & SGPA' : tab === 'marks' ? 'My Grades' : tab === 'homework' ? 'Assignments' : tab}
+                                </button>
+                            ))}
                         </div>
 
                         <div className="flex items-center gap-2">

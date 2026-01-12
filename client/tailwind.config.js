@@ -6,7 +6,11 @@ export default {
   ],
   darkMode: 'class', // Enable class-based dark mode
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: 'rgb(var(--accent-color) / <alpha-value>)',
+      }
+    },
   },
   plugins: [],
 }
