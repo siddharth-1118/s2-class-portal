@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import { LayoutDashboard, Users, Send, Trash2, LogOut, PlusCircle, Activity, GraduationCap, Search, FileText, Check, Save, Edit2, X, RotateCcw, Calendar, BarChart2, Zap } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import CalendarTab from '../components/CalendarTab';
+import TimetableTab from '../components/TimetableTab';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -385,6 +387,7 @@ Student RA2411003010003 got 45 marks"
                             <button onClick={() => setActiveTab('students')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'students' ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><GraduationCap className="w-4 h-4" /> Grading Sheet</button>
                             <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Activity className="w-4 h-4" /> History</button>
                             <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'timetable' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Calendar className="w-4 h-4" /> Timetable</button>
+                            <button onClick={() => setActiveTab('calendar')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'calendar' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Calendar className="w-4 h-4" /> Calendar</button>
                             <button onClick={() => setActiveTab('analytics')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'analytics' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><BarChart2 className="w-4 h-4" /> Analytics</button>
                         </div>
                         <div className="h-6 w-px bg-slate-700 hidden md:block"></div>
@@ -647,82 +650,18 @@ Student RA2411003010003 got 45 marks"
 
                 {
                     activeTab === 'timetable' && (
-                        <div className="animate-slide-up space-y-8">
-                            {/* Timetable Form */}
+                        <div className="animate-slide-up">
                             <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl">
-                                <h2 className="text-xl font-semibold mb-6 text-orange-400 flex items-center gap-2"><Calendar className="w-5 h-5" /> Manage Class Schedule</h2>
-                                <form onSubmit={handleTimetableSubmit} className="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
-                                    <div>
-                                        <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Day</label>
-                                        <select className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.day} onChange={e => setTtForm({ ...ttForm, day: e.target.value })}>
-                                            {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].map(d => <option key={d}>{d}</option>)}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Period</label>
-                                        <select className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.period} onChange={e => setTtForm({ ...ttForm, period: e.target.value })}>
-                                            {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <option key={p}>{p}</option>)}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Time</label>
-                                        <input type="text" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.time_range} onChange={e => setTtForm({ ...ttForm, time_range: e.target.value })} />
-                                    </div>
-                                    <div className="md:col-span-1">
-                                        <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Subject</label>
-                                        <input type="text" placeholder="Maths" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" required value={ttForm.subject} onChange={e => setTtForm({ ...ttForm, subject: e.target.value })} />
-                                    </div>
-                                    <div className="md:col-span-1">
-                                        <label className="text-xs font-bold text-slate-500 uppercase mb-1 block">Teacher</label>
-                                        <input type="text" placeholder="Mr. X" className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white" value={ttForm.teacher} onChange={e => setTtForm({ ...ttForm, teacher: e.target.value })} />
-                                    </div>
-                                    <button type="submit" className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 rounded-lg transition h-[42px]">Save</button>
-                                </form>
+                                <TimetableTab user={{ ...user, role: 'admin' }} />
                             </div>
+                        </div>
+                    )
+                }
 
-                            {/* Timetable Grid */}
-                            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl overflow-x-auto">
-                                <table className="w-full border-collapse min-w-[800px]">
-                                    <thead>
-                                        <tr>
-                                            <th className="p-3 border border-slate-700 bg-slate-900 text-slate-400 w-32">Day / Period</th>
-                                            {[1, 2, 3, 4, 5, 6, 7, 8].map(p => <th key={p} className="p-3 border border-slate-700 bg-slate-900 text-slate-400">Period {p}</th>)}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].map(day => (
-                                            <tr key={day}>
-                                                <td className="p-3 border border-slate-700 bg-slate-900/50 font-bold text-orange-400">{day}</td>
-                                                {[1, 2, 3, 4, 5, 6, 7, 8].map(period => {
-                                                    const entry = timetable.find(t => t.day === day && t.period == period);
-                                                    return (
-                                                        <td key={period} className="p-3 border border-slate-700 text-center relative group min-h-[80px]">
-                                                            {entry ? (
-                                                                <div>
-                                                                    <div className="font-bold text-white text-sm">{entry.subject}</div>
-                                                                    <div className="text-xs text-slate-500">{entry.time_range}</div>
-                                                                    <div className="text-xs text-slate-400 italic">{entry.teacher}</div>
-                                                                    <button
-                                                                        onClick={async () => {
-                                                                            if (confirm('Delete?')) {
-                                                                                await fetch(`${API_URL}/api/timetable/${entry.id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
-                                                                                fetchTimetable();
-                                                                            }
-                                                                        }}
-                                                                        className="absolute top-1 right-1 text-red-400 opacity-0 group-hover:opacity-100 hover:bg-red-500/20 p-1 rounded"
-                                                                    >
-                                                                        <Trash2 className="w-3 h-3" />
-                                                                    </button>
-                                                                </div>
-                                                            ) : <span className="text-slate-700">-</span>}
-                                                        </td>
-                                                    );
-                                                })}
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                {
+                    activeTab === 'calendar' && (
+                        <div className="animate-slide-up">
+                            <CalendarTab user={{ ...user, role: 'admin' }} />
                         </div>
                     )
                 }
