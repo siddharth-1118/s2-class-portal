@@ -309,35 +309,16 @@ const StudentDashboard = () => {
                                 </button>
 
                                 {themeMenuOpen && (
-                                    <>
-                                        <div className="fixed inset-0 z-40" onClick={() => setThemeMenuOpen(false)}></div>
-                                        <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-2xl p-4 w-52 z-50 border border-gray-100 animate-fade-in">
-                                            <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Theme Mode</h3>
-                                            <div className="flex gap-2 mb-4">
-                                                <button onClick={() => toggleTheme('light')} className={`w-8 h-8 rounded-full border flex items-center justify-center ${theme === 'light' ? 'border-2 border-indigo-600 ring-2 ring-indigo-100' : 'border-gray-200'} bg-white`} title="Light">☀️</button>
-                                                <button onClick={() => toggleTheme('dark')} className={`w-8 h-8 rounded-full border flex items-center justify-center ${theme === 'dark' ? 'border-2 border-indigo-600 ring-2 ring-indigo-100' : 'border-gray-700'} bg-slate-900 text-white`} title="Dark">🌙</button>
-                                                <button onClick={() => toggleTheme('color-blind')} className={`w-8 h-8 rounded-full border flex items-center justify-center ${theme === 'color-blind' ? 'border-2 border-indigo-600 ring-2 ring-indigo-100' : 'border-gray-200'} bg-blue-100 text-blue-800`} title="High Contrast">👁️</button>
-                                            </div>
-                                            <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Accent Color</h3>
-                                            <div className="grid grid-cols-4 gap-2 mb-3">
-                                                {['violet', 'indigo', 'blue', 'emerald', 'orange', 'pink', 'red', 'cyan'].map(c => (
-                                                    <button key={c} onClick={() => setAccentColor(c)} className={`w-6 h-6 rounded-full bg-${c}-500 hover:scale-110 transition ${accentColor === c ? 'ring-2 ring-offset-2 ring-gray-400 scale-110' : ''}`}></button>
-                                                ))}
-                                            </div>
-                                            <div className="relative">
-                                                <label className="text-xs font-bold text-gray-500 uppercase mb-1 block">Custom Color</label>
-                                                <div className="flex items-center gap-2">
-                                                    <input
-                                                        type="color"
-                                                        className="w-8 h-8 rounded cursor-pointer border-none p-0 bg-transparent"
-                                                        value={accentColor.startsWith('#') ? accentColor : '#7c3aed'}
-                                                        onChange={(e) => setAccentColor(e.target.value)}
-                                                    />
-                                                    <span className="text-xs text-gray-400 font-mono">{accentColor}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </>
+                                    <ThemeSelectorMenu
+                                        currentTheme={theme}
+                                        currentAccent={accentColor}
+                                        onApply={(t, a) => {
+                                            toggleTheme(t);
+                                            setAccentColor(a);
+                                            setThemeMenuOpen(false);
+                                        }}
+                                        onClose={() => setThemeMenuOpen(false)}
+                                    />
                                 )}
                             </div>
 

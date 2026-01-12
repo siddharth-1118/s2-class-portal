@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
-const ThemeSelectorMenu = ({ currentTheme, currentAccent, onApply, onClose }) => {
+const ThemeSelectorMenu = ({ currentTheme, currentAccent, currentFont, onApply, onClose }) => {
     const [tempTheme, setTempTheme] = useState(currentTheme);
     const [tempAccent, setTempAccent] = useState(currentAccent);
+    const [tempFont, setTempFont] = useState(currentFont || 'sans');
 
     return (
         <>
@@ -47,7 +48,7 @@ const ThemeSelectorMenu = ({ currentTheme, currentAccent, onApply, onClose }) =>
                 <div className="flex gap-2 pt-2 border-t border-gray-100">
                     <button onClick={onClose} className="flex-1 py-2 text-xs font-bold text-gray-500 hover:bg-gray-100 rounded-lg transition">Cancel</button>
                     <button
-                        onClick={() => onApply(tempTheme, tempAccent)}
+                        onClick={() => onApply(tempTheme, tempAccent, tempFont)}
                         className="flex-1 py-2 text-xs font-bold text-white bg-black dark:bg-slate-700 rounded-lg shadow-lg hover:opacity-90 transition active:scale-95"
                     >
                         Okay Apply
