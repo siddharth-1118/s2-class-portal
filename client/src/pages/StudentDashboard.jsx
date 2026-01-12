@@ -98,6 +98,10 @@ const StudentDashboard = () => {
 
         newSocket.on('new_homework', (hw) => setHomeworks(prev => [hw, ...prev]));
         newSocket.on('delete_homework', (id) => setHomeworks(prev => prev.filter(h => h.id != id)));
+        newSocket.on('new_mark', (mark) => {
+            setMarks(prev => [mark, ...prev]);
+            // Optional: Trigger a browser notification or toast here if app is open
+        });
 
         fetchStudentProfile();
         fetchHomeworks();

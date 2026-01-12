@@ -90,6 +90,14 @@ router.post('/', authenticateToken, requireAdmin, (req, res) => {
         console.error("Notification Error:", e);
     }
 
+    // Real-time update (Socket)
+    if (req.io) {
+        req.io.to(user.email).emit('new_mark', {
+            student_reg_no, subject, score, max_marks, exam_type,
+            created_at: new Date().toISOString()
+        });
+    }
+
     res.status(201).json({ message: 'Mark added' });
 });
 

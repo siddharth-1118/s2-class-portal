@@ -42,7 +42,7 @@ const sendToSubscription = (sub, payload) => {
         };
         console.log(`Sending to ${sub.user_email}...`);
 
-        webpush.sendNotification(pushSubscription, JSON.stringify(payload))
+        webpush.sendNotification(pushSubscription, JSON.stringify(payload), { TTL: 86400 })
             .then(res => console.log("Sent successfully to", sub.user_email))
             .catch(err => {
                 console.error("Error sending notification to", sub.user_email, err);

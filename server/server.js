@@ -36,6 +36,7 @@ io.on('connection', (socket) => {
     socket.on('login', (user) => {
         if (user) {
             socket.user = user;
+            socket.join(user.email); // Join personal room
             onlineUsers.add(user.email);
             io.emit('online_users', Array.from(onlineUsers));
         }
