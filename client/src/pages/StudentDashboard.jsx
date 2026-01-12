@@ -177,6 +177,12 @@ const StudentDashboard = () => {
             const res = await fetch(`${API_URL}/api/marks`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
+            if (res.status === 403) {
+                console.error("Token invalid (403). Redirecting to login.");
+                logout();
+                navigate('/');
+                return;
+            }
             setMarks(await res.json());
         } catch (e) { console.error(e); }
     };
@@ -287,7 +293,7 @@ const StudentDashboard = () => {
 
                     <div className="flex items-center gap-4">
                         <div className="bg-white/50 p-1 rounded-full flex gap-1 border border-white/60 dark:bg-slate-800/50 dark:border-slate-700">
-                            {['homework', 'marks', 'analytics', 'timetable', 'cgpa'].map(tab => (
+                            {['homework', 'marks', 'analytics', 'timetable', 'cgpa'].map((tab) => (
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
