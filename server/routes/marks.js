@@ -78,24 +78,32 @@ router.post('/', authenticateToken, requireAdmin, (req, res) => {
 
     // Notify Student
     try {
+        console.log(`Attempting to notify student with Reg No: ${student_reg_no}`);
         const user = db.prepare('SELECT email FROM users WHERE linked_reg_no = ?').get(student_reg_no);
+        console.log('Found linked user:', user);
+
         if (user) {
             const { sendNotificationToUser } = require('./notifications');
             sendNotificationToUser(user.email, {
                 title: 'New Grade Posted',
                 description: `You scored ${score}/${max_marks} in ${subject} (${exam_type || 'Exam'}).`
             });
+
+            // Real-time update (Socket)
+            if (req.io) {
+                console.log(`Emitting 'new_mark' to room: ${user.email}`);
+                req.io.to(user.email).emit('new_mark', {
+                    student_reg_no, subject, score, max_marks, exam_type,
+                    created_at: new Date().toISOString()
+                });
+            } else {
+                console.log('Socket.io instance (req.io) not found!');
+            }
+        } else {
+            console.log('No user found linked to this register number. Notification/Socket skipped.');
         }
     } catch (e) {
         console.error("Notification Error:", e);
-    }
-
-    // Real-time update (Socket)
-    if (req.io) {
-        req.io.to(user.email).emit('new_mark', {
-            student_reg_no, subject, score, max_marks, exam_type,
-            created_at: new Date().toISOString()
-        });
     }
 
     res.status(201).json({ message: 'Mark added' });
