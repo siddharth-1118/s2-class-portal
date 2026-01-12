@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 
-const ThemeSelectorMenu = ({ currentTheme = 'light', currentAccent = 'violet', currentFont = 'sans', onApply, onClose }) => {
+const ThemeSelectorMenu = ({ currentTheme = 'light', currentAccent = 'violet', currentFont = 'sans', currentBg = 'mesh-gradient', onApply, onClose }) => {
     // Defensive initializers to prevent crashes
     const [tempTheme, setTempTheme] = useState(currentTheme);
     const [tempAccent, setTempAccent] = useState(currentAccent || 'violet');
     const [tempFont, setTempFont] = useState(currentFont || 'sans');
+    const [tempBg, setTempBg] = useState(currentBg || 'mesh-gradient');
 
     // Safe helper for hex check
     const isHex = (val) => typeof val === 'string' && val.startsWith('#');
@@ -20,10 +21,19 @@ const ThemeSelectorMenu = ({ currentTheme = 'light', currentAccent = 'violet', c
         cyan: 'bg-cyan-500'
     };
 
+    const bgOptions = [
+        { id: 'mesh-gradient', name: 'Original', class: 'mesh-gradient' },
+        { id: 'bg-aurora', name: 'Aurora', class: 'bg-aurora' },
+        { id: 'bg-sunset', name: 'Sunset', class: 'bg-sunset' },
+        { id: 'bg-ocean', name: 'Ocean', class: 'bg-ocean' },
+        { id: 'bg-candy', name: 'Candy', class: 'bg-candy' },
+        { id: 'bg-midnight', name: 'Midnight', class: 'bg-midnight' },
+    ];
+
     return (
         <>
             <div className="fixed inset-0 z-40" onClick={onClose}></div>
-            <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-2xl p-4 w-60 z-50 border border-gray-100 animate-fade-in">
+            <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-2xl p-4 w-64 z-50 border border-gray-100 animate-fade-in max-h-[80vh] overflow-y-auto">
 
                 {/* Theme Mode */}
                 <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Theme Mode</h3>
@@ -81,11 +91,28 @@ const ThemeSelectorMenu = ({ currentTheme = 'light', currentAccent = 'violet', c
                     </div>
                 </div>
 
+                {/* Background Selection */}
+                <div className="mb-4">
+                    <label className="text-xs font-bold text-gray-500 uppercase mb-2 block">Background Style</label>
+                    <div className="grid grid-cols-2 gap-2">
+                        {bgOptions.map((bg) => (
+                            <button
+                                key={bg.id}
+                                onClick={() => setTempBg(bg.id)}
+                                className={`h-12 rounded-lg border text-xs font-medium transition overflow-hidden relative ${tempBg === bg.id ? 'border-2 border-primary ring-1 ring-primary/20' : 'border-gray-200 hover:border-gray-400'}`}
+                            >
+                                <div className={`absolute inset-0 ${bg.class} opacity-50`}></div>
+                                <span className="relative z-10 bg-white/80 dark:bg-black/50 px-1 rounded">{bg.name}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
                 {/* Actions */}
                 <div className="flex gap-2 pt-2 border-t border-gray-100">
                     <button onClick={onClose} className="flex-1 py-2 text-xs font-bold text-gray-500 hover:bg-gray-100 rounded-lg transition">Cancel</button>
                     <button
-                        onClick={() => onApply(tempTheme, tempAccent, tempFont)}
+                        onClick={() => onApply(tempTheme, tempAccent, tempFont, tempBg)}
                         className="flex-1 py-2 text-xs font-bold text-white bg-black dark:bg-slate-700 rounded-lg shadow-lg hover:opacity-90 transition active:scale-95"
                     >
                         Okay Apply

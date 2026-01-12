@@ -7,7 +7,8 @@ export const useTheme = () => useContext(ThemeContext);
 export const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState(localStorage.getItem('app-theme') || 'dark');
     const [accentColor, setAccentColor] = useState(localStorage.getItem('app-accent') || 'violet');
-    const [font, setFont] = useState(localStorage.getItem('app-font') || 'sans'); // sans, serif, mono
+    const [font, setFont] = useState(localStorage.getItem('app-font') || 'sans');
+    const [bgPattern, setBgPattern] = useState(localStorage.getItem('app-bg') || 'mesh-gradient');
 
     useEffect(() => {
         const root = window.document.documentElement;
@@ -40,14 +41,16 @@ export const ThemeProvider = ({ children }) => {
         root.classList.add(`font-${font}`);
         localStorage.setItem('app-font', font);
 
-    }, [theme, accentColor, font]);
+        localStorage.setItem('app-bg', bgPattern);
+
+    }, [theme, accentColor, font, bgPattern]);
 
     const toggleTheme = (newTheme) => {
         setTheme(newTheme);
     };
 
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme, accentColor, setAccentColor, font, setFont }}>
+        <ThemeContext.Provider value={{ theme, toggleTheme, accentColor, setAccentColor, font, setFont, bgPattern, setBgPattern }}>
             {children}
         </ThemeContext.Provider>
     );
