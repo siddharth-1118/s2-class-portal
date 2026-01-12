@@ -40,6 +40,12 @@ router.post('/', authenticateToken, requireAdmin, (req, res) => {
         db.prepare('DELETE FROM timetable WHERE day = ? AND period = ?').run(day, period);
         const stmt = db.prepare('INSERT INTO timetable (day, period, time_range, subject, teacher) VALUES (?, ?, ?, ?, ?)');
         stmt.run(day, period, time_range, subject, teacher);
+
+        // Real-time update
+        if (req.io) {
+            req.io.emit('new_timetable', { day, period, time_range, subject, teacher });
+        }
+
         res.json({ message: 'Timetable updated' });
     } catch (e) {
         console.error(e);

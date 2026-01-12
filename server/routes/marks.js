@@ -101,6 +101,48 @@ router.post('/', authenticateToken, requireAdmin, (req, res) => {
     res.status(201).json({ message: 'Mark added' });
 });
 
+// BULK POST marks
+router.post('/bulk', authenticateToken, requireAdmin, (req, res) => {
+    const { marks } = req.body; // Array of { student_reg_no, subject, score, max_marks, exam_type }
+
+    if (!marks || !Array.isArray(marks)) return res.status(400).json({ message: 'Invalid data' });
+
+    let count = 0;
+    const stmt = db.prepare('INSERT INTO marks (student_reg_no, subject, score, max_marks, exam_type) VALUES (?, ?, ?, ?, ?)');
+
+    const insertMany = db.transaction((items) => {
+        for (const m of items) {
+            const regNo = m.student_reg_no.trim().toUpperCase();
+            stmt.run(regNo, m.subject, m.score, m.max_marks, m.exam_type);
+
+            // Notify (Socket only for speed, skip push for bulk to avoid spamming 60 notifications per second)
+            if (req.io) {
+                // Find user email (inefficient to query 60 times, but safe for now)
+                const user = db.prepare('SELECT email FROM users WHERE linked_reg_no = ?').get(regNo);
+                if (user) {
+                    req.io.to(user.email).emit('new_mark', {
+                        student_reg_no: regNo,
+                        subject: m.subject,
+                        score: m.score,
+                        max_marks: m.max_marks,
+                        exam_type: m.exam_type,
+                        created_at: new Date().toISOString()
+                    });
+                }
+            }
+            count++;
+        }
+    });
+
+    try {
+        insertMany(marks);
+        res.json({ message: `Successfully added ${count} marks` });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ message: 'Bulk import failed' });
+    }
+});
+
 // DELETE mark (Admin only)
 router.delete('/:id', authenticateToken, requireAdmin, (req, res) => {
     db.prepare('DELETE FROM marks WHERE id = ?').run(req.params.id);

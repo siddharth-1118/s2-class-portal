@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save, Calendar, BarChart2 } from 'lucide-react';
+import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save, Calendar, BarChart2, Settings, Palette } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { useTheme } from '../context/ThemeContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -25,6 +26,7 @@ function urlBase64ToUint8Array(base64String) {
 
 const StudentDashboard = () => {
     const { user, logout } = useAuth();
+    const { theme, toggleTheme, accentColor, setAccentColor } = useTheme();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('homework');
 
@@ -36,6 +38,10 @@ const StudentDashboard = () => {
     // CGPA State
     const [cgpaCredits, setCgpaCredits] = useState({});
     const [calculatedCGPA, setCalculatedCGPA] = useState(null);
+    // SGPA State
+    const [sgpaCredits, setSgpaCredits] = useState({});
+    const [calculatedSGPA, setCalculatedSGPA] = useState(null);
+    const [sgpaCourseCount, setSgpaCourseCount] = useState(5);
 
     const calculateGradePoint = (score, max) => {
         const percentage = (score / max) * 100;
@@ -100,7 +106,13 @@ const StudentDashboard = () => {
         newSocket.on('delete_homework', (id) => setHomeworks(prev => prev.filter(h => h.id != id)));
         newSocket.on('new_mark', (mark) => {
             setMarks(prev => [mark, ...prev]);
-            // Optional: Trigger a browser notification or toast here if app is open
+        });
+        newSocket.on('new_timetable', (entry) => {
+            setTimetable(prev => {
+                // Remove existing entry for same day/period if any
+                const filtered = prev.filter(t => !(t.day === entry.day && t.period == entry.period));
+                return [...filtered, entry];
+            });
         });
 
         fetchStudentProfile();
@@ -277,16 +289,39 @@ const StudentDashboard = () => {
                             <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>My Grades</button>
                             <button onClick={() => setActiveTab('analytics')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'analytics' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>Analytics</button>
                             <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'timetable' ? 'bg-orange-500 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>TimeTable</button>
-                            <button onClick={() => setActiveTab('cgpa')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'cgpa' ? 'bg-emerald-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>CGPA</button>
+                            <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'timetable' ? 'bg-orange-500 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>TimeTable</button>
+                            <button onClick={() => setActiveTab('cgpa')} className={`px-4 py-2 rounded-full text-sm font-bold transition ${activeTab === 'cgpa' ? 'bg-emerald-600 text-white shadow-md' : 'text-gray-600 hover:bg-white/40'}`}>CGPA & SGPA</button>
                         </div>
 
-                        <button onClick={subscribeToPush} className={`p-3 rounded-full shadow-md transition ${isSubscribed ? 'bg-green-100 text-green-700' : 'bg-white text-indigo-600 hover:bg-indigo-50'}`}>
-                            {isSubscribed ? <CheckCircle className="w-5 h-5" /> : <Bell className="w-5 h-5" />}
-                        </button>
-                        <button onClick={() => { logout(); navigate('/'); }} className="bg-white text-gray-400 hover:text-red-500 p-3 rounded-full shadow-md transition">
-                            <LogOut className="w-5 h-5" />
-                        </button>
-                    </div>
+                        <div className="flex items-center gap-2">
+                            {/* Theme Selector Popover (Simplified) */}
+                            <div className="relative group">
+                                <button className="p-3 rounded-full bg-white text-gray-600 hover:bg-gray-100 shadow-md">
+                                    <Palette className="w-5 h-5" />
+                                </button>
+                                <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-xl p-4 w-48 hidden group-hover:block z-50 border border-gray-100">
+                                    <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Theme</h3>
+                                    <div className="flex gap-2 mb-4">
+                                        <button onClick={() => toggleTheme('light')} className={`w-8 h-8 rounded-full border ${theme === 'light' ? 'border-2 border-indigo-600' : 'border-gray-200'} bg-gray-100`} title="Light"></button>
+                                        <button onClick={() => toggleTheme('dark')} className={`w-8 h-8 rounded-full border ${theme === 'dark' ? 'border-2 border-indigo-600' : 'border-gray-700'} bg-gray-900`} title="Dark"></button>
+                                        <button onClick={() => toggleTheme('color-blind')} className={`w-8 h-8 rounded-full border ${theme === 'color-blind' ? 'border-2 border-indigo-600' : 'border-gray-200'} bg-blue-100`} title="Blue-ish"></button>
+                                    </div>
+                                    <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Accent</h3>
+                                    <div className="grid grid-cols-4 gap-2">
+                                        {['violet', 'indigo', 'blue', 'emerald', 'orange', 'pink', 'red', 'cyan'].map(c => (
+                                            <button key={c} onClick={() => setAccentColor(c)} className={`w-6 h-6 rounded-full bg-${c}-500 ${accentColor === c ? 'ring-2 ring-offset-2 ring-gray-400' : ''}`}></button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button onClick={subscribeToPush} className={`p-3 rounded-full shadow-md transition ${isSubscribed ? 'bg-green-100 text-green-700' : 'bg-white text-indigo-600 hover:bg-indigo-50'}`}>
+                                {isSubscribed ? <CheckCircle className="w-5 h-5" /> : <Bell className="w-5 h-5" />}
+                            </button>
+                            <button onClick={() => { logout(); navigate('/'); }} className="bg-white text-gray-400 hover:text-red-500 p-3 rounded-full shadow-md transition">
+                                <LogOut className="w-5 h-5" />
+                            </button>
+                        </div>
                 </header>
 
                 <main className="animate-slide-up">
@@ -473,6 +508,62 @@ const StudentDashboard = () => {
                                 </button>
                             </div>
                             {getUniqueSubjects().length === 0 && <p className="text-center text-gray-400 py-10 mt-4">No marks recorded to calculate CGPA.</p>}
+
+                            {/* SGPA Section */}
+                            <div className="mt-12 pt-8 border-t border-gray-200">
+                                <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2"><GraduationCap className="w-6 h-6 text-emerald-600" /> SGPA Calculator</h2>
+                                <p className="text-sm text-gray-500 mb-4">Estimate GPA for a specific semester by manually entering expected grades and credits.</p>
+
+                                <div className="space-y-4 mb-6">
+                                    {Array.from({ length: sgpaCourseCount }).map((_, i) => (
+                                        <div key={i} className="flex gap-4">
+                                            <select className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-2" onChange={e => {
+                                                const val = parseInt(e.target.value);
+                                                setSgpaCredits(prev => ({ ...prev, [`grade-${i}`]: val }));
+                                            }}>
+                                                <option value="0">Select Grade</option>
+                                                <option value="10">O (10)</option>
+                                                <option value="9">A+ (9)</option>
+                                                <option value="8">A (8)</option>
+                                                <option value="7">B+ (7)</option>
+                                                <option value="6">B (6)</option>
+                                                <option value="5">C (5)</option>
+                                                <option value="0">RA (0)</option>
+                                            </select>
+                                            <input
+                                                type="number"
+                                                placeholder="Credits (e.g., 4)"
+                                                className="w-24 bg-white border border-gray-300 rounded-lg px-3 py-2"
+                                                onChange={e => setSgpaCredits(prev => ({ ...prev, [`credit-${i}`]: parseFloat(e.target.value || 0) }))}
+                                            />
+                                        </div>
+                                    ))}
+                                    <button onClick={() => setSgpaCourseCount(c => c + 1)} className="text-sm text-indigo-600 font-bold hover:underline">+ Add Course</button>
+                                </div>
+
+                                <button onClick={() => {
+                                    let totalPoints = 0;
+                                    let totalCredits = 0;
+                                    for (let i = 0; i < sgpaCourseCount; i++) {
+                                        const g = sgpaCredits[`grade-${i}`] || 0;
+                                        const c = sgpaCredits[`credit-${i}`] || 0;
+                                        if (c > 0) {
+                                            totalPoints += g * c;
+                                            totalCredits += c;
+                                        }
+                                    }
+                                    setCalculatedSGPA(totalCredits === 0 ? 0 : (totalPoints / totalCredits).toFixed(2));
+                                }} className="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-700 transition">
+                                    Calculate SGPA
+                                </button>
+
+                                {calculatedSGPA && (
+                                    <div className="mt-6 text-center bg-emerald-900 rounded-2xl p-6 text-white shadow-xl">
+                                        <h3 className="text-xl font-bold opacity-90">Estimated SGPA</h3>
+                                        <div className="text-4xl font-extrabold mt-1 text-emerald-400">{calculatedSGPA}</div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </main>
