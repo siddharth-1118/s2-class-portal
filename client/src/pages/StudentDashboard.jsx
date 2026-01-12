@@ -31,9 +31,10 @@ const StudentDashboard = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('homework');
 
-    // ... (keep state)
-
-    // ... (keep state)
+    const [homeworks, setHomeworks] = useState([]);
+    const [marks, setMarks] = useState([]);
+    const [timetable, setTimetable] = useState([]);
+    const [isSubscribed, setIsSubscribed] = useState(false);
     // CGPA State
     const [cgpaCredits, setCgpaCredits] = useState({});
     const [calculatedCGPA, setCalculatedCGPA] = useState(null);
