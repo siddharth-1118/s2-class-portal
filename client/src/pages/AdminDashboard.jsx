@@ -6,7 +6,7 @@ import { LayoutDashboard, Users, Send, Trash2, LogOut, PlusCircle, Activity, Gra
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import CalendarTab from '../components/CalendarTab';
 import TimetableTab from '../components/TimetableTab';
-import GalleryTab from '../components/GalleryTab';
+// import GalleryTab from '../components/GalleryTab';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -653,7 +653,7 @@ Student RA2411003010003 got 45 marks"
                     activeTab === 'timetable' && (
                         <div className="animate-slide-up">
                             <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl">
-                                <GalleryTab isAdmin={true} />
+                                <TimetableTab user={{ ...user, role: 'admin' }} />
                             </div>
                         </div>
                     )

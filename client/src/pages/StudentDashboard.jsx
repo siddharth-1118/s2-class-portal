@@ -6,8 +6,8 @@ import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap,
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
 import CalendarTab from '../components/CalendarTab';
-// import TimetableTab from '../components/TimetableTab'; // Replaced by GalleryTab
-import GalleryTab from '../components/GalleryTab';
+import TimetableTab from '../components/TimetableTab';
+// import GalleryTab from '../components/GalleryTab';
 
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -575,8 +575,8 @@ const StudentDashboard = () => {
 
                     {activeTab === 'timetable' && (
                         <div className="glass-card rounded-2xl p-6 min-h-[500px]">
-                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><Calendar className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> Class Schedule</h2>
-                            <GalleryTab externalDate={timetableDate} />
+                            {/* <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><Calendar className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> Class Schedule</h2> */}
+                            <TimetableTab user={user} />
                         </div>
                     )}
 
