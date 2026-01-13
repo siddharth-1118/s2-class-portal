@@ -7,7 +7,7 @@ const TimetableTab = ({ user, initialDay }) => {
     const [schedule, setSchedule] = useState([]);
     const [meta, setMeta] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [adminBatch, setAdminBatch] = useState('BATCH_1'); // Default for admin view
+    const [adminBatch, setAdminBatch] = useState('GROUP_1'); // Default for admin view
     const [activeDay, setActiveDay] = useState('Day 1');
 
     // Day Colors
@@ -170,8 +170,8 @@ const TimetableTab = ({ user, initialDay }) => {
 
                 {isAdmin && (
                     <div className="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
-                        <button onClick={() => setAdminBatch('BATCH_1')} className={`px-4 py-1.5 rounded-md text-sm font-bold transition ${adminBatch === 'BATCH_1' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}>Batch 1</button>
-                        <button onClick={() => setAdminBatch('BATCH_2')} className={`px-4 py-1.5 rounded-md text-sm font-bold transition ${adminBatch === 'BATCH_2' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}>Batch 2</button>
+                        <button onClick={() => setAdminBatch('GROUP_1')} className={`px-4 py-1.5 rounded-md text-sm font-bold transition ${adminBatch === 'GROUP_1' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}>Group 1</button>
+                        <button onClick={() => setAdminBatch('GROUP_2')} className={`px-4 py-1.5 rounded-md text-sm font-bold transition ${adminBatch === 'GROUP_2' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}>Group 2</button>
                     </div>
                 )}
             </div>
