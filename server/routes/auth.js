@@ -89,20 +89,23 @@ router.post('/google', async (req, res) => {
         }
 
         let stmt = db.prepare('SELECT * FROM users WHERE email = ?');
-        const insert = db.prepare('INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
-        const randomPass = Math.random().toString(36).slice(-8);
-        const hashed = await bcrypt.hash(randomPass, 10);
-        insert.run(email, hashed, name, role);
-        user = stmt.get(email);
-    }
+        let user = stmt.get(email);
+
+        if (!user) {
+            const insert = db.prepare('INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
+            const randomPass = Math.random().toString(36).slice(-8);
+            const hashed = await bcrypt.hash(randomPass, 10);
+            insert.run(email, hashed, name, role);
+            user = stmt.get(email);
+        }
 
         const jwtToken = jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token: jwtToken, user: { id: user.id, email: user.email, role: user.role, name: user.name } });
+        res.json({ token: jwtToken, user: { id: user.id, email: user.email, role: user.role, name: user.name } });
 
-} catch (e) {
-    console.error(e);
-    res.status(500).json({ message: 'Google Auth Error' });
-}
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ message: 'Google Auth Error' });
+    }
 });
 
 // Profile Update (Student - One Time Lock)
