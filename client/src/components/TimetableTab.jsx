@@ -2,13 +2,22 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Clock, Calendar, User, Edit2, Save, X, ChevronRight, ChevronLeft } from 'lucide-react';
 
-const TimetableTab = ({ user }) => {
+const TimetableTab = ({ user, initialDay }) => {
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     const [schedule, setSchedule] = useState([]);
     const [meta, setMeta] = useState(null);
     const [loading, setLoading] = useState(true);
     const [adminBatch, setAdminBatch] = useState('BATCH_1'); // Default for admin view
     const [activeDay, setActiveDay] = useState('Day 1');
+
+    // Day Colors
+    const dayColors = {
+        'Day 1': 'from-blue-500 to-indigo-600',
+        'Day 2': 'from-purple-500 to-pink-600',
+        'Day 3': 'from-emerald-500 to-teal-600',
+        'Day 4': 'from-orange-500 to-red-600',
+        'Day 5': 'from-cyan-500 to-blue-600'
+    };
 
     // Edit State
     const [editingSlot, setEditingSlot] = useState(null);
@@ -21,13 +30,17 @@ const TimetableTab = ({ user }) => {
     }, [adminBatch]);
 
     useEffect(() => {
-        // Calculate Day Order on Load
-        const today = new Date();
-        const dayOrder = calculateDayOrder(today);
-        if (dayOrder) {
-            setActiveDay(dayOrder);
+        if (initialDay) {
+            setActiveDay(initialDay);
+        } else {
+            // Calculate Day Order on Load
+            const today = new Date();
+            const dayOrder = calculateDayOrder(today);
+            if (dayOrder) {
+                setActiveDay(dayOrder);
+            }
         }
-    }, []);
+    }, [initialDay]);
 
     // Helper: Calculate Day Order (1-5) based on Anchor
     // Anchor: Jan 13, 2026 (Tuesday) = Day 4
@@ -170,8 +183,8 @@ const TimetableTab = ({ user }) => {
                         key={day}
                         onClick={() => setActiveDay(day)}
                         className={`px-6 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-300 border ${activeDay === day
-                                ? 'bg-[rgb(var(--accent-color))] text-white border-transparent shadow-lg scale-105'
-                                : 'bg-white/5 text-[var(--text-primary)] border-white/10 hover:bg-white/10 hover:border-white/20'
+                            ? `bg-gradient-to-r ${dayColors[day]} text-white border-transparent shadow-lg scale-105`
+                            : 'bg-white/5 text-[var(--text-primary)] border-white/10 hover:bg-white/10 hover:border-white/20'
                             }`}
                     >
                         {day}
@@ -219,7 +232,7 @@ const TimetableTab = ({ user }) => {
                                                     </div>
                                                     {slot.type !== 'Theory' && (
                                                         <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider ${slot.type === 'Lab' ? 'bg-emerald-500/20 text-emerald-300' :
-                                                                slot.type === 'Online' ? 'bg-amber-500/20 text-amber-300' : 'bg-white/20'
+                                                            slot.type === 'Online' ? 'bg-amber-500/20 text-amber-300' : 'bg-white/20'
                                                             }`}>
                                                             {slot.type}
                                                         </span>

@@ -103,6 +103,53 @@ const CalendarTab = ({ user, onDateSelect }) => {
         return acc;
     }, {});
 
+    // Helper: Calculate Day Order (1-5) based on Anchor
+    // Anchor: Jan 13, 2026 (Tuesday) = Day 4
+    const determineDayOrder = (dateString, type) => {
+        if (type === 'holiday') return null;
+
+        const date = new Date(dateString);
+        const anchorDate = new Date('2026-01-13T00:00:00'); // Day 4
+
+        // Reset hours
+        date.setHours(0, 0, 0, 0);
+        anchorDate.setHours(0, 0, 0, 0);
+
+        // Count weekdays
+        let currentDate = new Date(anchorDate);
+        let daysDiff = 0;
+        const isFuture = date >= anchorDate;
+
+        while (currentDate.getTime() !== date.getTime()) {
+            if (isFuture) {
+                currentDate.setDate(currentDate.getDate() + 1);
+                const day = currentDate.getDay();
+                if (day !== 0 && day !== 6) daysDiff++;
+            } else {
+                const day = currentDate.getDay();
+                if (day !== 0 && day !== 6) daysDiff--;
+                currentDate.setDate(currentDate.getDate() - 1);
+            }
+        }
+
+        let calculated = (4 + daysDiff) % 5;
+        if (calculated <= 0) calculated += 5;
+
+        return calculated;
+    };
+
+    // Refs for scrolling
+    const todayRef = React.useRef(null);
+
+    useEffect(() => {
+        // Scroll to today after a short delay to ensure rendering
+        if (!loading && events.length > 0) {
+            setTimeout(() => {
+                todayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 500);
+        }
+    }, [loading, events]);
+
     return (
         <div className="space-y-8 animate-fade-in pb-20">
             {/* Header */}
@@ -183,57 +230,83 @@ const CalendarTab = ({ user, onDateSelect }) => {
                             </div>
 
                             <div className="space-y-6">
-                                {monthEvents.map((event) => (
-                                    <div key={event.id} className="relative pl-8 md:pl-12 group">
-                                        {/* Dot on Timeline */}
-                                        <div className={`absolute left-0 top-6 w-3 h-3 rounded-full border-2 border-slate-900 shadow-[0_0_0_4px_rgba(30,41,59,1)] z-10 transition-colors ${event.type === 'holiday' ? 'bg-orange-400' : event.type === 'exam' ? 'bg-yellow-400' : 'bg-blue-400'
-                                            } -translate-x-[5px] md:-translate-x-[5px]`}></div>
+                                {monthEvents.map((event) => {
+                                    const calculatedDayOrder = determineDayOrder(event.date, event.type);
 
-                                        {/* Card */}
+                                    // Check if Today
+                                    const today = new Date();
+                                    const eventDate = new Date(event.date);
+                                    const isToday = eventDate.getDate() === today.getDate() &&
+                                        eventDate.getMonth() === today.getMonth() &&
+                                        eventDate.getFullYear() === today.getFullYear();
+
+                                    return (
                                         <div
-                                            onClick={() => onDateSelect && onDateSelect(event.date)}
-                                            className={`bg-gradient-to-br ${getGradient(event.type)} backdrop-blur-xl border p-5 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] flex flex-col md:flex-row gap-4 items-start md:items-center justify-between cursor-pointer hover:shadow-xl`}>
-                                            {isEditing === event.id ? (
-                                                <div className="w-full grid gap-4 p-2">
-                                                    <input type="date" value={editForm.date} onChange={e => setEditForm({ ...editForm, date: e.target.value })} className="bg-slate-900/50 border border-white/10 rounded p-2 text-white" />
-                                                    <input type="text" value={editForm.description} onChange={e => setEditForm({ ...editForm, description: e.target.value })} className="bg-slate-900/50 border border-white/10 rounded p-2 text-white" />
-                                                    <div className="flex justify-end gap-2">
-                                                        <button onClick={() => handleEditSave(event.id)} className="px-3 py-1 bg-green-600 rounded text-sm">Save</button>
-                                                        <button onClick={() => setIsEditing(null)} className="px-3 py-1 bg-slate-600 rounded text-sm">Cancel</button>
+                                            key={event.id}
+                                            ref={isToday ? todayRef : null}
+                                            className="relative pl-8 md:pl-12 group"
+                                        >
+                                            {/* Dot on Timeline */}
+                                            <div className={`absolute left-0 top-6 w-3 h-3 rounded-full border-2 border-slate-900 shadow-[0_0_0_4px_rgba(30,41,59,1)] z-10 transition-colors ${isToday ? 'bg-green-400 animate-pulse shadow-[0_0_15px_rgba(74,222,128,0.5)]' :
+                                                    event.type === 'holiday' ? 'bg-orange-400' : event.type === 'exam' ? 'bg-yellow-400' : 'bg-blue-400'
+                                                } -translate-x-[5px] md:-translate-x-[5px]`}></div>
+
+                                            {/* Card */}
+                                            <div
+                                                onClick={() => onDateSelect && onDateSelect(event.date)}
+                                                className={`
+                                                    ${isToday ? 'bg-gradient-to-r from-emerald-900/40 to-teal-900/40 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.15)] scale-[1.03] ring-1 ring-emerald-500/30' : `bg-gradient-to-br ${getGradient(event.type)}`}
+                                                    backdrop-blur-xl border p-5 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] flex flex-col md:flex-row gap-4 items-start md:items-center justify-between cursor-pointer hover:shadow-xl
+                                                `}>
+
+                                                {isToday && (
+                                                    <div className="absolute -top-3 left-6 px-3 py-1 bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-wider rounded-full shadow-lg z-20">
+                                                        Today
                                                     </div>
-                                                </div>
-                                            ) : (
-                                                <>
-                                                    <div className="flex items-center gap-4">
-                                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center bg-slate-900/50 border border-white/5`}>
-                                                            <div className="text-center">
-                                                                <div className="text-xs font-bold text-slate-400 uppercase">{new Date(event.date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
-                                                                <div className="text-lg font-black text-white leading-none">{new Date(event.date).getDate()}</div>
+                                                )}
+
+                                                {isEditing === event.id ? (
+                                                    <div className="w-full grid gap-4 p-2">
+                                                        <input type="date" value={editForm.date} onChange={e => setEditForm({ ...editForm, date: e.target.value })} className="bg-slate-900/50 border border-white/10 rounded p-2 text-white" />
+                                                        <input type="text" value={editForm.description} onChange={e => setEditForm({ ...editForm, description: e.target.value })} className="bg-slate-900/50 border border-white/10 rounded p-2 text-white" />
+                                                        <div className="flex justify-end gap-2">
+                                                            <button onClick={() => handleEditSave(event.id)} className="px-3 py-1 bg-green-600 rounded text-sm">Save</button>
+                                                            <button onClick={() => setIsEditing(null)} className="px-3 py-1 bg-slate-600 rounded text-sm">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <>
+                                                        <div className="flex items-center gap-4">
+                                                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center bg-slate-900/50 border border-white/5`}>
+                                                                <div className="text-center">
+                                                                    <div className="text-xs font-bold text-slate-400 uppercase">{new Date(event.date).toLocaleDateString('en-US', { weekday: 'short' })}</div>
+                                                                    <div className="text-lg font-black text-white leading-none">{new Date(event.date).getDate()}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <h3 className="text-lg font-bold text-white leading-tight">{event.description}</h3>
+                                                                <div className="flex items-center gap-2 mt-1">
+                                                                    <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border border-white/10 ${event.type === 'holiday' ? 'bg-orange-500/20 text-orange-200' : 'bg-slate-800 text-slate-400'}`}>{event.type}</span>
+                                                                    {calculatedDayOrder && (
+                                                                        <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border flex items-center gap-1 ${isToday ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-300' : 'bg-blue-500/20 border-blue-500/30 text-blue-200'}`}>
+                                                                            <Clock size={10} /> Day Order {calculatedDayOrder}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div>
-                                                            <h3 className="text-lg font-bold text-white leading-tight">{event.description}</h3>
-                                                            <div className="flex items-center gap-2 mt-1">
-                                                                <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded border border-white/10 ${event.type === 'holiday' ? 'bg-orange-500/20 text-orange-200' : 'bg-slate-800 text-slate-400'}`}>{event.type}</span>
-                                                                {event.day_order && (
-                                                                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded border border-blue-500/30 bg-blue-500/20 text-blue-200 flex items-center gap-1">
-                                                                        <Clock size={10} /> Day Order {event.day_order}
-                                                                    </span>
-                                                                )}
+                                                        {isAdmin && (
+                                                            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity self-end md:self-center">
+                                                                <button onClick={() => startEdit(event)} className="p-2 hover:bg-slate-800 rounded-lg text-blue-300"><Edit2 size={16} /></button>
+                                                                <button onClick={() => handleDelete(event.id)} className="p-2 hover:bg-slate-800 rounded-lg text-red-300"><Trash2 size={16} /></button>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    {isAdmin && (
-                                                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity self-end md:self-center">
-                                                            <button onClick={() => startEdit(event)} className="p-2 hover:bg-slate-800 rounded-lg text-blue-300"><Edit2 size={16} /></button>
-                                                            <button onClick={() => handleDelete(event.id)} className="p-2 hover:bg-slate-800 rounded-lg text-red-300"><Trash2 size={16} /></button>
-                                                        </div>
-                                                    )}
-                                                </>
-                                            )}
+                                                        )}
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
                     ))

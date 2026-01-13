@@ -34,9 +34,49 @@ const StudentDashboard = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('homework');
     const [timetableDate, setTimetableDate] = useState(null);
+    const [timetableDay, setTimetableDay] = useState(null);
+
+    // Helper: Calculate Day Order (1-5) based on Anchor
+    // Anchor: Jan 13, 2026 (Tuesday) = Day 4
+    const calculateDayOrder = (dateInput) => {
+        const date = new Date(dateInput);
+        const anchorDate = new Date('2026-01-13T00:00:00'); // Day 4
+
+        // Reset hours for accurate diff
+        date.setHours(0, 0, 0, 0);
+        anchorDate.setHours(0, 0, 0, 0);
+
+        // Count ONLY weekdays (Mon-Fri) between anchor and date
+        let currentDate = new Date(anchorDate);
+        let daysDiff = 0;
+
+        // Direction
+        const isFuture = date >= anchorDate;
+
+        while (currentDate.getTime() !== date.getTime()) {
+            if (isFuture) {
+                currentDate.setDate(currentDate.getDate() + 1);
+                const day = currentDate.getDay();
+                if (day !== 0 && day !== 6) daysDiff++; // Skip Sun=0, Sat=6
+            } else {
+                const day = currentDate.getDay();
+                if (day !== 0 && day !== 6) daysDiff--;
+                currentDate.setDate(currentDate.getDate() - 1);
+            }
+        }
+
+        // Anchor is Day 4. 
+        // 4 + diff
+        let calculated = (4 + daysDiff) % 5;
+        if (calculated <= 0) calculated += 5; // Handle negative modulo or 0
+
+        return `Day ${calculated}`;
+    };
 
     const handleDateSelect = (date) => {
         setTimetableDate(date);
+        const dayOrder = calculateDayOrder(date);
+        setTimetableDay(dayOrder);
         setActiveTab('timetable');
     };
 
@@ -576,7 +616,7 @@ const StudentDashboard = () => {
                     {activeTab === 'timetable' && (
                         <div className="glass-card rounded-2xl p-6 min-h-[500px]">
                             {/* <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><Calendar className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> Class Schedule</h2> */}
-                            <TimetableTab user={user} />
+                            <TimetableTab user={user} initialDay={timetableDay} />
                         </div>
                     )}
 
