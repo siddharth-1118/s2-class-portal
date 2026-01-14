@@ -206,3 +206,27 @@
         opacity: 0;
     }
 }
+
+/* Mobile Optimization: Reduce load */
+@media (max-width: 768px) {
+    .solar-system {
+        transform: translate(-50%, -50%) scale(0.4);
+        opacity: 0.3;
+    }
+
+    .sun,
+    .orbit,
+    .planet,
+    .comet {
+        box-shadow: none !important;
+        /* Remove heavy shadows */
+        animation-duration: 0s !important;
+        /* Stop heavy movement if needed, or slow it down */
+        animation: none !important;
+    }
+
+    .sun {
+        background: radial-gradient(circle, #fcd34d 0%, #d97706 100%);
+        /* Static sun */
+    }
+}
