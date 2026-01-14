@@ -21,7 +21,8 @@ const MobileNav = ({ activeTab, setActiveTab, tabs, isOpen, onClose, onLogout })
             />
 
             {/* Sidebar Drawer */}
-            <div className={`fixed inset-y-0 right-0 z-[100] w-[280px] bg-slate-900 border-l border-white/10 shadow-2xl transform transition-transform duration-300 md:hidden flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            {/* Sidebar Drawer - Changed to Left Side */}
+            <div className={`fixed inset-y-0 left-0 z-[100] w-[280px] bg-slate-900 border-r border-white/10 shadow-2xl transform transition-transform duration-300 md:hidden flex flex-col ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
 
                 {/* Header */}
                 <div className="p-6 border-b border-white/10 flex justify-between items-center bg-slate-950/50">

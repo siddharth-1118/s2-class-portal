@@ -1,8 +1,7 @@
-/* --- SPACE THEME VFX --- */
 .space {
     --bg-primary: #000000;
     background: radial-gradient(circle at center, #0b0d17 0%, #000000 100%);
-    overflow: hidden;
+    /* overflow: hidden; Removed to allow scrolling */
 }
 
 /* Moving Stars */
