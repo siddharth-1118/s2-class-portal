@@ -335,4 +335,4 @@ const MessTab = ({ isAdmin }) => {
     );
 };
 
-export default MessTab;
+export default React.memo(MessTab);

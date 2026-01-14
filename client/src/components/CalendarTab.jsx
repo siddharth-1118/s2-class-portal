@@ -248,7 +248,7 @@ const CalendarTab = ({ user, onDateSelect }) => {
                                         >
                                             {/* Dot on Timeline */}
                                             <div className={`absolute left-0 top-6 w-3 h-3 rounded-full border-2 border-slate-900 shadow-[0_0_0_4px_rgba(30,41,59,1)] z-10 transition-colors ${isToday ? 'bg-green-400 animate-pulse shadow-[0_0_15px_rgba(74,222,128,0.5)]' :
-                                                    event.type === 'holiday' ? 'bg-orange-400' : event.type === 'exam' ? 'bg-yellow-400' : 'bg-blue-400'
+                                                event.type === 'holiday' ? 'bg-orange-400' : event.type === 'exam' ? 'bg-yellow-400' : 'bg-blue-400'
                                                 } -translate-x-[5px] md:-translate-x-[5px]`}></div>
 
                                             {/* Card */}
@@ -316,4 +316,4 @@ const CalendarTab = ({ user, onDateSelect }) => {
     );
 };
 
-export default CalendarTab;
+export default React.memo(CalendarTab);

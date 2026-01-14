@@ -370,4 +370,4 @@ const TimetableTab = ({ user, initialDay }) => {
     );
 };
 
-export default TimetableTab;
+export default React.memo(TimetableTab);
