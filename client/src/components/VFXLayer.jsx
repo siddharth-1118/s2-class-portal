@@ -152,4 +152,4 @@ const VFXLayer = () => {
     return <div className="fixed inset-0 pointer-events-none z-0"></div>;
 };
 
-export default VFXLayer;
+export default React.memo(VFXLayer); // Optimization: Memoize to prevent re-renders

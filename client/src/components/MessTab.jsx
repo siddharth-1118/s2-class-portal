@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import React from 'react';
 import { Clock, Coffee, Utensils, Moon, Sun, ChevronLeft, ChevronRight, Calendar, Edit2, X, Save, Timer, Sparkles } from 'lucide-react';
 
 const MessTab = ({ isAdmin }) => {
@@ -123,35 +124,38 @@ const MessTab = ({ isAdmin }) => {
             indigo: 'from-indigo-500/20 to-indigo-600/5 text-indigo-400 border-indigo-500/30',
         };
 
-        const activeClass = isActive ? 'ring-2 ring-white/50 scale-[1.02] shadow-[0_0_30px_rgba(255,255,255,0.1)]' : 'opacity-80 hover:opacity-100 hover:scale-[1.01]';
+        // When active, override gradient with accent color for distinct visibility
+        const activeClass = isActive
+            ? '!bg-[rgb(var(--accent-color))] !border-[rgb(var(--accent-color))] shadow-[0_0_30px_rgba(var(--accent-color),0.4)] scale-[1.02] z-10'
+            : 'opacity-80 hover:opacity-100 hover:scale-[1.01]';
 
         return (
-            <div className={`relative overflow-hidden rounded-3xl border backdrop-blur-md bg-gradient-to-br transition-all duration-500 group ${colorClasses[color]} ${activeClass}`}>
+            <div className={`relative overflow-hidden rounded-3xl border backdrop-blur-md bg-gradient-to-br transition-all duration-500 group ${isActive ? '' : colorClasses[color]} ${activeClass}`}>
                 {isActive && (
-                    <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 animate-pulse">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                    <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/20 animate-pulse shadow-lg">
+                        <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_white]"></span>
                         <span className="text-[10px] font-bold tracking-wider text-white">LIVE</span>
                     </div>
                 )}
 
                 <div className="p-6">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className={`p-3 rounded-2xl bg-white/5 border border-white/10 group-hover:rotate-12 transition-transform duration-300`}>
-                            {icon}
+                        <div className={`p-3 rounded-2xl border transition-transform duration-300 ${isActive ? 'bg-white/20 border-white/20' : 'bg-white/5 border-white/10 group-hover:rotate-12'}`}>
+                            {React.cloneElement(icon, { className: `w-6 h-6 ${isActive ? 'text-white' : ''}` })}
                         </div>
                         <div>
-                            <h3 className="text-xl font-black tracking-tight text-white mb-0.5">{title}</h3>
-                            <p className="text-xs font-mono opacity-60 uppercase tracking-widest">{time}</p>
+                            <h3 className={`text-xl font-black tracking-tight mb-0.5 ${isActive ? 'text-white' : 'text-white'}`}>{title}</h3>
+                            <p className={`text-xs font-mono uppercase tracking-widest ${isActive ? 'text-white/80' : 'opacity-60'}`}>{time}</p>
                         </div>
                     </div>
 
                     <div className="flex flex-wrap gap-2">
                         {items.length > 0 ? items.map((item, idx) => (
-                            <span key={idx} className="px-3 py-1.5 rounded-lg bg-black/20 border border-white/5 text-sm font-medium text-slate-200 hover:bg-white/10 transition-colors cursor-default">
+                            <span key={idx} className={`px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors cursor-default ${isActive ? 'bg-white/20 border-white/20 text-white hover:bg-white/30' : 'bg-black/20 border-white/5 text-slate-200 hover:bg-white/10'}`}>
                                 {item}
                             </span>
                         )) : (
-                            <span className="text-sm opacity-50 italic px-2">Menu updating...</span>
+                            <span className={`text-sm italic px-2 ${isActive ? 'text-white/60' : 'opacity-50'}`}>Menu updating...</span>
                         )}
                     </div>
                 </div>
@@ -225,8 +229,8 @@ const MessTab = ({ isAdmin }) => {
                 )}
             </div>
 
-            {/* Day Navigation */}
-            <div className="bg-slate-950/30 backdrop-blur-xl p-2 rounded-2xl border border-white/5 flex justify-between items-center sticky top-24 z-30 shadow-2xl">
+            {/* Day Navigation -- STICKY REMOVED ON MOBILE */}
+            <div className="bg-slate-950/30 backdrop-blur-xl p-2 rounded-2xl border border-white/5 flex justify-between items-center relative md:sticky md:top-24 z-30 shadow-2xl my-6">
                 <button
                     onClick={prevDay}
                     className="p-4 rounded-xl hover:bg-white/5 text-slate-400 hover:text-white transition-all active:scale-95"

@@ -503,7 +503,7 @@ const StudentDashboard = () => {
                 </div>
             )}
 
-            <div className="max-w-6xl mx-auto">
+            <div className="w-full md:max-w-6xl mx-auto px-4 md:px-0">
                 <header className="sticky top-0 md:top-6 z-50 flex flex-row justify-between items-center mb-6 md:mb-10 glass-card p-4 md:p-6 rounded-none md:rounded-2xl animate-fade-in gap-4 shadow-xl transition-all duration-300 border-b border-white/5 md:border-transparent -mx-4 md:mx-0 px-6">
                     <div className="flex items-center gap-4">
                         {/* Mobile Menu Trigger */}
