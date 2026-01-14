@@ -1,92 +1,74 @@
-import React, { useState } from 'react';
-import { BookOpen, GraduationCap, Calendar, Utensils, User, Grid, X, ChevronDown, BarChart2, Bell } from 'lucide-react';
+import React from 'react';
+import { BookOpen, GraduationCap, Calendar, Utensils, User, Grid, X, ChevronRight, LogOut, Bell, Award, BarChart2 } from 'lucide-react';
 
-const MobileNav = ({ activeTab, setActiveTab, tabs }) => {
-    const [showMore, setShowMore] = useState(false);
+const MobileNav = ({ activeTab, setActiveTab, tabs, isOpen, onClose, onLogout }) => {
 
+    // Default tabs in case none passed
     const defaultTabs = [
         { id: 'homework', label: 'Home', icon: <BookOpen className="w-5 h-5" /> },
         { id: 'marks', label: 'Marks', icon: <GraduationCap className="w-5 h-5" /> },
-        { id: 'timetable', label: 'Time', icon: <Calendar className="w-5 h-5" /> },
-        { id: 'mess', label: 'Mess', icon: <Utensils className="w-5 h-5" /> },
-        { id: 'profile', label: 'Profile', icon: <User className="w-5 h-5" /> },
     ];
+    const navTabs = tabs || defaultTabs;
 
-    const allTabs = tabs || defaultTabs;
-
-    // Logic: If <= 5 tabs, show all. If > 5, show 4 + More button.
-    const showMoreButton = allTabs.length > 5;
-    const mainTabs = showMoreButton ? allTabs.slice(0, 4) : allTabs;
-    const hiddenTabs = showMoreButton ? allTabs.slice(4) : [];
-
-    const handleTabClick = (id) => {
-        setActiveTab(id);
-        setShowMore(false);
-    };
+    // We no longer need separate "more" logic, as the sidebar can scroll
 
     return (
         <>
-            {/* More Menu Overlay */}
-            {showMore && (
-                <div className="fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm flex flex-col justify-end pb-24 animate-fade-in" onClick={() => setShowMore(false)}>
-                    <div className="mx-4 bg-slate-900 border border-slate-700 rounded-3xl p-6 shadow-2xl animate-slide-up" onClick={e => e.stopPropagation()}>
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold text-white">More Apps</h3>
-                            <button onClick={() => setShowMore(false)} className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition">
-                                <ChevronDown className="w-5 h-5" />
-                            </button>
-                        </div>
-                        <div className="grid grid-cols-4 gap-4">
-                            {hiddenTabs.map((tab) => (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => handleTabClick(tab.id)}
-                                    className={`flex flex-col items-center gap-2 group ${activeTab === tab.id ? 'opacity-100' : 'opacity-70 hover:opacity-100'}`}
-                                >
-                                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all shadow-lg ${activeTab === tab.id ? 'bg-[rgb(var(--accent-color))] text-white scale-110 shadow-[rgb(var(--accent-color))]/30' : 'bg-slate-800 text-slate-300 group-hover:bg-slate-700'}`}>
-                                        {React.cloneElement(tab.icon, { className: "w-6 h-6" })}
-                                    </div>
-                                    <span className={`text-xs font-medium text-center ${activeTab === tab.id ? 'text-[rgb(var(--accent-color))]' : 'text-slate-400'}`}>{tab.label}</span>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+            {/* Backdrop */}
+            <div
+                className={`fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+                onClick={onClose}
+            />
+
+            {/* Sidebar Drawer */}
+            <div className={`fixed inset-y-0 right-0 z-[100] w-[280px] bg-slate-900 border-l border-white/10 shadow-2xl transform transition-transform duration-300 md:hidden flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+
+                {/* Header */}
+                <div className="p-6 border-b border-white/10 flex justify-between items-center bg-slate-950/50">
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                        Menu
+                    </h2>
+                    <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition">
+                        <X className="w-6 h-6" />
+                    </button>
                 </div>
-            )}
 
-            {/* Bottom Bar */}
-            <div className="fixed bottom-4 left-4 right-4 z-[90] md:hidden">
-                <div className="bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex justify-between items-center p-2 relative">
-
-                    {mainTabs.map((tab) => (
+                {/* Nav Items */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
+                    {navTabs.map((tab) => (
                         <button
                             key={tab.id}
-                            onClick={() => handleTabClick(tab.id)}
-                            className={`flex flex-col items-center justify-center w-full py-2 rounded-xl transition-all duration-300 ${activeTab === tab.id ? 'text-[rgb(var(--accent-color))]' : 'text-slate-400 hover:text-white'}`}
+                            onClick={() => {
+                                setActiveTab(tab.id);
+                                onClose();
+                            }}
+                            className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all duration-300 group ${activeTab === tab.id ? 'bg-[rgb(var(--accent-color))]/10 border border-[rgb(var(--accent-color))]/20' : 'hover:bg-white/5 border border-transparent'}`}
                         >
-                            <div className={`transition-transform duration-300 ${activeTab === tab.id ? '-translate-y-1' : ''}`}>
-                                {tab.icon}
+                            <div className={`p-2 rounded-lg transition-colors ${activeTab === tab.id ? 'bg-[rgb(var(--accent-color))] text-white shadow-lg' : 'bg-slate-800 text-slate-400 group-hover:bg-slate-700 group-hover:text-white'}`}>
+                                {React.cloneElement(tab.icon, { className: "w-5 h-5" })}
                             </div>
-                            {activeTab === tab.id && (
-                                <span className="text-[10px] font-bold mt-1 opacity-100 animate-fade-in absolute bottom-1">{tab.label}</span>
-                            )}
+                            <div className="flex-1 text-left">
+                                <span className={`font-semibold block ${activeTab === tab.id ? 'text-[rgb(var(--accent-color))]' : 'text-slate-300 group-hover:text-white'}`}>
+                                    {tab.label}
+                                </span>
+                            </div>
+                            {activeTab === tab.id && <ChevronRight className="w-4 h-4 text-[rgb(var(--accent-color))]" />}
                         </button>
                     ))}
-
-                    {showMoreButton && (
-                        <button
-                            onClick={() => setShowMore(!showMore)}
-                            className={`flex flex-col items-center justify-center w-full py-2 rounded-xl transition-all duration-300 ${showMore ? 'text-white' : 'text-slate-400 hover:text-white'}`}
-                        >
-                            <div className={`transition-transform duration-300 ${showMore ? '-translate-y-1' : ''}`}>
-                                {showMore ? <X className="w-5 h-5" /> : <Grid className="w-5 h-5" />}
-                            </div>
-                            {showMore && (
-                                <span className="text-[10px] font-bold mt-1 opacity-100 animate-fade-in absolute bottom-1">Close</span>
-                            )}
-                        </button>
-                    )}
                 </div>
+
+                {/* Footer / Logout */}
+                {onLogout && (
+                    <div className="p-4 border-t border-white/10 bg-slate-950/30">
+                        <button
+                            onClick={onLogout}
+                            className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 text-slate-400 hover:text-red-400 transition"
+                        >
+                            <LogOut className="w-5 h-5" />
+                            <span className="font-semibold">Logout</span>
+                        </button>
+                    </div>
+                )}
             </div>
         </>
     );

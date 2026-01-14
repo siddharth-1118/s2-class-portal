@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save, Calendar, BarChart2, Settings, Palette, User, Utensils, Award } from 'lucide-react';
+import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save, Calendar, BarChart2, Settings, Palette, User, Utensils, Award, Menu } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
 import CalendarTab from '../components/CalendarTab';
@@ -77,6 +77,7 @@ const StudentDashboard = () => {
 
     const [timetableDate, setTimetableDate] = useState(null);
     const [timetableDay, setTimetableDay] = useState(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     // Helper: Calculate Day Order (1-5) based on Anchor
     // Anchor: Jan 13, 2026 (Tuesday) = Day 4
@@ -503,9 +504,14 @@ const StudentDashboard = () => {
             )}
 
             <div className="max-w-6xl mx-auto">
-                <header className="sticky top-6 z-50 flex flex-col md:flex-row justify-between items-center mb-10 glass-card p-6 rounded-2xl animate-fade-in gap-4 shadow-2xl transition-all duration-300">
+                <header className="sticky top-0 md:top-6 z-50 flex flex-row justify-between items-center mb-6 md:mb-10 glass-card p-4 md:p-6 rounded-none md:rounded-2xl animate-fade-in gap-4 shadow-xl transition-all duration-300 border-b border-white/5 md:border-transparent -mx-4 md:mx-0 px-6">
                     <div className="flex items-center gap-4">
-                        <div className="rounded-full shadow-lg bg-white overflow-hidden w-12 h-12 flex items-center justify-center border-2 border-[rgba(var(--accent-color),0.3)]">
+                        {/* Mobile Menu Trigger */}
+                        <button onClick={() => setIsMobileMenuOpen(true)} className="md:hidden p-2 -ml-2 rounded-full hover:bg-white/10 text-[var(--text-primary)]">
+                            <Menu className="w-6 h-6" />
+                        </button>
+
+                        <div className="hidden md:flex rounded-full shadow-lg bg-white overflow-hidden w-12 h-12 items-center justify-center border-2 border-[rgba(var(--accent-color),0.3)]">
                             <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
                         </div>
                         <div>
@@ -636,6 +642,9 @@ const StudentDashboard = () => {
                 <MobileNav
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
+                    isOpen={isMobileMenuOpen}
+                    onClose={() => setIsMobileMenuOpen(false)}
+                    onLogout={() => { logout(); navigate('/'); }}
                     tabs={[
                         { id: 'homework', label: 'Home', icon: <BookOpen className="w-6 h-6" /> },
                         { id: 'marks', label: 'Grades', icon: <GraduationCap className="w-6 h-6" /> },
