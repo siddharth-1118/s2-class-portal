@@ -5,6 +5,7 @@ import StudentDashboard from './pages/StudentDashboard';
 import ResetPassword from './pages/ResetPassword';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { Analytics } from '@vercel/analytics/react';
 
 const AdminRoute = ({ children }) => {
   const { user } = useAuth();
@@ -38,6 +39,7 @@ function App() {
               </StudentRoute>
             } />
           </Routes>
+          <Analytics />
         </Router>
       </ThemeProvider>
     </AuthProvider>
