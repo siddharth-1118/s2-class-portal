@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save, Calendar, BarChart2, Settings, Palette } from 'lucide-react';
+import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save, Calendar, BarChart2, Settings, Palette, User, Utensils, Award } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
 import CalendarTab from '../components/CalendarTab';
@@ -633,7 +633,21 @@ const StudentDashboard = () => {
                     </div>
                 )}
 
-                <MobileNav activeTab={activeTab} setActiveTab={setActiveTab} />
+                <MobileNav
+                    activeTab={activeTab}
+                    setActiveTab={setActiveTab}
+                    tabs={[
+                        { id: 'homework', label: 'Home', icon: <BookOpen className="w-6 h-6" /> },
+                        { id: 'marks', label: 'Grades', icon: <GraduationCap className="w-6 h-6" /> },
+                        { id: 'timetable', label: 'Time', icon: <Clock className="w-6 h-6" /> },
+                        { id: 'mess', label: 'Mess', icon: <Utensils className="w-6 h-6" /> },
+                        { id: 'analytics', label: 'Stats', icon: <BarChart2 className="w-6 h-6" /> },
+                        { id: 'calendar', label: 'Calendar', icon: <Calendar className="w-6 h-6" /> },
+                        { id: 'cgpa', label: 'CGPA', icon: <Award className="w-6 h-6" /> },
+                        { id: 'notices', label: 'Notices', icon: <Bell className="w-6 h-6" /> },
+                        { id: 'profile', label: 'Profile', icon: <User className="w-6 h-6" /> },
+                    ]}
+                />
 
                 <main className="animate-slide-up">
                     {activeTab === 'homework' && (
