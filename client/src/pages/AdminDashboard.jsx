@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import { LayoutDashboard, Users, Send, Trash2, LogOut, PlusCircle, Activity, GraduationCap, Search, FileText, Check, Save, Edit2, X, RotateCcw, Calendar, BarChart2, Zap, BookOpen } from 'lucide-react';
+import { LayoutDashboard, Users, Send, Trash2, LogOut, PlusCircle, Activity, GraduationCap, Search, FileText, Check, Save, Edit2, X, RotateCcw, Calendar, BarChart2, Zap, BookOpen, Utensils } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import CalendarTab from '../components/CalendarTab';
 import TimetableTab from '../components/TimetableTab';
+import MessTab from '../components/MessTab';
+import MobileNav from '../components/MobileNav';
 // import GalleryTab from '../components/GalleryTab';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -14,7 +16,11 @@ const AdminDashboard = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const [onlineUsers, setOnlineUsers] = useState([]);
-    const [activeTab, setActiveTab] = useState('homework');
+    const [activeTab, setActiveTab] = useState(() => localStorage.getItem('activeAdminTab') || 'homework');
+
+    useEffect(() => {
+        localStorage.setItem('activeAdminTab', activeTab);
+    }, [activeTab]);
 
     // User Management State
     const [userList, setUserList] = useState([]);
@@ -393,8 +399,19 @@ Student RA2411003010003 got 45 marks"
                 </div>
             )}
 
-            <div className="max-w-7xl mx-auto">
-                <header className="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-slate-800 pb-6 animate-fade-in gap-4">
+            <MobileNav
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                tabs={[
+                    { id: 'homework', label: 'Home', icon: <FileText className="w-5 h-5" /> },
+                    { id: 'users', label: 'Users', icon: <Users className="w-5 h-5" /> },
+                    { id: 'notices', label: 'Notices', icon: <Send className="w-5 h-5" /> },
+                    { id: 'mess', label: 'Mess', icon: <Utensils className="w-5 h-5" /> },
+                    { id: 'students', label: 'Grading', icon: <GraduationCap className="w-5 h-5" /> },
+                ]}
+            />
+            <div className="max-w-7xl mx-auto pb-24">
+                <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md flex flex-col md:flex-row justify-between items-center mb-8 border-b border-slate-800 pb-6 pt-6 animate-fade-in gap-4 -mx-6 px-6 shadow-lg transition-all duration-300">
                     <div className="flex items-center gap-3">
                         <div className="bg-gradient-to-br from-violet-600 to-fuchsia-600 p-2 rounded-lg shadow-lg shadow-violet-500/20">
                             <LayoutDashboard className="w-6 h-6 text-white" />
@@ -404,12 +421,14 @@ Student RA2411003010003 got 45 marks"
                         </h1>
                     </div>
                     <div className="flex items-center gap-6">
-                        <div className="flex gap-2 p-1 bg-slate-800 rounded-full border border-slate-700 overflow-x-auto max-w-[90vw]">
+                        <div className="hidden md:flex gap-2 p-1 bg-slate-800 rounded-full border border-slate-700 overflow-x-auto max-w-[90vw]">
                             <button onClick={() => setActiveTab('homework')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'homework' ? 'bg-violet-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><FileText className="w-4 h-4" /> Homework</button>
                             <button onClick={() => setActiveTab('users')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'users' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Users className="w-4 h-4" /> Users</button>
                             <button onClick={() => setActiveTab('notices')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'notices' ? 'bg-yellow-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Send className="w-4 h-4" /> Notices</button>
                             <button onClick={() => setActiveTab('students')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'students' ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><GraduationCap className="w-4 h-4" /> Grading Sheet</button>
                             <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Activity className="w-4 h-4" /> History</button>
+                            <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Activity className="w-4 h-4" /> History</button>
+                            <button onClick={() => setActiveTab('mess')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'mess' ? 'bg-orange-500 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Utensils className="w-4 h-4" /> Mess</button>
                             <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'timetable' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Calendar className="w-4 h-4" /> Timetable</button>
                             <button onClick={() => setActiveTab('calendar')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'calendar' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Calendar className="w-4 h-4" /> Calendar</button>
                             <button onClick={() => setActiveTab('analytics')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'analytics' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><BarChart2 className="w-4 h-4" /> Analytics</button>
@@ -720,6 +739,14 @@ Student RA2411003010003 got 45 marks"
                     </div>
                 )}
 
+                {activeTab === 'mess' && (
+                    <div className="animate-slide-up">
+                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl min-h-[600px]">
+                            <MessTab isAdmin={true} />
+                        </div>
+                    </div>
+                )}
+
                 {activeTab === 'students' && (
                     <div className="animate-slide-up">
                         <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl min-h-[600px]">
@@ -962,11 +989,6 @@ Student RA2411003010003 got 45 marks"
                 )
             }
 
-            <style jsx global>{`
-                .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-                .custom-scrollbar::-webkit-scrollbar-track { background: rgba(30, 41, 59, 0.5); }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(71, 85, 105, 0.8); border-radius: 4px; }
-            `}</style>
         </div >
     );
 };

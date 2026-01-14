@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./space-vfx.css";
 
 @layer components {
   /* ... */
@@ -630,3 +631,7 @@ body {
     background-position: 20px 100vh;
   }
 }
+/* Custom Scrollbar Utility */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(30, 41, 59, 0.5); }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(71, 85, 105, 0.8); border-radius: 4px; }

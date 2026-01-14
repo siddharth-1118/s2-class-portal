@@ -6,10 +6,21 @@ const VFXLayer = () => {
 
     if (theme === 'space') {
         return (
-            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-black">
                 <div className="stars-sm"></div>
                 <div className="stars-md"></div>
                 <div className="stars-lg"></div>
+
+                {/* Solar System VFX */}
+                <div className="solar-system">
+                    <div className="sun"></div>
+                    <div className="orbit orbit-mercury"><div className="planet mercury"></div></div>
+                    <div className="orbit orbit-venus"><div className="planet venus"></div></div>
+                    <div className="orbit orbit-earth"><div className="planet earth"><div className="moon"></div></div></div>
+                    <div className="orbit orbit-mars"><div className="planet mars"></div></div>
+                </div>
+
+                <div className="comet"></div>
             </div>
         );
     }

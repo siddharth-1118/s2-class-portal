@@ -1,0 +1,208 @@
+/* --- SPACE THEME VFX --- */
+.space {
+    --bg-primary: #000000;
+    background: radial-gradient(circle at center, #0b0d17 0%, #000000 100%);
+    overflow: hidden;
+}
+
+/* Moving Stars */
+.stars-sm,
+.stars-md,
+.stars-lg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    animation: moveStars 100s linear infinite;
+}
+
+.stars-sm {
+    box-shadow: 140px 200px #FFF, 400px 500px #FFF, 700px 100px #FFF;
+    width: 1px;
+    height: 1px;
+}
+
+.stars-md {
+    box-shadow: 200px 300px #FFF, 500px 100px #FFF, 800px 900px #FFF;
+    width: 2px;
+    height: 2px;
+    animation-duration: 150s;
+}
+
+.stars-lg {
+    box-shadow: 300px 400px #FFF, 600px 200px #FFF, 900px 600px #FFF;
+    width: 3px;
+    height: 3px;
+    animation-duration: 200s;
+}
+
+@keyframes moveStars {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-2000px);
+    }
+}
+
+/* Solar System Container */
+.solar-system {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.6);
+    /* Scaled down to fit */
+    width: 800px;
+    height: 800px;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Sun */
+.sun {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, #fcd34d 0%, #f59e0b 50%, #d97706 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 60px rgba(251, 191, 36, 0.6);
+    animation: pulseSun 4s infinite alternate;
+}
+
+@keyframes pulseSun {
+    from {
+        box-shadow: 0 0 40px rgba(251, 191, 36, 0.4);
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    to {
+        box-shadow: 0 0 80px rgba(251, 191, 36, 0.8);
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+/* Orbits */
+.orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: orbitRotate linear infinite;
+}
+
+.orbit-mercury {
+    width: 120px;
+    height: 120px;
+    animation-duration: 5s;
+}
+
+.orbit-venus {
+    width: 180px;
+    height: 180px;
+    animation-duration: 8s;
+}
+
+.orbit-earth {
+    width: 260px;
+    height: 260px;
+    animation-duration: 12s;
+}
+
+.orbit-mars {
+    width: 340px;
+    height: 340px;
+    animation-duration: 20s;
+}
+
+@keyframes orbitRotate {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Planets */
+.planet {
+    position: absolute;
+    top: 50%;
+    right: -5px;
+    /* Position on the orbit ring */
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+
+.mercury {
+    width: 10px;
+    height: 10px;
+    background: #a3a3a3;
+}
+
+.venus {
+    width: 14px;
+    height: 14px;
+    background: #fbbf24;
+}
+
+.earth {
+    width: 16px;
+    height: 16px;
+    background: #3b82f6;
+    right: -8px;
+}
+
+.mars {
+    width: 12px;
+    height: 12px;
+    background: #ef4444;
+}
+
+/* Moon */
+.moon {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+}
+
+/* Comet */
+.comet {
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 4px;
+    height: 4px;
+    background: white;
+    box-shadow: -20px 20px 0 -1px rgba(255, 255, 255, 0.2), -40px 40px 0 -2px rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: cometMove 15s infinite ease-in-out;
+}
+
+@keyframes cometMove {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(-120vw, 120vh) scale(0.5);
+        opacity: 0;
+    }
+}

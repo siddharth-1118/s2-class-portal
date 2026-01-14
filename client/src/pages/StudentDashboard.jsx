@@ -7,8 +7,10 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useTheme } from '../context/ThemeContext';
 import CalendarTab from '../components/CalendarTab';
 import TimetableTab from '../components/TimetableTab';
+import MessTab from '../components/MessTab';
 import VFXLayer from '../components/VFXLayer';
 // import GalleryTab from '../components/GalleryTab';
+import MobileNav from '../components/MobileNav';
 
 const NoticesList = ({ API_URL }) => {
     const [notices, setNotices] = useState([]);
@@ -66,7 +68,13 @@ const StudentDashboard = () => {
     const { user, logout } = useAuth();
     const { theme, toggleTheme, accentColor, setAccentColor, font, setFont, bgPattern, setBgPattern, character, setCharacter } = useTheme();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('homework');
+
+    // Tab Persistence
+    const [activeTab, setActiveTab] = useState(() => localStorage.getItem('activeStudentTab') || 'homework');
+    useEffect(() => {
+        localStorage.setItem('activeStudentTab', activeTab);
+    }, [activeTab]);
+
     const [timetableDate, setTimetableDate] = useState(null);
     const [timetableDay, setTimetableDay] = useState(null);
 
@@ -495,7 +503,7 @@ const StudentDashboard = () => {
             )}
 
             <div className="max-w-6xl mx-auto">
-                <header className="flex flex-col md:flex-row justify-between items-center mb-10 glass-card p-6 rounded-2xl animate-fade-in gap-4 relative z-50">
+                <header className="sticky top-6 z-50 flex flex-col md:flex-row justify-between items-center mb-10 glass-card p-6 rounded-2xl animate-fade-in gap-4 shadow-2xl transition-all duration-300">
                     <div className="flex items-center gap-4">
                         <div className="rounded-full shadow-lg bg-white overflow-hidden w-12 h-12 flex items-center justify-center border-2 border-[rgba(var(--accent-color),0.3)]">
                             <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
@@ -510,8 +518,8 @@ const StudentDashboard = () => {
                     </div>
 
                     <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-                        <div className="bg-white/10 p-1 rounded-3xl flex flex-wrap justify-center gap-1 border border-white/20 w-full md:w-auto">
-                            {['homework', 'marks', 'analytics', 'timetable', 'calendar', 'cgpa', 'notices'].map((tab) => (
+                        <div className="hidden md:flex bg-white/10 p-1 rounded-3xl flex-wrap justify-center gap-1 border border-white/20 w-full md:w-auto">
+                            {['homework', 'marks', 'timetable', 'mess', 'analytics', 'calendar', 'cgpa', 'notices'].map((tab) => (
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
@@ -625,6 +633,8 @@ const StudentDashboard = () => {
                     </div>
                 )}
 
+                <MobileNav activeTab={activeTab} setActiveTab={setActiveTab} />
+
                 <main className="animate-slide-up">
                     {activeTab === 'homework' && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -686,6 +696,8 @@ const StudentDashboard = () => {
                             <TimetableTab user={user} initialDay={timetableDay} />
                         </div>
                     )}
+
+                    {activeTab === 'mess' && <MessTab />}
 
                     {activeTab === 'calendar' && <CalendarTab user={user} onDateSelect={handleDateSelect} />}
 
