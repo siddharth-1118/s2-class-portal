@@ -19,7 +19,8 @@ export const ThemeProvider = ({ children }) => {
         // Expanded theme list cleanup
         const themes = [
             'light', 'dark', 'cyberpunk', 'fantasy', 'space', 'ocean', 'jungle', 'candy', 'steampunk', 'horror',
-            'pixel', 'samurai', 'superhero', 'magic', 'western', 'music', 'sports', 'winter', 'dino', 'robot', 'pirate', 'alien'
+            'pixel', 'samurai', 'superhero', 'magic', 'western', 'music', 'sports', 'winter', 'dino', 'robot', 'pirate', 'alien',
+            'sunset', 'midnight', 'forest', 'retro'
         ];
         root.classList.remove(...themes);
         root.classList.add(theme);
@@ -44,7 +45,11 @@ export const ThemeProvider = ({ children }) => {
             'music-pink': '233, 69, 96', // Music
             'grass': '34, 197, 94', // Sports
             'swamp': '101, 163, 13', // Dino
-            'electric': '56, 189, 248' // Robot
+            'electric': '56, 189, 248', // Robot
+            'orange': '249, 115, 22', // Sunset
+            'indigo': '99, 102, 241', // Midnight
+            'green': '34, 197, 94', // Forest
+            'yellow': '234, 179, 8' // Retro
         };
 
         const hexToRgb = (hex) => {

@@ -458,6 +458,10 @@ const StudentDashboard = () => {
                                 { id: 'robot', name: 'Mecha-Z', emoji: '🤖', desc: 'Future intelligence.', theme: 'robot', accent: 'electric', anim: 'creature-glitch', entryAnim: 'anim-glitch' },
                                 { id: 'pirate', name: 'Skull King', emoji: '☠️', desc: 'Terror of the seas.', theme: 'pirate', accent: 'gold', anim: 'creature-float', entryAnim: 'anim-ghost' },
                                 { id: 'alien', name: 'Zorg', emoji: '👽', desc: 'Visitor from beyond.', theme: 'alien', accent: 'leaf', anim: 'creature-float', entryAnim: 'anim-ufo-land' },
+                                { id: 'sunset', name: 'Golden Hour', emoji: '🌅', desc: 'Warm glow.', theme: 'sunset', accent: 'orange', anim: 'creature-float', entryAnim: 'anim-fade' },
+                                { id: 'midnight', name: 'Deep Night', emoji: '🌚', desc: 'Silent shadows.', theme: 'midnight', accent: 'indigo', anim: 'creature-float', entryAnim: 'anim-fade' },
+                                { id: 'forest', name: 'Enchanted', emoji: '🌲', desc: 'Nature spirits.', theme: 'forest', accent: 'green', anim: 'creature-bounce', entryAnim: 'anim-grow' },
+                                { id: 'retro', name: 'Vintage', emoji: '📼', desc: 'Old school cool.', theme: 'retro', accent: 'yellow', anim: 'creature-glitch', entryAnim: 'anim-glitch' },
 
                             ].map((char) => (
                                 <button
@@ -494,9 +498,9 @@ const StudentDashboard = () => {
                 </div>
             )}
 
-            {/* Floating Creature */}
+            {/* Floating Creature - HIDDEN ON MOBILE */}
             {character && (
-                <div className={`fixed bottom-10 right-10 z-40 pointer-events-none ${character.anim || 'creature-float'}`}>
+                <div className={`fixed bottom-24 right-4 md:bottom-10 md:right-10 z-40 pointer-events-none ${character.anim || 'creature-float'} hidden md:block`}>
                     <div className="text-6xl filter drop-shadow-2xl opacity-90 hover:scale-110 transition cursor-pointer pointer-events-auto" onClick={() => setShowCharacterModal(true)} title="Change Companion">
                         {character.emoji}
                     </div>
