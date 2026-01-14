@@ -157,6 +157,18 @@ router.delete('/:id', authenticateToken, requireAdmin, (req, res) => {
     res.json({ message: 'Mark deleted' });
 });
 
+// BULK DELETE marks (Admin only)
+router.post('/bulk-delete', authenticateToken, requireAdmin, (req, res) => {
+    const { ids } = req.body;
+    if (!ids || !Array.isArray(ids) || ids.length === 0) return res.status(400).json({ message: 'No IDs provided' });
+
+    const placeholders = ids.map(() => '?').join(',');
+    const stmt = db.prepare(`DELETE FROM marks WHERE id IN (${placeholders})`);
+    const info = stmt.run(...ids);
+
+    res.json({ message: `Deleted ${info.changes} marks` });
+});
+
 // UPDATE mark (Admin only)
 router.put('/:id', authenticateToken, requireAdmin, (req, res) => {
     const { score, max_marks, exam_type, subject } = req.body;

@@ -209,7 +209,8 @@ const TimetableTab = ({ user, initialDay }) => {
                             </div>
                         </div>
 
-                        <div className="overflow-x-auto">
+                        {/* Desktop Table View */}
+                        <div className="hidden md:block overflow-x-auto">
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="text-xs opacity-60 uppercase tracking-wider border-b border-white/10 bg-white/5">
@@ -263,6 +264,54 @@ const TimetableTab = ({ user, initialDay }) => {
                                     )}
                                 </tbody>
                             </table>
+                        </div>
+
+                        {/* Mobile List View */}
+                        <div className="md:hidden cursor-default">
+                            {currentDaySchedule.length > 0 ? (
+                                currentDaySchedule.map((slot, idx) => (
+                                    <div
+                                        key={idx}
+                                        className={`p-4 border-b border-white/5 last:border-0 ${isAdmin ? 'cursor-pointer active:bg-white/5' : ''}`}
+                                        onClick={() => isAdmin && handleEditClick(slot)}
+                                    >
+                                        <div className="flex items-start justify-between mb-2">
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex flex-col items-center justify-center w-12 h-12 rounded-xl bg-white/5 border border-white/10">
+                                                    <span className="text-[10px] uppercase opacity-50 font-bold">Per</span>
+                                                    <span className="text-xl font-bold font-mono">{slot.period}</span>
+                                                </div>
+                                                <div>
+                                                    <div className={`font-bold text-lg leading-tight ${slot.type === 'Lab' ? 'text-emerald-400' : 'text-[var(--text-primary)]'}`}>
+                                                        {slot.subject}
+                                                    </div>
+                                                    <div className="text-xs opacity-60 font-mono mt-1 font-bold">
+                                                        {slot.time_range}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {isAdmin && <Edit2 size={16} className="text-white/40" />}
+                                        </div>
+
+                                        <div className="flex items-center justify-between pl-[60px]"> {/* Indent to align with text */}
+                                            <div className="flex items-center gap-2 text-sm opacity-70">
+                                                <User size={14} className="opacity-50" />
+                                                {slot.teacher || slot.staff || 'No Staff'}
+                                            </div>
+
+                                            {slot.type !== 'Theory' && (
+                                                <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider ${slot.type === 'Lab' ? 'bg-emerald-500/20 text-emerald-300' :
+                                                    slot.type === 'Online' ? 'bg-amber-500/20 text-amber-300' : 'bg-white/20'
+                                                    }`}>
+                                                    {slot.type}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="p-10 text-center opacity-50">No classes scheduled for {activeDay}.</div>
+                            )}
                         </div>
                     </div>
                 </div>

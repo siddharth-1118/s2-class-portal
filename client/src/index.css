@@ -1,196 +1,221 @@
 @import "tailwindcss";
-@import './themes.css';
 
-@layer base {
-  :root {
-    --accent-color: 124, 58, 237;
-    /* Default Violet */
-  }
-
-  body {
-    @apply text-gray-900 transition-colors duration-300;
-    background-color: transparent;
-    color: var(--text-primary, #111827);
-  }
-
-  /* Dark Mode Overrides */
-  .dark body {
-    @apply text-slate-100;
-    color: var(--text-primary, #f1f5f9);
-  }
+@layer components {
+  /* ... */
 }
 
-@layer utilities {
-  .glass {
-    @apply bg-white/10 backdrop-blur-lg border border-white/20;
-  }
-
-  .glass-card {
-    @apply backdrop-blur-md border border-white/10 shadow-xl;
-    background-color: var(--bg-secondary, rgba(255, 255, 255, 0.7));
-    color: var(--text-primary, #111827);
-  }
-
-  /* --- FONTS --- */
-  .font-inter {
-    font-family: 'Inter', sans-serif;
-  }
-
-  .font-roboto {
-    font-family: 'Roboto', sans-serif;
-  }
-
-  .font-open-sans {
-    font-family: 'Open Sans', sans-serif;
-  }
-
-  .font-lato {
-    font-family: 'Lato', sans-serif;
-  }
-
-  .font-montserrat {
-    font-family: 'Montserrat', sans-serif;
-  }
-
-  .font-oswald {
-    font-family: 'Oswald', sans-serif;
-  }
-
-  .font-raleway {
-    font-family: 'Raleway', sans-serif;
-  }
-
-  .font-poppins {
-    font-family: 'Poppins', sans-serif;
-  }
-
-  .font-nunito {
-    font-family: 'Nunito', sans-serif;
-  }
-
-  .font-ubuntu {
-    font-family: 'Ubuntu', sans-serif;
-  }
-
-  .font-merriweather {
-    font-family: 'Merriweather', serif;
-  }
-
-  .font-playfair {
-    font-family: 'Playfair Display', serif;
-  }
-
-  .font-lora {
-    font-family: 'Lora', serif;
-  }
-
-  .font-roboto-slab {
-    font-family: 'Roboto Slab', serif;
-  }
-
-  .font-arvo {
-    font-family: 'Arvo', serif;
-  }
-
-  .font-pacifico {
-    font-family: 'Pacifico', cursive;
-  }
-
-  .font-dancing {
-    font-family: 'Dancing Script', cursive;
-  }
-
-  .font-indie {
-    font-family: 'Indie Flower', cursive;
-  }
-
-  .font-amatic {
-    font-family: 'Amatic SC', cursive;
-  }
-
-  .font-shadows {
-    font-family: 'Shadows Into Light', cursive;
-  }
-
-  .font-orbitron {
-    font-family: 'Orbitron', sans-serif;
-  }
-
-  .font-press-start {
-    font-family: 'Press Start 2P', cursive;
-  }
-
-  .font-creepster {
-    font-family: 'Creepster', cursive;
-  }
-
-  .font-cinzel {
-    font-family: 'Cinzel', serif;
-  }
-
-  .font-bangers {
-    font-family: 'Bangers', cursive;
-  }
-
-  .font-righteous {
-    font-family: 'Righteous', cursive;
-  }
-
-  .font-fredericka {
-    font-family: 'Fredericka the Great', cursive;
-  }
-
-  .mesh-gradient {
-    background-color: #ff99cc;
-    background-image:
-      radial-gradient(at 12% 88%, hsla(253, 16%, 7%, 1) 0px, transparent 50%),
-      radial-gradient(at 93% 2%, hsla(245, 71%, 37%, 1) 0px, transparent 50%),
-      radial-gradient(at 6% 3%, hsla(305, 80%, 59%, 1) 0px, transparent 50%),
-      radial-gradient(at 83% 86%, hsla(339, 26%, 75%, 1) 0px, transparent 50%),
-      radial-gradient(at 35% 23%, hsla(271, 76%, 43%, 1) 0px, transparent 50%),
-      radial-gradient(at 49% 91%, hsla(272, 70%, 26%, 1) 0px, transparent 50%);
-  }
-
-  .bg-aurora {
-    background-color: #000000;
-    background-image:
-      radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
-      radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
-  }
-
-  .bg-sunset {
-    background-color: #ff9a9e;
-    background-image: linear-gradient(to top, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-  }
-
-  .bg-ocean {
-    background-color: #21D4FD;
-    background-image: linear-gradient(19deg, #21D4FD 0%, #B721FF 100%);
-  }
-
-  .bg-candy {
-    background-color: #FFE53B;
-    background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 74%);
-  }
-
-  .bg-midnight {
-    background-color: #0f172a;
-    background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-out;
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.5s ease-out;
-  }
+/* Hide Number Input Spinner */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-@keyframes fadeIn {
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  appearance: textfield;
+}
+
+/* --- THEMES --- */
+html {
+  min-height: 100vh;
+}
+
+body {
+  background-color: transparent;
+  color: var(--text-primary);
+  transition: background 0.5s ease, color 0.5s ease;
+  min-height: 100vh;
+}
+
+:root {
+  --bg-primary: #0f172a;
+  --text-primary: #f8fafc;
+  --bg-secondary: #1e293b;
+}
+
+/* LIGHT / DARK DEFAULTS */
+.light {
+  --bg-primary: #f8fafc;
+  --text-primary: #0f172a;
+  --bg-secondary: #e2e8f0;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.dark {
+  --bg-primary: #0f172a;
+  --text-primary: #f8fafc;
+  --bg-secondary: #1e293b;
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+/* THEME OVERRIDES */
+/* Cyberpunk */
+.cyberpunk {
+  --bg-primary: #050510;
+  background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #050510 100%);
+}
+
+/* Fantasy */
+.fantasy {
+  --bg-primary: #1a0f0f;
+  background: linear-gradient(to bottom, #2c1a1a, #0f0505);
+}
+
+/* Space */
+.space {
+  --bg-primary: #02020a;
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+}
+
+/* Ocean */
+.ocean {
+  --bg-primary: #001e2b;
+  background: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+}
+
+/* Jungle */
+.jungle {
+  background: linear-gradient(to bottom right, #134e5e, #71b280);
+}
+
+/* Candy */
+.candy {
+  --text-primary: #4a044e;
+  background: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+}
+
+/* Steampunk */
+.steampunk {
+  background: radial-gradient(circle, #3e2b20 0%, #1a120b 100%);
+}
+
+/* Horror */
+.horror {
+  background: linear-gradient(to bottom, #000000, #434343);
+}
+
+/* Pixel */
+.pixel {
+  background: linear-gradient(135deg, #2b1055 0%, #7597de 100%);
+}
+
+/* Samurai */
+.samurai {
+  background: linear-gradient(to right, #243949 0%, #517fa4 100%);
+}
+
+/* Superhero */
+.superhero {
+  background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+  --text-primary: #1e3a8a;
+}
+
+/* Magic */
+.magic {
+  background: radial-gradient(circle at center, #2e0249 0%, #570a57 50%, #a91079 100%);
+}
+
+/* NEW THEMES */
+.western {
+  background: linear-gradient(to bottom, #8e9eab, #eef2f3);
+  --text-primary: #2d3748;
+}
+
+.music {
+  background: linear-gradient(to right, #434343 0%, black 100%);
+}
+
+.sports {
+  background: linear-gradient(to bottom, #56ab2f, #a8e063);
+  --text-primary: #064e3b;
+}
+
+.winter {
+  background: linear-gradient(to top, #dfe9f3 0%, white 100%);
+  --text-primary: #1e3a8a;
+}
+
+.dino {
+  background: linear-gradient(to bottom, #504b38, #2e3020);
+}
+
+.robot {
+  background: repeating-linear-gradient(45deg, #2b2b2b 0px, #2b2b2b 10px, #333 10px, #333 20px);
+}
+
+.pirate {
+  background: linear-gradient(to bottom, #232526, #414345);
+}
+
+.alien {
+  background: radial-gradient(circle, #0f2027, #203a43, #2c5364);
+}
+
+/* Utility for glass effect on white text themes */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.candy .glass-card,
+.winter .glass-card,
+.western .glass-card,
+.superhero .glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  color: #1a202c;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* --- VFX ANIMATIONS --- */
+/* Space Stars */
+.stars-sm,
+.stars-md,
+.stars-lg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  box-shadow: 100px 200px #FFF, 300px 500px #FFF, 500px 100px #FFF, 800px 300px #FFF, 200px 700px #FFF;
+}
+
+.stars-sm {
+  width: 1px;
+  height: 1px;
+  animation: twinkle 3s infinite alternate;
+}
+
+.stars-md {
+  width: 2px;
+  height: 2px;
+  animation: twinkle 4s infinite alternate;
+}
+
+.stars-lg {
+  width: 3px;
+  height: 3px;
+  animation: twinkle 5s infinite alternate;
+}
+
+@keyframes twinkle {
   from {
-    opacity: 0;
+    opacity: 0.3;
   }
 
   to {
@@ -198,14 +223,410 @@
   }
 }
 
-@keyframes slideUp {
+/* Winter Snow */
+.snowflake {
+  position: absolute;
+  top: -10%;
+  color: #FFF;
+  font-size: 1.5rem;
+  animation: fall linear infinite;
+  animation-duration: 8s;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+  }
+
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
+
+/* Cyberpunk Grid */
+.cyber-grid {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background-image: linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(500px) rotateX(60deg);
+  animation: grid-scroll 10s linear infinite;
+  opacity: 0.3;
+}
+
+@keyframes grid-scroll {
   from {
-    transform: translateY(20px);
-    opacity: 0;
+    transform: perspective(500px) rotateX(60deg) translateY(0);
   }
 
   to {
+    transform: perspective(500px) rotateX(60deg) translateY(40px);
+  }
+}
+
+/* Ocean Bubbles */
+.bubble {
+  position: absolute;
+  bottom: -20px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+  border-radius: 50%;
+  aspect-ratio: 1;
+  animation: bubble-rise 6s infinite ease-in;
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateY(-110vh) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* --- ENTRY ANIMATIONS (Overlay) --- */
+.anim-rocket-launch {
+  animation: rocket-launch 3s ease-in-out forwards;
+}
+
+@keyframes rocket-launch {
+  0% {
+    transform: translateY(100vh) scale(0.5);
+    opacity: 0;
+  }
+
+  20% {
+    transform: translateY(20vh) scale(1.5);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translateY(-20vh) scale(1.5);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-150vh) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.anim-glitch {
+  animation: glitch-anim 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+}
+
+@keyframes glitch-anim {
+  0% {
+    transform: translate(0)
+  }
+
+  20% {
+    transform: translate(-5px, 5px)
+  }
+
+  40% {
+    transform: translate(-5px, -5px)
+  }
+
+  60% {
+    transform: translate(5px, 5px)
+  }
+
+  80% {
+    transform: translate(5px, -5px)
+  }
+
+  100% {
+    transform: translate(0)
+  }
+}
+
+.anim-spin {
+  animation: spin-entry 1s ease-out forwards;
+}
+
+@keyframes spin-entry {
+  0% {
+    transform: rotate(0deg) scale(0);
+  }
+
+  100% {
+    transform: rotate(360deg) scale(1.5);
+  }
+}
+
+.anim-bubble {
+  animation: bubble-entry 3s ease-out forwards;
+}
+
+@keyframes bubble-entry {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1.5);
+  }
+
+  100% {
+    transform: scale(2) translateY(-200px);
+    opacity: 0;
+  }
+}
+
+.anim-pounce {
+  animation: pounce-entry 1s ease-out forwards;
+}
+
+@keyframes pounce-entry {
+  0% {
+    transform: scale(0) translateY(100px);
+  }
+
+  60% {
+    transform: scale(1.2) translateY(-20px);
+  }
+
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.anim-bounce-in {
+  animation: bounce-in 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1.5);
+  }
+}
+
+.anim-ghost {
+  animation: ghost-float 3s ease-in-out infinite;
+}
+
+@keyframes ghost-float {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translateY(-20px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* --- NEW VFX CLASSES --- */
+
+/* Sparkles (Fantasy/Magic) */
+.sparkle {
+  position: absolute;
+  font-size: 1.5rem;
+  animation: pulse-fade 2s infinite ease-in-out;
+}
+
+@keyframes pulse-fade {
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(45deg);
+  }
+}
+
+/* Fireflies (Jungle/Alien) */
+.firefly {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #bef264;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #bef264;
+  animation: fly 10s infinite linear alternate, blink 2s infinite ease-in-out;
+}
+
+@keyframes fly {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  33% {
+    transform: translate(100px, -50px);
+  }
+
+  66% {
+    transform: translate(-50px, 50px);
+  }
+
+  100% {
+    transform: translate(20px, -100px);
+  }
+}
+
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Ash/Dust (Dino/Western) */
+.ash-overlay {
+  position: absolute;
+  inset: 0;
+  background: url('https://grainy-gradients.vercel.app/noise.svg');
+  opacity: 0.2;
+  mix-blend-mode: overlay;
+}
+
+/* Floating Icons (Candy/Sports/Music) */
+.floating-item,
+.floating-note {
+  position: absolute;
+  bottom: -50px;
+  font-size: 2rem;
+  opacity: 0.6;
+  animation: float-up 6s infinite ease-in;
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translateY(-110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Petals (Samurai) */
+.petal {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 100% 0 100% 0;
+  background: #ffc0cb;
+  top: -10%;
+  animation: fall-sway 8s infinite linear;
+}
+
+@keyframes fall-sway {
+  0% {
+    transform: translateY(0) rotate(0deg) translateX(0);
+  }
+
+  50% {
+    transform: translateY(50vh) rotate(180deg) translateX(50px);
+  }
+
+  100% {
+    transform: translateY(110vh) rotate(360deg) translateX(0);
+  }
+}
+
+/* Matrix (Pixel/Robot) */
+.matrix-rain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+  color: #0f0;
+  font-family: monospace;
+  font-size: 1rem;
+  overflow: hidden;
+}
+
+.matrix-col {
+  position: absolute;
+  top: -100px;
+  animation: matrix-drop 3s infinite linear;
+  writing-mode: vertical-rl;
+}
+
+@keyframes matrix-drop {
+  0% {
     transform: translateY(0);
-    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(110vh);
+  }
+}
+
+/* Fog (Horror/Steampunk) */
+.fog-layer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  animation: fog-pulse 5s infinite alternate;
+}
+
+@keyframes fog-pulse {
+  0% {
+    opacity: 0.3;
+  }
+
+  100% {
+    opacity: 0.7;
+  }
+}
+
+/* Comic Lines (Superhero) */
+.comic-lines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 0, 0.1) 10px, rgba(255, 255, 0, 0.1) 20px);
+  opacity: 0.5;
+}
+
+/* Rain (Pirate) */
+.rain-layer {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, transparent 20%);
+  background-size: 2px 50px;
+  animation: rain 0.5s linear infinite;
+  opacity: 0.3;
+}
+
+@keyframes rain {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 20px 100vh;
   }
 }

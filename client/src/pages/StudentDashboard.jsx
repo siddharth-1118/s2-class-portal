@@ -7,7 +7,41 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useTheme } from '../context/ThemeContext';
 import CalendarTab from '../components/CalendarTab';
 import TimetableTab from '../components/TimetableTab';
+import VFXLayer from '../components/VFXLayer';
 // import GalleryTab from '../components/GalleryTab';
+
+const NoticesList = ({ API_URL }) => {
+    const [notices, setNotices] = useState([]);
+    useEffect(() => {
+        fetch(`${API_URL}/api/notices`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+            .then(res => res.json())
+            .then(data => setNotices(data))
+            .catch(err => console.error(err));
+    }, [API_URL]);
+
+    if (notices.length === 0) return <div className="text-center opacity-50 py-10">No notices found.</div>;
+
+    return (
+        <>
+            {notices.map((n) => (
+                <div key={n.id} className="bg-white/5 border border-white/10 p-5 rounded-2xl relative overflow-hidden group hover:bg-white/10 transition">
+                    <div className={`absolute top-0 left-0 w-1 h-full ${n.category === 'urgent' ? 'bg-red-500' : 'bg-[rgb(var(--accent-color))]'}`}></div>
+                    <div className="flex justify-between items-start mb-2 pl-2">
+                        <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded ${n.category === 'urgent' ? 'bg-red-500/20 text-red-300' : 'bg-white/10 text-[var(--text-primary)]'}`}>
+                            {n.category}
+                        </span>
+                        <span className="text-xs opacity-50 font-mono">{new Date(n.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <p className="pl-2 text-lg leading-relaxed text-[var(--text-primary)]">{n.message}</p>
+                    <div className="mt-4 pl-2 flex items-center gap-2 text-xs opacity-50">
+                        <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center font-bold">A</div>
+                        Posted by {n.created_by || 'Admin'}
+                    </div>
+                </div>
+            ))}
+        </>
+    );
+};
 
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -285,6 +319,24 @@ const StudentDashboard = () => {
 
     return (
         <div className={`min-h-screen p-6 transition-all duration-300 ${!character ? (bgPattern || 'mesh-gradient') : 'bg-transparent'}`}>
+            {/* Approval Pending Overlay */
+                !user.is_approved && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900 text-white p-6">
+                        <div className="text-center max-w-md">
+                            <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <Clock className="w-10 h-10 text-amber-500" />
+                            </div>
+                            <h2 className="text-3xl font-bold mb-4">Approval Pending</h2>
+                            <p className="text-slate-400 mb-8">
+                                Your account is waiting for administrator approval. <br />
+                                Please contact your class teacher or admin.
+                            </p>
+                            <button onClick={() => { logout(); navigate('/'); }} className="bg-slate-800 hover:bg-slate-700 px-6 py-3 rounded-xl font-bold transition">
+                                Back to Login
+                            </button>
+                        </div>
+                    </div>
+                )}
             {/* Profile Lock Modal */}
             {showProfileModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -345,8 +397,10 @@ const StudentDashboard = () => {
                     </div>
                 </div>
             )}
+            {/* Background Pattern */}
+            <div className={`fixed inset-0 z-0 pointer-events-none opacity-20 bg-pattern ${bgPattern}`}></div>
+            <VFXLayer />
 
-            {/* Character Selection Modal */}
             {/* Selection Animation Overlay */}
             {selectionAnim.show && (
                 <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center overflow-hidden">
@@ -411,17 +465,17 @@ const StudentDashboard = () => {
                                             setAccentColor(char.accent);
                                             setBgPattern(''); // Clear explicit bg pattern to let theme show
                                             setSelectionAnim({ show: false, id: '', emoji: '', theme: '', anim: '' });
-                                        }, 2800); // Increased wait time for longer ability animations
+                                        }, 2800); // Wait for animation
                                     }}
-                                    className={`group relative bg-slate-800 rounded-2xl p-4 hover:bg-slate-700 transition-all duration-300 hover:scale-105 border border-slate-700 hover:border-${char.id === 'cyberpunk' ? 'green-400' : 'blue-400'} flex flex-col items-center text-center`}
+                                    className={`group relative bg-slate-800 rounded-2xl p-4 transition-all duration-300 hover:scale-105 flex flex-col items-center text-center ${character?.id === char.id ? 'border-4 border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.5)] bg-slate-700' : 'border border-slate-700 hover:border-blue-400 hover:bg-slate-700'}`}
                                 >
                                     <div className={`text-5xl md:text-6xl mb-3 drop-shadow-lg transition-transform duration-500 group-hover:scale-110 ${char.anim}`}>
                                         {char.emoji}
                                     </div>
                                     <h3 className="text-white font-bold text-lg">{char.name}</h3>
                                     <p className="text-gray-400 text-xs mt-1 line-clamp-2">{char.desc}</p>
-                                    <div className="mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-900 text-gray-300 group-hover:bg-white group-hover:text-black transition-colors">
-                                        Select
+                                    <div className={`mt-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors ${character?.id === char.id ? 'bg-emerald-500 text-white' : 'bg-slate-900 text-gray-300 group-hover:bg-white group-hover:text-black'}`}>
+                                        {character?.id === char.id ? 'Active' : 'Select'}
                                     </div>
                                 </button>
                             ))}
@@ -457,17 +511,30 @@ const StudentDashboard = () => {
 
                     <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
                         <div className="bg-white/10 p-1 rounded-3xl flex flex-wrap justify-center gap-1 border border-white/20 w-full md:w-auto">
-                            {['homework', 'marks', 'analytics', 'timetable', 'calendar', 'cgpa'].map((tab) => (
+                            {['homework', 'marks', 'analytics', 'timetable', 'calendar', 'cgpa', 'notices'].map((tab) => (
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
                                     className={`px-4 py-2 rounded-full text-sm font-bold transition capitalize ${activeTab === tab ? 'text-white shadow-md' : 'text-[var(--text-primary)] hover:bg-white/10'}`}
                                     style={activeTab === tab ? { backgroundColor: 'rgb(var(--accent-color))' } : {}}
                                 >
-                                    {tab === 'cgpa' ? 'CGPA & SGPA' : tab === 'marks' ? 'My Grades' : tab === 'homework' ? 'Assignments' : tab}
+                                    {tab === 'cgpa' ? 'CGPA' : tab === 'marks' ? 'Grades' : tab === 'homework' ? 'Assignments' : tab}
                                 </button>
                             ))}
                         </div>
+
+                        {/* Profile Button */}
+                        <button
+                            onClick={() => setActiveTab('profile')}
+                            className={`p-1 pl-2 pr-4 rounded-full flex items-center gap-3 transition border ${activeTab === 'profile' ? 'bg-white text-slate-900 border-transparent shadow-lg' : 'bg-white/10 border-white/20 text-[var(--text-primary)] hover:bg-white/20'}`}
+                        >
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xs font-bold text-white uppercase">
+                                {user.name.charAt(0)}
+                            </div>
+                            <div className="text-left hidden md:block">
+                                <div className="text-xs opacity-60 font-bold uppercase tracking-wider">Profile</div>
+                            </div>
+                        </button>
 
                         <div className="flex items-center gap-2">
                             {/* Creature Gallery Toggle */}
@@ -770,6 +837,61 @@ const StudentDashboard = () => {
                                         <div className="absolute inset-0" style={{ backgroundColor: 'rgb(var(--accent-color))', opacity: 0.2 }}></div>
                                         <h3 className="text-xl font-bold opacity-90 relative z-10 text-[var(--text-primary)]">Estimated SGPA</h3>
                                         <div className="text-4xl font-extrabold mt-1 relative z-10" style={{ color: 'rgb(var(--accent-color))' }}>{calculatedSGPA}</div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'notices' && (
+                        <div className="glass-card rounded-2xl p-6 min-h-[500px]">
+                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]"><Bell className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} /> Notices Board</h2>
+                            <div className="space-y-4">
+                                <NoticesList API_URL={API_URL} />
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'profile' && (
+                        <div className="glass-card max-w-2xl mx-auto rounded-3xl p-8 shadow-2xl animate-slide-up">
+                            <div className="text-center mb-8">
+                                <div className="w-24 h-24 mx-auto bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-full flex items-center justify-center text-4xl font-bold text-white mb-4 shadow-lg">
+                                    {user.name.charAt(0)}
+                                </div>
+                                <h2 className="text-3xl font-extrabold text-[var(--text-primary)]">{user.name}</h2>
+                                <p className="opacity-60 text-[var(--text-primary)]">{user.email}</p>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+                                    <h3 className="text-xs font-bold uppercase opacity-50 mb-4 tracking-widest text-[var(--text-primary)]">Academic Details</h3>
+                                    <div className="grid grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="block text-xs opacity-60 mb-1 text-[var(--text-primary)]">Register Number</label>
+                                            <div className="text-xl font-mono font-bold text-[var(--text-primary)]">{studentProfile?.register_number || 'Not Linked'}</div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs opacity-60 mb-1 text-[var(--text-primary)]">Section</label>
+                                            <div className="text-xl font-bold text-[var(--text-primary)]">{studentProfile?.section || '-'}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
+                                    <h3 className="text-xs font-bold uppercase opacity-50 mb-4 tracking-widest text-[var(--text-primary)]">Contact Info</h3>
+                                    <div>
+                                        <label className="block text-xs opacity-60 mb-1 text-[var(--text-primary)]">Mobile Number</label>
+                                        <div className="text-lg font-medium text-[var(--text-primary)]">{studentProfile?.mobile || '-'}</div>
+                                    </div>
+                                </div>
+
+                                {studentProfile?.is_locked ? (
+                                    <div className="text-center text-sm opacity-50 py-4 text-[var(--text-primary)]">
+                                        <Lock className="w-4 h-4 inline-block mr-1" /> Profile is locked. Contact admin for corrections.
+                                    </div>
+                                ) : (
+                                    <div className="text-center">
+                                        <button onClick={() => setShowProfileModal(true)} className="text-[rgb(var(--accent-color))] hover:underline font-bold">Edit Profile</button>
                                     </div>
                                 )}
                             </div>

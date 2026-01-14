@@ -14,12 +14,17 @@ db.exec(`
     role TEXT CHECK(role IN ('admin', 'student')) NOT NULL,
     mobile TEXT,
     section TEXT,
-    linked_reg_no TEXT
+    linked_reg_no TEXT,
+    is_approved INTEGER DEFAULT 0 -- 0: Pending, 1: Approved, 2: Rejected
   );
 `);
 
 // Migration for linked_reg_no
 try { db.prepare('ALTER TABLE users ADD COLUMN linked_reg_no TEXT').run(); } catch (e) { }
+// Migration for is_approved
+try { db.prepare('ALTER TABLE users ADD COLUMN is_approved INTEGER DEFAULT 0').run(); } catch (e) { }
+// Auto-approve existing users (optional, but good for migration)
+try { db.prepare('UPDATE users SET is_approved = 1 WHERE is_approved IS NULL').run(); } catch (e) { }
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS homework (
@@ -95,6 +100,15 @@ db.exec(`
     staff TEXT,
     type TEXT, -- 'Theory', 'Lab', 'Online'
     time_range TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS notices (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    message TEXT NOT NULL,
+    category TEXT DEFAULT 'general', -- 'general', 'urgent', 'homework'
+    target TEXT, -- 'all', 'student_email', 'batch'
+    created_by TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 `);
 

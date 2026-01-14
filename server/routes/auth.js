@@ -19,6 +19,7 @@ router.post('/register', async (req, res) => {
     let role = 'student';
     if (ADMIN_EMAILS.includes(email)) {
         role = 'admin';
+        // Admins auto-approved
     } else {
         const isAllowed = ALLOWED_DOMAINS.some(domain => email.endsWith(domain));
         if (!isAllowed) {
@@ -29,8 +30,9 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
-        const stmt = db.prepare('INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
-        const info = stmt.run(email, hashedPassword, name, role);
+        const stmt = db.prepare('INSERT INTO users (email, password, name, role, is_approved) VALUES (?, ?, ?, ?, ?)');
+        const isApproved = role === 'admin' ? 1 : 0; // Admins approved, Students pending (0)
+        const info = stmt.run(email, hashedPassword, name, role, isApproved);
         res.status(201).json({ message: 'User created successfully', userId: info.lastInsertRowid });
     } catch (error) {
         if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
@@ -56,8 +58,8 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token, user: { id: user.id, email: user.email, role: user.role, name: user.name } });
+    const token = jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name, is_approved: user.is_approved }, process.env.JWT_SECRET, { expiresIn: '24h' });
+    res.json({ token, user: { id: user.id, email: user.email, role: user.role, name: user.name, is_approved: user.is_approved } });
 });
 
 // GOOGLE AUTH
@@ -92,15 +94,16 @@ router.post('/google', async (req, res) => {
         let user = stmt.get(email);
 
         if (!user) {
-            const insert = db.prepare('INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)');
+            const insert = db.prepare('INSERT INTO users (email, password, name, role, is_approved) VALUES (?, ?, ?, ?, ?)');
             const randomPass = Math.random().toString(36).slice(-8);
             const hashed = await bcrypt.hash(randomPass, 10);
-            insert.run(email, hashed, name, role);
+            const isApproved = role === 'admin' ? 1 : 0;
+            insert.run(email, hashed, name, role, isApproved);
             user = stmt.get(email);
         }
 
-        const jwtToken = jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token: jwtToken, user: { id: user.id, email: user.email, role: user.role, name: user.name } });
+        const jwtToken = jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name, is_approved: user.is_approved }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.json({ token: jwtToken, user: { id: user.id, email: user.email, role: user.role, name: user.name, is_approved: user.is_approved } });
 
     } catch (e) {
         console.error(e);
@@ -223,6 +226,34 @@ router.post('/reset-password', async (req, res) => {
     db.prepare('DELETE FROM password_resets WHERE email = ?').run(record.email);
 
     res.json({ message: 'Password updated successfully' });
+});
+
+// ADMIN: Get All Users
+router.get('/users', (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, requester) => {
+        if (err || requester.role !== 'admin') return res.sendStatus(403);
+        const users = db.prepare('SELECT id, email, name, role, is_approved, linked_reg_no FROM users ORDER BY id DESC').all();
+        res.json(users);
+    });
+});
+
+// ADMIN: Toggle Approval
+router.post('/approve/:id', (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, requester) => {
+        if (err || requester.role !== 'admin') return res.sendStatus(403);
+
+        const { is_approved } = req.body; // 1 or 0
+        db.prepare('UPDATE users SET is_approved = ? WHERE id = ?').run(is_approved, req.params.id);
+        res.json({ message: `User ${is_approved ? 'Approved' : 'Disapproved'}` });
+    });
 });
 
 module.exports = router;

@@ -16,6 +16,14 @@ const AdminDashboard = () => {
     const [onlineUsers, setOnlineUsers] = useState([]);
     const [activeTab, setActiveTab] = useState('homework');
 
+    // User Management State
+    const [userList, setUserList] = useState([]);
+
+    // Notice State
+    const [noticeMsg, setNoticeMsg] = useState('');
+    const [targetStudent, setTargetStudent] = useState('all'); // 'all' or specific email
+    const [notices, setNotices] = useState([]);
+
     // Homework State
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -51,8 +59,11 @@ const AdminDashboard = () => {
     // Smart Import State
     const [importModalOpen, setImportModalOpen] = useState(false);
     const [rawImportText, setRawImportText] = useState('');
-
+    const [stagedMarks, setStagedMarks] = useState({});
     const [msg, setMsg] = useState('');
+
+    // Exam Type Filter State
+    const [activeExamTab, setActiveExamTab] = useState('All');
 
 
     const [socket, setSocket] = useState(null);
@@ -71,8 +82,14 @@ const AdminDashboard = () => {
         fetchMarks();
         fetchTimetable();
 
+        // Initial Fetch for Users or Notices (to populate student list)
+        // Initial Fetch for Users or Notices (to populate student list)
+        if (activeTab === 'users') {
+            fetch(`${API_URL}/api/auth/users`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } }).then(res => res.json()).then(setUserList);
+        }
+
         return () => newSocket.close();
-    }, [user]);
+    }, [user, activeTab]);
 
     const fetchHomeworks = async () => {
         try {
@@ -243,32 +260,36 @@ const AdminDashboard = () => {
     };
 
     const handleSmartImport = () => {
-        // Regex to find "RegNo" and "Score" patterns
-        // Supporting formats: "RA24... 90", "RA24... - 90", tab separated
         const lines = rawImportText.split('\n');
         let count = 0;
+        const newStaged = { ...stagedMarks };
 
         lines.forEach(line => {
+            // 1. Find RegNo
             const regMatch = line.match(/(RA\d+)/i);
-            const scoreMatch = line.match(/(\d+)(\s*\/|\s*)(\d+)?/); // simple number finder
-
             if (regMatch) {
                 const regNo = regMatch[1].toUpperCase();
-                // Find score (naive: first number found after reg no that isn't the reg no digits)
-                // Better: look for last number in line
-                const numbers = line.match(/\d+/g);
-                if (numbers && numbers.length > 0) {
-                    const score = numbers[numbers.length - 1]; // Assume last number is score
-                    // Populate input
-                    const el = document.getElementById(`input-${regNo}`);
-                    if (el) {
-                        el.value = score;
-                        count++;
-                    }
+
+                // 2. Remove RegNo from line to avoid matching its digits as score
+                const restOfLine = line.replace(regMatch[0], '');
+
+                // 3. Find Score (Number or 'ab'/'absent')
+                // Matches: "23", "23.5", "ab", "AB", "absent"
+                // \b ensures we don't match partial words, but allow simple numbers
+                const scoreMatch = restOfLine.match(/\b(ab|absent|\d+(\.\d+)?)\b/i);
+
+                if (scoreMatch) {
+                    let score = scoreMatch[0];
+                    if (score.toLowerCase().startsWith('ab')) score = 'AB'; // Standardize Absent
+
+                    newStaged[regNo] = score;
+                    count++;
                 }
             }
         });
-        alert(`Parsed ${count} scores from text! Verify and click 'Save All'.`);
+
+        setStagedMarks(newStaged);
+        alert(`Parsed and staged ${count} scores! Review them in the table before clicking 'Save All'.`);
         setImportModalOpen(false);
     };
 
@@ -385,6 +406,8 @@ Student RA2411003010003 got 45 marks"
                     <div className="flex items-center gap-6">
                         <div className="flex gap-2 p-1 bg-slate-800 rounded-full border border-slate-700 overflow-x-auto max-w-[90vw]">
                             <button onClick={() => setActiveTab('homework')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'homework' ? 'bg-violet-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><FileText className="w-4 h-4" /> Homework</button>
+                            <button onClick={() => setActiveTab('users')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'users' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Users className="w-4 h-4" /> Users</button>
+                            <button onClick={() => setActiveTab('notices')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'notices' ? 'bg-yellow-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Send className="w-4 h-4" /> Notices</button>
                             <button onClick={() => setActiveTab('students')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'students' ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><GraduationCap className="w-4 h-4" /> Grading Sheet</button>
                             <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Activity className="w-4 h-4" /> History</button>
                             <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'timetable' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Calendar className="w-4 h-4" /> Timetable</button>
@@ -467,15 +490,193 @@ Student RA2411003010003 got 45 marks"
                     </div>
                 )}
 
+                {activeTab === 'users' && (
+                    <div className="animate-slide-up">
+                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl min-h-[600px]">
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-xl font-semibold text-indigo-300 flex items-center gap-2">
+                                    <Users className="w-5 h-5" /> User Management
+                                </h2>
+                                <button onClick={() => {
+                                    fetch(`${API_URL}/api/auth/users`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } }).then(res => res.json()).then(setUserList);
+                                }} className="text-sm bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded">Refresh</button>
+                            </div>
+
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left border-collapse">
+                                    <thead className="bg-slate-950/50 text-slate-400 text-xs uppercase">
+                                        <tr>
+                                            <th className="p-4">Name</th>
+                                            <th className="p-4">Email</th>
+                                            <th className="p-4">Role</th>
+                                            <th className="p-4">Linked Reg No</th>
+                                            <th className="p-4 text-center">Status</th>
+                                            <th className="p-4 text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-700/50">
+                                        {userList.map(u => (
+                                            <tr key={u.id} className="hover:bg-slate-800/30 transition">
+                                                <td className="p-4 font-bold text-white">{u.name}</td>
+                                                <td className="p-4 text-slate-400 text-sm">{u.email}</td>
+                                                <td className="p-4"><span className={`px-2 py-0.5 rounded text-xs uppercase font-bold ${u.role === 'admin' ? 'bg-purple-500/20 text-purple-300' : 'bg-blue-500/20 text-blue-300'}`}>{u.role}</span></td>
+                                                <td className="p-4 font-mono text-xs">{u.linked_reg_no || '-'}</td>
+                                                <td className="p-4 text-center">
+                                                    {u.is_approved ?
+                                                        <span className="text-emerald-400 text-xs font-bold border border-emerald-500/30 px-2 py-1 rounded bg-emerald-500/10">Active</span>
+                                                        : <span className="text-amber-400 text-xs font-bold border border-amber-500/30 px-2 py-1 rounded bg-amber-500/10 animate-pulse">Pending</span>
+                                                    }
+                                                </td>
+                                                <td className="p-4 text-right">
+                                                    {u.role !== 'admin' && (
+                                                        <button
+                                                            onClick={async () => {
+                                                                await fetch(`${API_URL}/api/auth/approve/${u.id}`, {
+                                                                    method: 'POST',
+                                                                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                                                                    body: JSON.stringify({ is_approved: u.is_approved ? 0 : 1 })
+                                                                });
+                                                                setUserList(prev => prev.map(usr => usr.id === u.id ? { ...usr, is_approved: !usr.is_approved } : usr));
+                                                            }}
+                                                            className={`px-3 py-1 rounded text-xs font-bold transition ${u.is_approved ? 'bg-red-500/20 text-red-300 hover:bg-red-500/30' : 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30'}`}
+                                                        >
+                                                            {u.is_approved ? 'Revoke' : 'Approve'}
+                                                        </button>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'notices' && (
+                    <div className="animate-slide-up grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl h-fit">
+                            <h2 className="text-xl font-semibold mb-6 text-yellow-300 flex items-center gap-2">
+                                <Send className="w-5 h-5" /> Broadcast Notice
+                            </h2>
+
+                            <div className="mb-4 space-y-2">
+                                <label className="text-sm font-bold text-slate-400 uppercase">Target Audience</label>
+                                <select
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-yellow-500"
+                                    value={targetStudent}
+                                    onChange={(e) => setTargetStudent(e.target.value)}
+                                >
+                                    <option value="all">📢 All Students</option>
+                                    <optgroup label="Class List">
+                                        {students.map(s => (
+                                            <option key={s.register_number} value={s.register_number}>{s.name} ({s.register_number})</option>
+                                        ))}
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <textarea
+                                className="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-white focus:outline-none focus:ring-1 focus:ring-yellow-500 h-40 resize-none mb-4"
+                                placeholder="Type your message here..."
+                                value={noticeMsg}
+                                onChange={e => setNoticeMsg(e.target.value)}
+                            ></textarea>
+
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={async () => {
+                                        if (!noticeMsg) return;
+                                        try {
+                                            await fetch(`${API_URL}/api/notices`, {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                                                body: JSON.stringify({ message: noticeMsg, category: 'general', target: targetStudent })
+                                            });
+                                            alert('Notice Sent!');
+                                            setNoticeMsg('');
+                                        } catch (e) { console.error(e); alert('Failed'); }
+                                    }}
+                                    className="flex-1 bg-yellow-600 text-white font-bold py-3 rounded-xl hover:bg-yellow-700 transition"
+                                >
+                                    {targetStudent === 'all' ? 'Send to All' : 'Send to Student'}
+                                </button>
+
+                                <button
+                                    onClick={async () => {
+                                        try {
+                                            await fetch(`${API_URL}/api/notices`, {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                                                body: JSON.stringify({ message: "This is a test notification to verify push services.", category: 'urgent', target: 'all' })
+                                            });
+                                            alert('Test Notification Triggered!');
+                                        } catch (e) { alert('Error triggering test'); }
+                                    }}
+                                    className="bg-slate-700 text-slate-300 px-4 rounded-xl hover:bg-slate-600 transition text-sm font-bold"
+                                >
+                                    Test Push
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl h-fit">
+                            <h2 className="text-xl font-semibold mb-6 text-slate-300">Recent Notices</h2>
+                            <div className="text-center text-slate-500 py-10">
+                                View logic implemented in Student Dashboard. <br /> This tab is mainly for broadcasting.
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {activeTab === 'marks' && (
                     <div className="animate-slide-up">
                         <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl min-h-[600px]">
-                            <h2 className="text-xl font-semibold mb-6 text-pink-300 flex items-center justify-between gap-2">
-                                <span className="flex items-center gap-2"><Activity className="w-5 h-5" /> Detailed Grading History</span>
-                                <button onClick={() => setAddMarkModalOpen(true)} className="bg-pink-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-pink-700 transition flex items-center gap-1 shadow-lg">
-                                    <PlusCircle className="w-4 h-4" /> Add Grade
-                                </button>
-                            </h2>
+                            <div className="flex flex-col gap-4 mb-6">
+                                <h2 className="text-xl font-semibold text-pink-300 flex items-center gap-2"><Activity className="w-5 h-5" /> Detailed Grading History</h2>
+                                <div className="flex flex-wrap items-center gap-2">
+                                    {['All', ...new Set(marksList.map(m => m.exam_type || 'Unspecified'))].map(type => (
+                                        <button
+                                            key={type}
+                                            onClick={() => setActiveExamTab(type)}
+                                            className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${activeExamTab === type ? 'bg-pink-600 text-white shadow-lg' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'}`}
+                                        >
+                                            {type}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="flex items-center gap-2 self-end">
+                                    <button onClick={() => setAddMarkModalOpen(true)} className="bg-pink-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-pink-700 transition flex items-center gap-1 shadow-lg">
+                                        <PlusCircle className="w-4 h-4" /> Add Grade
+                                    </button>
+                                    {marksList.filter(m => activeExamTab === 'All' || (m.exam_type || 'Unspecified') === activeExamTab).length > 0 && (
+                                        <button
+                                            onClick={async () => {
+                                                const visibleMarks = marksList.filter(m => activeExamTab === 'All' || (m.exam_type || 'Unspecified') === activeExamTab);
+                                                if (!confirm(`Are you sure you want to DELETE ALL ${visibleMarks.length} marks currently visible? This cannot be undone.`)) return;
+                                                try {
+                                                    const ids = visibleMarks.map(m => m.id);
+                                                    const res = await fetch(`${API_URL}/api/marks/bulk-delete`, {
+                                                        method: 'POST',
+                                                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                                                        body: JSON.stringify({ ids })
+                                                    });
+                                                    if (res.ok) {
+                                                        alert("All marks deleted.");
+                                                        fetchMarks();
+                                                    } else {
+                                                        alert("Failed to delete marks.");
+                                                    }
+                                                } catch (e) { console.error(e); alert("Failed to delete."); }
+                                            }}
+                                            className="bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-red-700 transition flex items-center gap-1 shadow-lg ml-2"
+                                        >
+                                            <Trash2 className="w-4 h-4" /> Delete All ({marksList.filter(m => activeExamTab === 'All' || (m.exam_type || 'Unspecified') === activeExamTab).length})
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
                             <div className="overflow-x-auto custom-scrollbar">
                                 <table className="w-full text-left border-collapse">
                                     <thead>
@@ -488,7 +689,7 @@ Student RA2411003010003 got 45 marks"
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-700/50">
-                                        {marksList.map((m) => (
+                                        {marksList.filter(m => activeExamTab === 'All' || (m.exam_type || 'Unspecified') === activeExamTab).map((m) => (
                                             <tr key={m.id} className="text-slate-300 hover:bg-slate-700/30 transition">
                                                 <td className="py-4 pl-2">
                                                     <div className="font-semibold text-white">{m.student_name}</div>
@@ -553,14 +754,7 @@ Student RA2411003010003 got 45 marks"
                                     </div>
                                     <div className="space-y-1">
                                         <label className="text-xs font-bold text-slate-500 uppercase">Exam Type</label>
-                                        <select className="w-full bg-slate-800 border-none rounded-lg px-3 py-2 text-white focus:ring-1 focus:ring-emerald-500" value={bulkExamType} onChange={e => setBulkExamType(e.target.value)}>
-                                            <option>Internal 1</option>
-                                            <option>Internal 2</option>
-                                            <option>Internal 3</option>
-                                            <option>Model Exam</option>
-                                            <option>Semester</option>
-                                            <option>Assignment</option>
-                                        </select>
+                                        <input type="text" placeholder="e.g. Internal 1" className="w-full bg-slate-800 border-none rounded-lg px-3 py-2 text-white focus:ring-1 focus:ring-emerald-500" value={bulkExamType} onChange={e => setBulkExamType(e.target.value)} />
                                     </div>
                                     <div className="space-y-1">
                                         <label className="text-xs font-bold text-slate-500 uppercase">Filter Student</label>
@@ -569,6 +763,42 @@ Student RA2411003010003 got 45 marks"
                                             <input type="text" placeholder="Reg No / Name" className="w-full bg-slate-800 border-none rounded-lg pl-9 pr-3 py-2 text-white focus:ring-1 focus:ring-emerald-500" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
                                         </div>
                                     </div>
+                                </div>
+
+                                <div className="flex justify-end mt-4 mb-4">
+                                    <button
+                                        onClick={async () => {
+                                            const payload = {
+                                                marks: Object.entries(stagedMarks).map(([reg, score]) => ({
+                                                    student_reg_no: reg,
+                                                    subject: bulkSubject,
+                                                    score: score,
+                                                    max_marks: bulkMaxMarks,
+                                                    exam_type: bulkExamType
+                                                }))
+                                            };
+
+                                            if (payload.marks.length === 0) return alert("No changes to save!");
+
+                                            try {
+                                                const res = await fetch(`${API_URL}/api/marks/bulk`, {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                                                    body: JSON.stringify(payload)
+                                                });
+                                                if (res.ok) {
+                                                    alert("All grades saved successfully!");
+                                                    setStagedMarks({});
+                                                    fetchMarks(); // Refresh
+                                                } else {
+                                                    alert("Failed to save grades.");
+                                                }
+                                            } catch (e) { console.error(e); alert("Error saving"); }
+                                        }}
+                                        className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg flex items-center gap-2 transition"
+                                    >
+                                        <Save className="w-5 h-5" /> Save All
+                                    </button>
                                 </div>
                             </div>
 
@@ -584,7 +814,7 @@ Student RA2411003010003 got 45 marks"
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-700/50">
-                                            {filteredStudents.map((s) => (
+                                            {filteredStudents.map((s, i) => (
                                                 <tr key={s.register_number} className="hover:bg-slate-800/50 transition">
                                                     <td className="p-4 font-mono text-emerald-400 text-sm">{s.register_number}</td>
                                                     <td className="p-4 text-slate-200 font-medium flex items-center gap-2">
@@ -613,26 +843,39 @@ Student RA2411003010003 got 45 marks"
                                                     <td className="p-4">
                                                         <div className="flex items-center gap-2">
                                                             <input
-                                                                type="number"
+                                                                type="text"
+                                                                inputMode="numeric"
+                                                                pattern="[0-9]*"
                                                                 placeholder="-"
-                                                                className="bg-slate-800 border border-slate-600 rounded px-3 py-1.5 text-white w-20 text-center focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition"
+                                                                value={stagedMarks[s.register_number] !== undefined ? stagedMarks[s.register_number] : (marksList.find(m => m.student_reg_no === s.register_number && m.subject === bulkSubject && m.exam_type === bulkExamType)?.score || '')}
+                                                                onChange={(e) => setStagedMarks(prev => ({ ...prev, [s.register_number]: e.target.value }))}
+                                                                className="bg-slate-800 border border-slate-600 rounded px-3 py-1.5 text-white w-20 text-center focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition no-spinner"
                                                                 onKeyDown={(e) => {
-                                                                    if (e.key === 'Enter') {
-                                                                        submitGrade(s.register_number, e.target.value);
+                                                                    if (e.key === 'Enter' || e.key === 'ArrowDown') {
+                                                                        e.preventDefault();
+                                                                        // Focus Next
+                                                                        const nextIdx = i + 1;
+                                                                        if (nextIdx < filteredStudents.length) {
+                                                                            const nextReg = filteredStudents[nextIdx].register_number;
+                                                                            const nextInput = document.getElementById(`input-${nextReg}`);
+                                                                            if (nextInput) nextInput.focus();
+                                                                        }
+                                                                    }
+                                                                    if (e.key === 'ArrowUp') {
+                                                                        e.preventDefault();
+                                                                        // Focus Previous
+                                                                        const prevIdx = i - 1;
+                                                                        if (prevIdx >= 0) {
+                                                                            const prevReg = filteredStudents[prevIdx].register_number;
+                                                                            const prevInput = document.getElementById(`input-${prevReg}`);
+                                                                            if (prevInput) prevInput.focus();
+                                                                        }
                                                                     }
                                                                 }}
+                                                                onWheel={(e) => e.target.blur()}
                                                                 id={`input-${s.register_number}`}
                                                             />
-                                                            <button
-                                                                onClick={() => {
-                                                                    const val = document.getElementById(`input-${s.register_number}`).value;
-                                                                    submitGrade(s.register_number, val);
-                                                                }}
-                                                                className="bg-emerald-600 hover:bg-emerald-700 text-white p-1.5 rounded transition shadow-lg"
-                                                                title="Submit Grade"
-                                                            >
-                                                                <Save className="w-4 h-4" />
-                                                            </button>
+                                                            {/* Individual Save Removed */}
                                                         </div>
                                                     </td>
                                                     <td className="p-4 text-center">
@@ -666,7 +909,6 @@ Student RA2411003010003 got 45 marks"
                         </div>
                     )
                 }
-
             </div >
 
             {
@@ -677,14 +919,7 @@ Student RA2411003010003 got 45 marks"
                             <form onSubmit={handleMarkUpdate} className="space-y-4">
                                 <div>
                                     <label className="text-xs text-slate-400 uppercase">Exam Type</label>
-                                    <select className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white" value={markToEdit.exam_type} onChange={e => setMarkToEdit({ ...markToEdit, exam_type: e.target.value })}>
-                                        <option>Internal 1</option>
-                                        <option>Internal 2</option>
-                                        <option>Internal 3</option>
-                                        <option>Model Exam</option>
-                                        <option>Semester</option>
-                                        <option>Assignment</option>
-                                    </select>
+                                    <input type="text" placeholder="e.g. Cycle Test 1" className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white" value={markToEdit.exam_type} onChange={e => setMarkToEdit({ ...markToEdit, exam_type: e.target.value })} />
                                 </div>
                                 <div>
                                     <label className="text-xs text-slate-400 uppercase">Score</label>
