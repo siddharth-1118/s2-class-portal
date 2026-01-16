@@ -42,47 +42,34 @@ async function verifyCredentials(username, password) {
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
         const page = await browser.newPage();
-
-        // Increased Timeout for Render
+        await page.setViewport({ width: 1280, height: 800 });
         page.setDefaultTimeout(30000);
 
-        // Optimization: Block Images/Fonts
-        await page.setRequestInterception(true);
-        page.on('request', (req) => {
-            if (['image', 'stylesheet', 'font', 'media'].includes(req.resourceType())) {
-                req.abort();
-            } else {
-                req.continue();
-            }
-        });
-
-        await page.goto('https://academia.srmist.edu.in/', { waitUntil: 'domcontentloaded' });
+        await page.goto('https://academia.srmist.edu.in/', { waitUntil: 'networkidle2' });
 
         // Simple Login Flow
         const iframeElement = await page.waitForSelector('#signinFrame');
         const frame = await iframeElement.contentFrame();
 
+        await frame.waitForSelector('#login_id', { visible: true });
         await frame.type('#login_id', username);
         await frame.click('#nextbtn');
 
         try {
-            await frame.waitForSelector('#password', { visible: true, timeout: 3000 });
+            await frame.waitForSelector('#password', { visible: true, timeout: 15000 });
         } catch (e) {
-            throw new Error('Invalid Username');
+            throw new Error('Invalid Username (or Page Timeout)');
         }
 
         await frame.type('#password', password);
         await frame.click('#nextbtn');
 
         // Check for success or error
-        // If success, we navigate away or see a specific element.
-        // If error, we see .error-message
-
         try {
             // Wait for either navigation (success) or error message
             await Promise.race([
-                page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
-                frame.waitForSelector('.error-message', { timeout: 5000 })
+                page.waitForNavigation({ waitUntil: 'networkidle2' }),
+                frame.waitForSelector('.error-message', { timeout: 10000 })
             ]);
 
             const errorMsg = await frame.$('.error-message');
@@ -93,11 +80,17 @@ async function verifyCredentials(username, password) {
                 return true;
             }
         } catch (e) {
+            if (e.message.includes('Invalid Password')) throw e;
+
             // If timeout waiting for navigation, check if we are still on login page
             if (page.url().includes('accounts.srmist.edu.in')) {
+                const errorMsg = await frame.$('.error-message');
+                if (errorMsg) throw new Error('Invalid Password');
+                // If no error message but no nav, assume success if URL correct? No.
                 throw new Error('Login Timeout or Failed');
             }
         }
+        return true;
         return true;
 
     } catch (e) {
