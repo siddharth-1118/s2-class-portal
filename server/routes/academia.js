@@ -4,7 +4,7 @@ const db = require('../db');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const { scrapeTimetable, scrapeMarks, scrapeAcademicPlanner, scrapeAttendance } = require('../utils/academiaScraper');
-// crypto imported above
+const { encrypt, decrypt } = require('../utils/crypto');
 
 // Middleware
 const authenticateToken = (req, res, next) => {
