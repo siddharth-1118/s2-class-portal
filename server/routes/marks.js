@@ -182,6 +182,7 @@ router.put('/:id', authenticateToken, requireAdmin, (req, res) => {
 // GET Profile (Student)
 router.get('/profile', authenticateToken, (req, res) => {
     const user = db.prepare('SELECT * FROM users WHERE email = ?').get(req.user.email);
+    if (!user) return res.sendStatus(401);
     if (!user.linked_reg_no) {
         return res.json({ name: user.name, register_number: null, is_locked: false });
     }
