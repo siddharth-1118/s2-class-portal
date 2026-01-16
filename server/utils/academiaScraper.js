@@ -12,8 +12,18 @@ async function verifyCredentials(username, password) {
         });
         const page = await browser.newPage();
 
-        // Fast Timeout
-        page.setDefaultTimeout(8000);
+        // Increased Timeout for Render
+        page.setDefaultTimeout(30000);
+
+        // Optimization: Block Images/Fonts
+        await page.setRequestInterception(true);
+        page.on('request', (req) => {
+            if (['image', 'stylesheet', 'font', 'media'].includes(req.resourceType())) {
+                req.abort();
+            } else {
+                req.continue();
+            }
+        });
 
         await page.goto('https://academia.srmist.edu.in/', { waitUntil: 'domcontentloaded' });
 
