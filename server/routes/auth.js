@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
 const { OAuth2Client } = require('google-auth-library');
+const { encrypt, decrypt } = require('../utils/crypto');
 
 const ADMIN_EMAILS = ['saisiddharthvooka@gmail.com', 'kothaig2@srmist.edu.in'];
 const ALLOWED_DOMAINS = ['@srmist.edu.in', '@gmail.com']; // Add your new domains here
