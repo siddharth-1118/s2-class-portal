@@ -123,59 +123,102 @@ router.post('/login', async (req, res) => {
     const academiaPassword = req.body.academiaPassword || password;
 
     const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
-    const user = stmt.get(email);
+    let user = stmt.get(email);
 
+    // CASE 1: User does NOT exist in DB yet.
     if (!user) {
-        return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-        // Smart Rescue: Check against Academia if it's an SRM email
-        if (email.endsWith('@srmist.edu.in')) {
-            try {
-                console.log(`[Auth] Password mismatch for ${email}. Verifying with Academia...`);
-
-                // FAST VERIFICATION
-                const { verifyCredentials } = require('../utils/academiaScraper');
-                await verifyCredentials(academiaEmail, academiaPassword);
-
-                console.log(`[Auth] Academia verification success for ${email}. Updating local credentials.`);
-
-                // Update Local DB with new Password (hashed) and Academia Creds (Encrypted)
-                const newHashed = await bcrypt.hash(password, 10);
-                const { encrypt } = require('../utils/crypto');
-                const encrypted = encrypt(academiaPassword);
-
-                db.prepare('UPDATE users SET password = ?, academia_enc_pass = ?, academia_iv = ?, linked_reg_no = ? WHERE id = ?')
-                    .run(newHashed, encrypted.content, encrypted.iv, academiaEmail, user.id);
-
-                // Trigger Full Sync in Background
-                triggerBackgroundSync(user.id, user.email, academiaEmail, academiaPassword);
-
-            } catch (e) {
-                console.error(`[Auth] Academia verification failed: ${e.message}`);
-                return res.status(400).json({ message: 'Invalid credentials (and Academia login failed)' });
-            }
-        } else {
+        // Only allow auto-creation for SRM emails
+        if (!email.endsWith('@srmist.edu.in')) {
             return res.status(400).json({ message: 'Invalid credentials' });
+        }
+
+        try {
+            console.log(`[Auth] User ${email} not found locally. Attempting Auto-Register via Academia Verification...`);
+
+            // Verify with Academia directly
+            const { verifyCredentials } = require('../utils/academiaScraper');
+            await verifyCredentials(academiaEmail, academiaPassword);
+
+            console.log(`[Auth] Academia verified. Creating new user for: ${email}`);
+
+            // If we are here, credentials are valid on Academia.
+            // Create the user locally.
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            // Determine Role
+            let role = 'student';
+            if (ADMIN_EMAILS.includes(email)) role = 'admin';
+
+            // Encrypt Academia Creds
+            const { encrypt } = require('../utils/crypto');
+            const encrypted = encrypt(academiaPassword);
+
+            // Insert New User
+            const insert = db.prepare('INSERT INTO users (email, password, name, role, is_approved, linked_reg_no, academia_enc_pass, academia_iv) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+            // Name defaults to Email prefix for now, will be updated by sync
+            let name = email.split('@')[0];
+            const isApproved = 1;
+
+            const info = insert.run(email, hashedPassword, name, role, isApproved, academiaEmail, encrypted.content, encrypted.iv);
+            const userId = info.lastInsertRowid;
+
+            // Fetch the newly created user
+            user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+
+            // Trigger Background Sync immediately to get real Name, Timetable etc.
+            triggerBackgroundSync(user.id, user.email, academiaEmail, academiaPassword);
+
+        } catch (e) {
+            console.error(`[Auth] Auto-Register Failed: ${e.message}`);
+            // If verifyCredentials throws, it means invalid academia login
+            return res.status(400).json({ message: 'Invalid Academia Login. Please check your NetID/Password.' });
         }
     }
 
-    // AUTO-UPDATE ACADEMIA CREDS ON LOGIN (If check passed naturally or via Rescue)
-    // If we just Rescued, we already updated. If we didn't Rescue (isMatch was true), we might still need to update Sync creds if they changed? 
-    // Actually if isMatch is true, we assume the password matches. But maybe the user changed their Academia password and updated it here?
-    // If isMatch is true, we simply update the encrypted fields to ensure they are current.
+    // CASE 2: User EXISTS. Verify Password.
+    else {
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            // Smart Rescue: Check against Academia (Password might have changed there)
+            if (email.endsWith('@srmist.edu.in')) {
+                try {
+                    console.log(`[Auth] Password mismatch for ${email}. Verifying with Academia...`);
 
-    if (isMatch && email.endsWith('@srmist.edu.in')) {
-        // ... existing update logic ...
-        try {
-            const { encrypt } = require('../utils/crypto');
-            const encrypted = encrypt(academiaPassword);
-            db.prepare('UPDATE users SET academia_enc_pass = ?, academia_iv = ?, linked_reg_no = COALESCE(linked_reg_no, ?) WHERE id = ?')
-                .run(encrypted.content, encrypted.iv, academiaEmail, user.id);
-            triggerBackgroundSync(user.id, user.email, academiaEmail, academiaPassword);
-        } catch (e) { console.error("Login Sync Update Failed:", e); }
+                    const { verifyCredentials } = require('../utils/academiaScraper');
+                    await verifyCredentials(academiaEmail, academiaPassword);
+
+                    console.log(`[Auth] Academia verification success for ${email}. Updating local credentials.`);
+
+                    // Update Local DB with new Password (hashed) and Academia Creds (Encrypted)
+                    const newHashed = await bcrypt.hash(password, 10);
+                    const { encrypt } = require('../utils/crypto');
+                    const encrypted = encrypt(academiaPassword);
+
+                    db.prepare('UPDATE users SET password = ?, academia_enc_pass = ?, academia_iv = ?, linked_reg_no = ? WHERE id = ?')
+                        .run(newHashed, encrypted.content, encrypted.iv, academiaEmail, user.id);
+
+                    // Trigger Full Sync in Background
+                    triggerBackgroundSync(user.id, user.email, academiaEmail, academiaPassword);
+
+                } catch (e) {
+                    console.error(`[Auth] Academia verification failed: ${e.message}`);
+                    return res.status(400).json({ message: 'Invalid credentials (and Academia login failed)' });
+                }
+            } else {
+                return res.status(400).json({ message: 'Invalid credentials' });
+            }
+        }
+
+        // AUTO-UPDATE ACADEMIA CREDS ON LOGIN (If check passed naturally)
+        if (isMatch && email.endsWith('@srmist.edu.in')) {
+            try {
+                const { encrypt } = require('../utils/crypto');
+                const encrypted = encrypt(academiaPassword);
+                db.prepare('UPDATE users SET academia_enc_pass = ?, academia_iv = ?, linked_reg_no = COALESCE(linked_reg_no, ?) WHERE id = ?')
+                    .run(encrypted.content, encrypted.iv, academiaEmail, user.id);
+                triggerBackgroundSync(user.id, user.email, academiaEmail, academiaPassword);
+            } catch (e) { console.error("Login Sync Update Failed:", e); }
+        }
     }
 
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name, is_approved: user.is_approved }, process.env.JWT_SECRET, { expiresIn: '24h' });
