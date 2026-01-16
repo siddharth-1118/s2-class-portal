@@ -423,13 +423,18 @@ async function scrapeProfile(page) {
     const log = (msg) => console.log(`[ProfileScraper] ${msg}`);
     try {
         log("Navigating to My Profile...");
+        await page.setViewport({ width: 1280, height: 800 });
         await page.goto('https://academia.srmist.edu.in/#Page:My_Profile', { waitUntil: 'networkidle2' });
 
-        // Wait for unique element in profile
+        // Robust Wait: Wait for text "Register Number" or "Student Name"
         try {
-            await page.waitForSelector('table', { timeout: 10000 });
+            await page.waitForFunction(
+                () => document.body.innerText.includes('Register Number') || document.body.innerText.includes('Student Name'),
+                { timeout: 30000 }
+            );
         } catch (e) {
-            log("Profile table not found.");
+            log("Profile text not found. Dumping body for debug...");
+            // Optional: log body to see what's there
         }
 
         const profileData = await page.evaluate(() => {
