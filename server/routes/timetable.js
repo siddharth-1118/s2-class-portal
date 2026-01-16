@@ -65,6 +65,32 @@ router.get('/', authenticateToken, (req, res) => {
         // For now, mapping detected groups to the seed keys
         const batchToQuery = assignedGroup === 'GROUP_1' ? 'GROUP_1' : 'GROUP_2';
 
+        // Check for personal timetable first, UNLESS a specific batch is requested
+        let showPersonal = false;
+        if (req.query.batch === 'PERSONAL') {
+            showPersonal = true;
+        } else if (!req.query.batch) {
+            // Default behavior: Show Personal if exists
+            const personalExists = db.prepare('SELECT 1 FROM personal_timetables WHERE user_email = ?').get(userEmail);
+            if (personalExists) showPersonal = true;
+        }
+
+        if (showPersonal) {
+            const personal = db.prepare('SELECT * FROM personal_timetables WHERE user_email = ? ORDER BY day, period').all(userEmail);
+            if (personal && personal.length > 0) {
+                res.json({
+                    meta: {
+                        batch: "Personal Timetable (Synced)",
+                        isGroup1: false,
+                        activeBatch: 'PERSONAL'
+                    },
+                    schedule: personal,
+                    detectedGroup: 'PERSONAL'
+                });
+                return;
+            }
+        }
+
         const schedule = db.prepare(`
             SELECT * FROM timetable_entries 
             WHERE batch = ? 

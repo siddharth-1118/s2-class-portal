@@ -1,0 +1,332 @@
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T05:55:05.571Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T05:55:05.572Z] Calling performSync...
+[2026-01-15T05:55:24.262Z] Sync Error: Waiting for selector `#signin-form, input[type="text"]` failed
+TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T05:55:53.091Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T05:55:53.092Z] Calling performSync...
+[2026-01-15T05:56:11.151Z] Sync Error: Waiting for selector `#signin-form, input[type="text"]` failed
+TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T05:56:56.820Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T05:56:56.821Z] Calling performSync...
+[2026-01-15T05:57:13.428Z] Sync Error: Waiting for selector `#signin-form, input[type="text"]` failed
+TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T05:57:32.431Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T05:57:32.432Z] Calling performSync...
+[2026-01-15T05:57:49.504Z] Sync Error: Waiting for selector `#signin-form, input[type="text"]` failed
+TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T05:58:30.451Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T05:58:30.452Z] Calling performSync...
+[2026-01-15T05:58:48.569Z] Sync Error: Waiting for selector `#signin-form, input[type="text"]` failed
+TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T05:59:24.149Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T05:59:24.150Z] Calling performSync...
+[2026-01-15T05:59:39.756Z] Sync Error: Waiting for selector `#signin-form, input[type="text"]` failed
+TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:02:13.541Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:02:13.542Z] Calling performSync...
+[2026-01-15T06:02:50.097Z] Sync Error: Waiting for selector `#signin-form, input[type="text"], input[name="username"]` failed
+TimeoutError: Waiting for selector `#signin-form, input[type="text"], input[name="username"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:06:09.346Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:06:09.347Z] Calling performSync...
+[2026-01-15T06:07:32.688Z] Sync Error: Waiting for selector `table` failed
+TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:110:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:09:40.534Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:09:40.535Z] Calling performSync...
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:09:58.668Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:09:58.670Z] Calling performSync...
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:10:12.086Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:10:12.088Z] Calling performSync...
+[2026-01-15T06:11:17.337Z] Sync Error: Waiting for selector `table` failed
+TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:111:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:11:37.387Z] Sync Error: Waiting for selector `table` failed
+TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:111:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:11:50.359Z] Sync Error: Waiting for selector `table` failed
+TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:111:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:13:19.133Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:13:19.134Z] Calling performSync...
+[2026-01-15T06:13:31.225Z] Sync Error: Login failed: Invalid credentials or Captcha required.
+Error: Login failed: Invalid credentials or Captcha required.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:77:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:14:53.407Z] Sync Request: sv3824@srmist.edu.in / sv3824
+[2026-01-15T06:14:53.408Z] Calling performSync...
+[2026-01-15T06:15:44.826Z] Sync Error: Waiting for selector `table` failed
+TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:124:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:21:51.535Z] Sync Request: sv3824@srmist.edu.in / sv3824
+[2026-01-15T06:21:51.535Z] Calling performSync...
+[2026-01-15T06:22:47.400Z] Sync Error: Waiting for selector `table` failed
+TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:124:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[2026-01-15T06:23:13.797Z] Sync Request: sv3824@srmist.edu.in / sv3824
+[2026-01-15T06:23:13.798Z] Calling performSync...
+[2026-01-15T06:23:25.866Z] Sync Error: Login failed: Invalid credentials or Captcha required.
+Error: Login failed: Invalid credentials or Captcha required.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:77:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[2026-01-15T06:23:41.457Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:23:41.458Z] Calling performSync...
+[2026-01-15T06:23:55.319Z] Sync Error: Login failed: Invalid credentials or Captcha required.
+Error: Login failed: Invalid credentials or Captcha required.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:77:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[2026-01-15T06:24:41.856Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:24:41.857Z] Calling performSync...
+[2026-01-15T06:24:53.448Z] Sync Error: Login failed: Invalid credentials or Captcha required.
+Error: Login failed: Invalid credentials or Captcha required.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:77:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[2026-01-15T06:25:03.268Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:25:03.268Z] Calling performSync...
+[2026-01-15T06:25:15.657Z] Sync Error: Login failed: Invalid credentials or Captcha required.
+Error: Login failed: Invalid credentials or Captcha required.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:77:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:29:03.899Z] Sync Request: sv3824@srmist.edu.in / sv3824
+[2026-01-15T06:29:03.900Z] Calling performSync...
+[2026-01-15T06:29:19.384Z] Sync Error: Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+Error: Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:74:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[2026-01-15T06:29:45.953Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:29:45.954Z] Calling performSync...
+[2026-01-15T06:30:06.786Z] performSync success
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:30:46.777Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:30:46.778Z] Calling performSync...
+[2026-01-15T06:31:04.564Z] performSync success
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:33:34.657Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:33:34.658Z] Calling performSync...
+[2026-01-15T06:33:51.928Z] performSync success
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:53:13.608Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:53:13.609Z] Calling performSync...
+[2026-01-15T06:53:38.077Z] performSync success
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:55:00.767Z] Sync Request: sv3824@srmist.edu.in / saisiddharthvooka@gmail.com
+[2026-01-15T06:55:00.768Z] Calling performSync...
+[2026-01-15T06:55:15.024Z] Sync Error: Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+Error: Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:74:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[2026-01-15T06:55:30.607Z] Sync Request: sv3824@srmist.edu.in / sv3824
+[2026-01-15T06:55:30.608Z] Calling performSync...
+[2026-01-15T06:55:42.868Z] Sync Error: Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+Error: Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:74:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T06:56:00.800Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:56:00.801Z] Calling performSync...
+[2026-01-15T06:56:54.206Z] Sync Error: Timetable page failed to load.
+Error: Timetable page failed to load.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:159:19)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[Auth] Token check: Present
+[2026-01-15T06:57:07.411Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T06:57:07.412Z] Calling performSync...
+[2026-01-15T06:57:28.309Z] performSync success
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[2026-01-15T07:05:05.635Z] Sync Request: sv3824@srmist.edu.in / sv3824@srmist.edu.in
+[2026-01-15T07:05:05.635Z] Calling performSync...
+[2026-01-15T07:05:26.177Z] performSync success
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present
+[Auth] Token check: Present

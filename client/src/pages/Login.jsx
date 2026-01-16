@@ -2,25 +2,31 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
-import { GoogleLogin } from '@react-oauth/google';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5005';
 
 const Login = () => {
     const [isRegister, setIsRegister] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
+    // Removed unused Academia specific states as we use main fields now
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setIsLoading(true);
 
         const endpoint = isRegister ? `${API_URL}/api/auth/register` : `${API_URL}/api/auth/login`;
-        const body = isRegister ? { email, password, name } : { email, password };
+        // Send email/password as academia fallback automatically
+        const body = isRegister
+            ? { email, password, name, academiaEmail: email, academiaPassword: password }
+            : { email, password };
 
         try {
             const res = await fetch(endpoint, {
@@ -41,31 +47,13 @@ const Login = () => {
             }
         } catch (err) {
             setError(err.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    const handleGoogleSuccess = async (response) => {
-        try {
-            const res = await fetch(`${API_URL}/api/auth/google`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token: response.credential })
-            });
 
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message);
-
-            login(data);
-            navigate(data.user.role === 'admin' ? '/admin' : '/student');
-        } catch (err) {
-            console.error(err);
-            setError('Google Login Failed');
-        }
-    };
-
-    const handleGoogleError = () => {
-        setError('Google Login Failed');
-    };
+    // Removed Google Handlers
 
     const [forgotMode, setForgotMode] = useState(false);
     const [resetEmail, setResetEmail] = useState('');
@@ -139,29 +127,32 @@ const Login = () => {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 required
+                                disabled={isLoading}
                             />
                         </div>
                     )}
                     <div>
-                        <label className="block text-sm font-medium text-white/80 mb-1">Email Address</label>
+                        <label className="block text-sm font-medium text-white/80 mb-1">Academia NetID (Email)</label>
                         <input
                             type="email"
                             className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                            placeholder="you@srmist.edu.in"
+                            placeholder="xx1234@srmist.edu.in"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            disabled={isLoading}
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-white/80 mb-1">Password</label>
+                        <label className="block text-sm font-medium text-white/80 mb-1">Academia Password</label>
                         <input
                             type="password"
                             className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                            placeholder="••••••••"
+                            placeholder="Your Academia Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
+                            disabled={isLoading}
                         />
                     </div>
 
@@ -173,32 +164,21 @@ const Login = () => {
 
                     <button
                         type="submit"
-                        className="w-full py-3 bg-gradient-to-r from-pink-500 to-violet-600 rounded-lg text-white font-bold shadow-lg hover:shadow-xl transform transition hover:-translate-y-0.5"
+                        disabled={isLoading}
+                        className={`w-full py-3 bg-gradient-to-r from-pink-500 to-violet-600 rounded-lg text-white font-bold shadow-lg transform transition ${isLoading ? 'opacity-70 cursor-wait' : 'hover:shadow-xl hover:-translate-y-0.5'}`}
                     >
-                        {isRegister ? 'Register' : 'Login'}
+                        {isLoading
+                            ? (isRegister ? 'Creating...' : 'Verifying...')
+                            : (isRegister ? 'Register' : 'Login')
+                        }
                     </button>
                 </form>
 
-                <div className="my-6 flex items-center">
-                    <div className="flex-1 border-t border-white/20"></div>
-                    <span className="px-4 text-white/50 text-sm">Or</span>
-                    <div className="flex-1 border-t border-white/20"></div>
-                </div>
-
-                <div className="flex justify-center">
-                    <GoogleLogin
-                        onSuccess={handleGoogleSuccess}
-                        onError={handleGoogleError}
-                        theme="filled_blue"
-                        shape="pill"
-                        text="signin_with"
-                    />
-                </div>
-
                 <div className="mt-6 text-center">
                     <button
-                        onClick={() => setIsRegister(!isRegister)}
+                        onClick={() => { setIsRegister(!isRegister); setError(''); }}
                         className="text-white/70 hover:text-white text-sm underline"
+                        disabled={isLoading}
                     >
                         {isRegister ? 'Already have an account? Login' : 'Need an account? Register'}
                     </button>

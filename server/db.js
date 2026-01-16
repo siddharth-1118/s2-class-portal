@@ -26,6 +26,11 @@ try { db.prepare('ALTER TABLE users ADD COLUMN is_approved INTEGER DEFAULT 0').r
 // Auto-approve existing users (optional, but good for migration)
 try { db.prepare('UPDATE users SET is_approved = 1 WHERE is_approved IS NULL').run(); } catch (e) { }
 
+// Migration for Academia Credentials
+try { db.prepare('ALTER TABLE users ADD COLUMN academia_enc_pass TEXT').run(); } catch (e) { }
+try { db.prepare('ALTER TABLE users ADD COLUMN academia_iv TEXT').run(); } catch (e) { }
+
+
 db.exec(`
   CREATE TABLE IF NOT EXISTS homework (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -119,6 +124,32 @@ db.exec(`
     snacks TEXT,
     dinner TEXT,
     specials TEXT
+  );
+
+  CREATE TABLE IF NOT EXISTS personal_timetables (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_email TEXT NOT NULL,
+    day TEXT NOT NULL,
+    period TEXT NOT NULL,
+    subject TEXT,
+    staff TEXT,
+    type TEXT,
+    time_range TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS attendance (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_email TEXT NOT NULL,
+    course_code TEXT,
+    course_title TEXT,
+    category TEXT,
+    faculty_name TEXT,
+    slot TEXT,
+    hours_conducted REAL,
+    hours_absent REAL,
+    attendance_percentage REAL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 `);
 
@@ -242,7 +273,7 @@ const seedMessMenu = () => {
     // Migration: Update existing rows if specials are NULL
     // This is useful since we just added the column and the table might default to NULL
     console.log("Checking for Mess Menu Updates (Specials)...");
-    const update = db.prepare('UPDATE mess_menu SET specials = ? WHERE day = ? AND (specials IS NULL OR specials = "")');
+    const update = db.prepare("UPDATE mess_menu SET specials = ? WHERE day = ? AND (specials IS NULL OR specials = '')");
     let updatedCount = 0;
     menuData.forEach(m => {
       const info = update.run(m.specials, m.day);

@@ -1,0 +1,669 @@
+[2026-01-15T05:55:05.581Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T05:55:23.724Z] [Scraper Error] Waiting for selector `#signin-form, input[type="text"]` failed
+[2026-01-15T05:55:23.730Z] TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T05:55:53.094Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T05:56:10.700Z] [Scraper Error] Waiting for selector `#signin-form, input[type="text"]` failed
+[2026-01-15T05:56:10.702Z] TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T05:56:56.822Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T05:57:12.914Z] [Scraper Error] Waiting for selector `#signin-form, input[type="text"]` failed
+[2026-01-15T05:57:12.917Z] TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T05:57:32.434Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T05:57:48.563Z] [Scraper Error] Waiting for selector `#signin-form, input[type="text"]` failed
+[2026-01-15T05:57:48.566Z] TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T05:58:30.454Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T05:58:48.066Z] [Scraper Error] Waiting for selector `#signin-form, input[type="text"]` failed
+[2026-01-15T05:58:48.069Z] TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T05:59:24.152Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T05:59:39.353Z] [Scraper Error] Waiting for selector `#signin-form, input[type="text"]` failed
+[2026-01-15T05:59:39.355Z] TimeoutError: Waiting for selector `#signin-form, input[type="text"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:02:13.547Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:02:14.689Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:02:19.536Z] [Scraper] Page navigation complete
+[2026-01-15T06:02:19.542Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:02:49.566Z] [Scraper] Login selectors not found. Dumping page content...
+[2026-01-15T06:02:49.573Z] [Scraper] Page Content Sample: Academia - Student Portal
+Forgot Password?
+[2026-01-15T06:02:49.574Z] [Scraper Error] Waiting for selector `#signin-form, input[type="text"], input[name="username"]` failed
+[2026-01-15T06:02:49.576Z] TimeoutError: Waiting for selector `#signin-form, input[type="text"], input[name="username"]` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:34:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:06:09.351Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:06:10.792Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:06:16.659Z] [Scraper] Page navigation complete
+[2026-01-15T06:06:16.666Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:06:16.668Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:06:16.715Z] [Scraper] Switched to iframe context
+[2026-01-15T06:06:17.179Z] [Scraper] Clicking login...
+[2026-01-15T06:07:17.188Z] Nav timeout after click (might be ok if SPA update)
+[2026-01-15T06:07:17.190Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:07:32.238Z] [Scraper Error] Waiting for selector `table` failed
+[2026-01-15T06:07:32.240Z] TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:110:9)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:09:40.537Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:09:41.485Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:09:46.204Z] [Scraper] Page navigation complete
+[2026-01-15T06:09:46.212Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:09:46.216Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:09:46.281Z] [Scraper] Switched to iframe context
+[2026-01-15T06:09:46.842Z] [Scraper] Clicking login...
+[2026-01-15T06:09:58.673Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:10:00.005Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:10:06.307Z] [Scraper] Page navigation complete
+[2026-01-15T06:10:06.313Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:10:06.317Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:10:06.385Z] [Scraper] Switched to iframe context
+[2026-01-15T06:10:06.877Z] [Scraper] Clicking login...
+[2026-01-15T06:10:12.089Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:10:13.343Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:10:19.038Z] [Scraper] Page navigation complete
+[2026-01-15T06:10:19.046Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:10:19.048Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:10:19.149Z] [Scraper] Switched to iframe context
+[2026-01-15T06:10:19.651Z] [Scraper] Clicking login...
+[2026-01-15T06:10:46.846Z] Nav timeout after click (might be ok if SPA update)
+[2026-01-15T06:10:46.848Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:10:46.858Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T06:10:46.859Z] [Scraper] Navigating to Timetable...
+[2026-01-15T06:10:46.866Z] [Scraper] Link not found, forcing hash...
+[2026-01-15T06:11:06.881Z] Nav timeout after click (might be ok if SPA update)
+[2026-01-15T06:11:06.883Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:11:06.892Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T06:11:06.894Z] [Scraper] Navigating to Timetable...
+[2026-01-15T06:11:06.901Z] [Scraper] Link not found, forcing hash...
+[2026-01-15T06:11:16.892Z] [Scraper Error] Timetable table not found. Dump: Academia - Student Portal
+Forgot Password?
+[2026-01-15T06:11:16.903Z] [Scraper] Still on login page!
+[2026-01-15T06:11:16.905Z] [Scraper Error] Waiting for selector `table` failed
+[2026-01-15T06:11:16.906Z] TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:111:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:11:19.658Z] Nav timeout after click (might be ok if SPA update)
+[2026-01-15T06:11:19.659Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:11:19.672Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T06:11:19.674Z] [Scraper] Navigating to Timetable...
+[2026-01-15T06:11:19.678Z] [Scraper] Link not found, forcing hash...
+[2026-01-15T06:11:36.932Z] [Scraper Error] Timetable table not found. Dump: Academia - Student Portal
+Forgot Password?
+[2026-01-15T06:11:36.941Z] [Scraper] Still on login page!
+[2026-01-15T06:11:36.944Z] [Scraper Error] Waiting for selector `table` failed
+[2026-01-15T06:11:36.946Z] TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:111:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:11:49.710Z] [Scraper Error] Timetable table not found. Dump: Academia - Student Portal
+Forgot Password?
+[2026-01-15T06:11:49.721Z] [Scraper] Still on login page!
+[2026-01-15T06:11:49.723Z] [Scraper Error] Waiting for selector `table` failed
+[2026-01-15T06:11:49.724Z] TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:111:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:13:19.139Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:13:20.785Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:13:25.100Z] [Scraper] Page navigation complete
+[2026-01-15T06:13:25.110Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:13:25.114Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:13:25.185Z] [Scraper] Switched to iframe context
+[2026-01-15T06:13:25.726Z] [Scraper] Clicking login...
+[2026-01-15T06:13:30.733Z] [Scraper] Login Error detected in iframe: Sign In
+Invalid email address. Check if you are entering it correctly.
+Next
+[2026-01-15T06:13:30.735Z] [Scraper Error] Login failed: Invalid credentials or Captcha required.
+[2026-01-15T06:13:30.736Z] Error: Login failed: Invalid credentials or Captcha required.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:77:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:14:53.434Z] [Scraper] Starting for user: sv3824
+[2026-01-15T06:14:54.589Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:14:59.176Z] [Scraper] Page navigation complete
+[2026-01-15T06:14:59.181Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:14:59.183Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:14:59.218Z] [Scraper] Switched to iframe context
+[2026-01-15T06:14:59.458Z] [Scraper] Clicking login...
+[2026-01-15T06:15:04.467Z] [Scraper] Post-login iframe check done. Proceeding...
+[2026-01-15T06:15:14.474Z] Main page nav timeout (might be SPA)
+[2026-01-15T06:15:14.475Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:15:14.485Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T06:15:14.486Z] [Scraper] Navigating to Timetable...
+[2026-01-15T06:15:14.491Z] [Scraper] Link not found, forcing hash...
+[2026-01-15T06:15:44.521Z] [Scraper Error] Timetable table not found. Dump: Academia - Student Portal
+Forgot Password?
+[2026-01-15T06:15:44.526Z] [Scraper] Still on login page!
+[2026-01-15T06:15:44.527Z] [Scraper Error] Waiting for selector `table` failed
+[2026-01-15T06:15:44.528Z] TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:124:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:21:51.538Z] [Scraper] Starting for user: sv3824
+[2026-01-15T06:21:53.544Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:21:56.976Z] [Scraper] Page navigation complete
+[2026-01-15T06:21:56.987Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:21:56.991Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:21:57.068Z] [Scraper] Switched to iframe context
+[2026-01-15T06:22:01.732Z] [Scraper] Clicking login...
+[2026-01-15T06:22:06.754Z] [Scraper] Post-login iframe check done. Proceeding...
+[2026-01-15T06:22:16.767Z] Main page nav timeout (might be SPA)
+[2026-01-15T06:22:16.769Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:22:16.785Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T06:22:16.786Z] [Scraper] Navigating to Timetable...
+[2026-01-15T06:22:16.791Z] [Scraper] Link not found, forcing hash...
+[2026-01-15T06:22:46.825Z] [Scraper Error] Timetable table not found. Dump: Academia - Student Portal
+Forgot Password?
+[2026-01-15T06:22:46.839Z] [Scraper] Still on login page!
+[2026-01-15T06:22:46.841Z] [Scraper Error] Waiting for selector `table` failed
+[2026-01-15T06:22:46.843Z] TimeoutError: Waiting for selector `table` failed
+    at CSSQueryHandler.waitFor (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:214:46)
+    at async CdpFrame.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Frame.js:544:21)
+    at async CdpPage.waitForSelector (C:\Users\saisi\homework\server\node_modules\puppeteer-core\lib\cjs\puppeteer\api\Page.js:1385:20)
+    at async scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:124:13)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:23:13.800Z] [Scraper] Starting for user: sv3824
+[2026-01-15T06:23:15.489Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:23:19.986Z] [Scraper] Page navigation complete
+[2026-01-15T06:23:19.991Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:23:19.992Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:23:20.056Z] [Scraper] Switched to iframe context
+[2026-01-15T06:23:20.375Z] [Scraper] Clicking login...
+[2026-01-15T06:23:25.387Z] [Scraper] Login Error detected in iframe: Sign In
+Invalid email address. Check if you are entering it correctly.
+Next
+[2026-01-15T06:23:25.389Z] [Scraper Error] Login failed: Invalid credentials or Captcha required.
+[2026-01-15T06:23:25.390Z] Error: Login failed: Invalid credentials or Captcha required.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:77:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:23:41.472Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:23:43.093Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:23:48.377Z] [Scraper] Page navigation complete
+[2026-01-15T06:23:48.382Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:23:48.385Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:23:48.489Z] [Scraper] Switched to iframe context
+[2026-01-15T06:23:49.112Z] [Scraper] Clicking login...
+[2026-01-15T06:23:54.134Z] [Scraper] Login Error detected in iframe: Sign In
+Invalid email address. Check if you are entering it correctly.
+Next
+[2026-01-15T06:23:54.137Z] [Scraper Error] Login failed: Invalid credentials or Captcha required.
+[2026-01-15T06:23:54.140Z] Error: Login failed: Invalid credentials or Captcha required.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:77:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:24:41.859Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:24:43.058Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:24:47.386Z] [Scraper] Page navigation complete
+[2026-01-15T06:24:47.391Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:24:47.392Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:24:47.424Z] [Scraper] Switched to iframe context
+[2026-01-15T06:24:47.895Z] [Scraper] Clicking login...
+[2026-01-15T06:24:52.901Z] [Scraper] Login Error detected in iframe: Sign In
+Invalid email address. Check if you are entering it correctly.
+Next
+[2026-01-15T06:24:52.903Z] [Scraper Error] Login failed: Invalid credentials or Captcha required.
+[2026-01-15T06:24:52.904Z] Error: Login failed: Invalid credentials or Captcha required.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:77:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:25:03.270Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:25:05.124Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:25:09.651Z] [Scraper] Page navigation complete
+[2026-01-15T06:25:09.656Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:25:09.657Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:25:09.724Z] [Scraper] Switched to iframe context
+[2026-01-15T06:25:10.175Z] [Scraper] Clicking login...
+[2026-01-15T06:25:15.187Z] [Scraper] Login Error detected in iframe: Sign In
+Invalid email address. Check if you are entering it correctly.
+Next
+[2026-01-15T06:25:15.189Z] [Scraper Error] Login failed: Invalid credentials or Captcha required.
+[2026-01-15T06:25:15.190Z] Error: Login failed: Invalid credentials or Captcha required.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:77:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:29:03.903Z] [Scraper] Starting for user: sv3824
+[2026-01-15T06:29:08.240Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:29:13.325Z] [Scraper] Page navigation complete
+[2026-01-15T06:29:13.346Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:29:13.356Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:29:13.441Z] [Scraper] Switched to iframe context
+[2026-01-15T06:29:13.592Z] [Scraper] Username typed. Clicking Next...
+[2026-01-15T06:29:18.714Z] [Scraper] Login Step 1 Error: Sign In
+This account does not exist.
+Next
+[2026-01-15T06:29:18.716Z] [Scraper Error] Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+[2026-01-15T06:29:18.718Z] Error: Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:74:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:29:45.959Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:29:47.680Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:29:52.722Z] [Scraper] Page navigation complete
+[2026-01-15T06:29:52.727Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:29:52.730Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:29:52.814Z] [Scraper] Switched to iframe context
+[2026-01-15T06:29:53.122Z] [Scraper] Username typed. Clicking Next...
+[2026-01-15T06:29:53.710Z] [Scraper] Password field appeared.
+[2026-01-15T06:29:53.917Z] [Scraper] Password typed. Clicking Login...
+[2026-01-15T06:29:55.028Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:29:55.072Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T06:29:55.130Z] [Scraper] Navigating to Timetable...
+[2026-01-15T06:29:55.194Z] [Scraper] Link not found, forcing hash...
+[2026-01-15T06:30:46.780Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:30:48.203Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:30:52.457Z] [Scraper] Page navigation complete
+[2026-01-15T06:30:52.461Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:30:52.462Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:30:52.503Z] [Scraper] Switched to iframe context
+[2026-01-15T06:30:52.786Z] [Scraper] Username typed. Clicking Next...
+[2026-01-15T06:30:53.293Z] [Scraper] Password field appeared.
+[2026-01-15T06:30:53.457Z] [Scraper] Password typed. Clicking Login...
+[2026-01-15T06:30:54.511Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:30:54.533Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T06:30:54.535Z] [Scraper] Navigating to Timetable...
+[2026-01-15T06:30:54.539Z] [Scraper] Link not found, forcing hash...
+[2026-01-15T06:33:34.661Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:33:35.893Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:33:40.332Z] [Scraper] Page navigation complete
+[2026-01-15T06:33:40.339Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:33:40.341Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:33:40.382Z] [Scraper] Switched to iframe context
+[2026-01-15T06:33:40.643Z] [Scraper] Username typed. Clicking Next...
+[2026-01-15T06:33:41.239Z] [Scraper] Password field appeared.
+[2026-01-15T06:33:41.463Z] [Scraper] Password typed. Clicking Login...
+[2026-01-15T06:33:42.508Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:33:42.522Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T06:33:42.524Z] [Scraper] Login success. Waiting for dashboard/menu...
+[2026-01-15T06:33:47.063Z] [Scraper] Found Timetable link: https://academia.srmist.edu.in/#Time_Table_Mapping_2016_17_Even
+[2026-01-15T06:33:51.365Z] [Scraper] Waiting for Timetable container...
+[2026-01-15T06:53:13.611Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:53:18.208Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:53:22.627Z] [Scraper] Page navigation complete
+[2026-01-15T06:53:22.663Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:53:22.678Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:53:22.832Z] [Scraper] Switched to iframe context
+[2026-01-15T06:53:23.268Z] [Scraper] Username typed. Clicking Next...
+[2026-01-15T06:53:23.726Z] [Scraper] Password field appeared.
+[2026-01-15T06:53:23.909Z] [Scraper] Password typed. Clicking Login...
+[2026-01-15T06:53:24.950Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:53:24.965Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T06:53:24.967Z] [Scraper] Login success. Waiting for dashboard/menu...
+[2026-01-15T06:53:30.886Z] [Scraper] Found link type: unified -> https://academia.srmist.edu.in/#Time_Table_Mapping_2016_17_Even
+[2026-01-15T06:53:35.085Z] [Scraper] Waiting for Timetable container...
+[2026-01-15T06:55:00.771Z] [Scraper] Starting for user: saisiddharthvooka@gmail.com
+[2026-01-15T06:55:03.659Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:55:08.521Z] [Scraper] Page navigation complete
+[2026-01-15T06:55:08.526Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:55:08.528Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:55:08.572Z] [Scraper] Switched to iframe context
+[2026-01-15T06:55:09.218Z] [Scraper] Username typed. Clicking Next...
+[2026-01-15T06:55:14.315Z] [Scraper] Login Step 1 Error: Sign In
+This account does not exist.
+Next
+[2026-01-15T06:55:14.317Z] [Scraper Error] Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+[2026-01-15T06:55:14.318Z] Error: Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:74:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:55:30.610Z] [Scraper] Starting for user: sv3824
+[2026-01-15T06:55:32.560Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:55:37.028Z] [Scraper] Page navigation complete
+[2026-01-15T06:55:37.034Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:55:37.036Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:55:37.078Z] [Scraper] Switched to iframe context
+[2026-01-15T06:55:37.269Z] [Scraper] Username typed. Clicking Next...
+[2026-01-15T06:55:42.371Z] [Scraper] Login Step 1 Error: Sign In
+This account does not exist.
+Next
+[2026-01-15T06:55:42.373Z] [Scraper Error] Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+[2026-01-15T06:55:42.374Z] Error: Login failed: Invalid Username/Email. Try using NetID (e.g. sv3824).
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:74:23)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:56:00.802Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:56:02.619Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:56:06.495Z] [Scraper] Page navigation complete
+[2026-01-15T06:56:06.502Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:56:06.504Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:56:06.544Z] [Scraper] Switched to iframe context
+[2026-01-15T06:56:06.826Z] [Scraper] Username typed. Clicking Next...
+[2026-01-15T06:56:07.279Z] [Scraper] Password field appeared.
+[2026-01-15T06:56:07.426Z] [Scraper] Password typed. Clicking Login...
+[2026-01-15T06:56:08.472Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:56:08.527Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T06:56:08.537Z] [Scraper] Login success. Waiting for dashboard/menu...
+[2026-01-15T06:56:23.549Z] Dashboard menu wait timed out, proceeding anyway...
+[2026-01-15T06:56:23.553Z] [Scraper] Link not found. Forcing known Unified hash...
+[2026-01-15T06:56:23.554Z] [Scraper] Forcing hash: https://academia.srmist.edu.in/#Page:Unified_Time_Table_2024_25
+[2026-01-15T06:56:23.568Z] [Scraper] Waiting for Timetable container...
+[2026-01-15T06:56:53.585Z] [Scraper Error] Timetable not found. Dump: Academia - Student Portal
+Forgot Password?
+[2026-01-15T06:56:53.587Z] [Scraper Error] Timetable page failed to load.
+[2026-01-15T06:56:53.588Z] Error: Timetable page failed to load.
+    at scrapeTimetable (C:\Users\saisi\homework\server\utils\academiaScraper.js:159:19)
+    at async performSync (C:\Users\saisi\homework\server\routes\academia.js:35:48)
+    at async C:\Users\saisi\homework\server\routes\academia.js:78:43
+[2026-01-15T06:57:07.413Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T06:57:08.640Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T06:57:13.618Z] [Scraper] Page navigation complete
+[2026-01-15T06:57:13.623Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T06:57:13.624Z] [Scraper] Waiting for login iframe...
+[2026-01-15T06:57:13.658Z] [Scraper] Switched to iframe context
+[2026-01-15T06:57:13.950Z] [Scraper] Username typed. Clicking Next...
+[2026-01-15T06:57:14.398Z] [Scraper] Password field appeared.
+[2026-01-15T06:57:14.559Z] [Scraper] Password typed. Clicking Login...
+[2026-01-15T06:57:15.599Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T06:57:15.623Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T06:57:15.625Z] [Scraper] Login success. Waiting for dashboard/menu...
+[2026-01-15T06:57:22.538Z] [Scraper] Found link type: unified -> https://academia.srmist.edu.in/#Time_Table_Mapping_2016_17_Even
+[2026-01-15T06:57:23.252Z] [Scraper] Waiting for Timetable container...
+[2026-01-15T07:05:05.638Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:05:07.448Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:05:13.142Z] [Scraper] Page navigation complete
+[2026-01-15T07:05:13.150Z] [Scraper] Page Title: Academia - Academic Web Services Login
+[2026-01-15T07:05:13.153Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:05:13.213Z] [Scraper] Switched to iframe context
+[2026-01-15T07:05:13.602Z] [Scraper] Username typed. Clicking Next...
+[2026-01-15T07:05:14.089Z] [Scraper] Password field appeared.
+[2026-01-15T07:05:14.245Z] [Scraper] Password typed. Clicking Login...
+[2026-01-15T07:05:15.289Z] [Scraper] Post-login URL: https://academia.srmist.edu.in/
+[2026-01-15T07:05:15.312Z] [Scraper] Profile found: {"name":"","regNo":""}
+[2026-01-15T07:05:15.314Z] [Scraper] Login success. Waiting for dashboard/menu...
+[2026-01-15T07:05:20.614Z] [Scraper] Found Unified link: https://academia.srmist.edu.in/#Time_Table_Mapping_2016_17_Even. Scraping details map...
+[2026-01-15T07:05:25.504Z] [Scraper] Unified Map built with 0 entries.
+[2026-01-15T07:05:25.506Z] [Scraper] Navigating to Grid: https://academia.srmist.edu.in/#Time_Table_Mapping_2016_17_Even
+[2026-01-15T07:05:25.517Z] [Scraper] Waiting for Timetable container...
+[2026-01-15T07:36:20.227Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:36:22.003Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:36:23.374Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:36:24.373Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:36:24.385Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:36:24.661Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:36:25.140Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:36:25.294Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:36:25.568Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:36:32.761Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:36:35.916Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:36:37.640Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:36:41.350Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:36:41.381Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:36:48.710Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:36:48.721Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:36:48.739Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:36:49.030Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:37:06.207Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:37:07.785Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:37:13.391Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:37:13.408Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:37:13.511Z] [Scraper] Inspecting 5 potential timetable links to build Connected Data.
+[2026-01-15T07:37:13.524Z] [Scraper] Inspecting 5 potential timetable links to build Connected Data.
+[2026-01-15T07:37:14.188Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:37:14.238Z] [Scraper] Link: https://academia.srmist.edu.in/#Time_Table_Mapping_2016_17_Even -> Type: GRID
+[2026-01-15T07:37:14.242Z] [Scraper] Link: https://academia.srmist.edu.in/#Time_Table_Mapping_2016_17_Even -> Type: GRID
+[2026-01-15T07:37:14.283Z] [Scraper] Inspecting 5 potential timetable links to build Connected Data.
+[2026-01-15T07:37:14.343Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_Batch_1 -> Type: GRID
+[2026-01-15T07:37:14.365Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_Batch_1 -> Type: GRID
+[2026-01-15T07:37:14.441Z] [Scraper] Link: https://academia.srmist.edu.in/#Time_Table_Mapping_2016_17_Even -> Type: UNKNOWN
+[2026-01-15T07:37:14.571Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_batch_2 -> Type: GRID
+[2026-01-15T07:37:14.704Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_batch_2 -> Type: GRID
+[2026-01-15T07:37:14.719Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_Batch_1 -> Type: UNKNOWN
+[2026-01-15T07:37:14.821Z] [Scraper] Link: https://academia.srmist.edu.in/#My_Time_Table_Attendance -> Type: GRID
+[2026-01-15T07:37:14.886Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_batch_2 -> Type: UNKNOWN
+[2026-01-15T07:37:14.893Z] [Scraper] Link: https://academia.srmist.edu.in/#My_Time_Table_Attendance -> Type: GRID
+[2026-01-15T07:37:15.060Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:My_Time_Table_2023_24 -> Type: GRID
+[2026-01-15T07:37:15.061Z] [Scraper] Navigating to Schedule Grid: https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_batch_2
+[2026-01-15T07:37:15.097Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:My_Time_Table_2023_24 -> Type: GRID
+[2026-01-15T07:37:15.102Z] [Scraper] Navigating to Schedule Grid: https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_batch_2
+[2026-01-15T07:37:15.189Z] [Scraper] Link: https://academia.srmist.edu.in/#My_Time_Table_Attendance -> Type: UNKNOWN
+[2026-01-15T07:37:15.236Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:37:15.459Z] [Scraper] Inspecting 5 potential timetable links to build Connected Data.
+[2026-01-15T07:37:15.584Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:My_Time_Table_2023_24 -> Type: UNKNOWN
+[2026-01-15T07:37:15.587Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:37:15.654Z] [Scraper] Link: https://academia.srmist.edu.in/#Time_Table_Mapping_2016_17_Even -> Type: UNKNOWN
+[2026-01-15T07:37:15.738Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_Batch_1 -> Type: UNKNOWN
+[2026-01-15T07:37:15.830Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_batch_2 -> Type: UNKNOWN
+[2026-01-15T07:37:16.036Z] [Scraper] Link: https://academia.srmist.edu.in/#My_Time_Table_Attendance -> Type: UNKNOWN
+[2026-01-15T07:37:16.495Z] [Scraper] Link: https://academia.srmist.edu.in/#Page:My_Time_Table_2023_24 -> Type: UNKNOWN
+[2026-01-15T07:37:16.496Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:37:17.393Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:18.091Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:18.939Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:19.284Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:22.944Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:23.216Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:23.318Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:23.335Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:37:23.340Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:37:24.320Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:24.816Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:25.460Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:25.890Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:26.871Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:28.474Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:28.987Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:29.005Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:29.684Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:30.504Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:34.176Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:34.210Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:34.685Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:35.298Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:37:41.700Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:42.088Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:46.103Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:49.742Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:49.970Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:50.124Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:50.427Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:50.658Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:50.896Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:52.173Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:52.742Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:53.387Z] [Scraper] Error inspecting link: Navigation timeout of 30000 ms exceeded
+[2026-01-15T07:37:53.478Z] [Scraper] Error inspecting link: Navigation timeout of 30000 ms exceeded
+[2026-01-15T07:37:54.179Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:54.491Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:37:54.544Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:38:00.602Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:38:02.411Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:38:02.663Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:38:03.806Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:38:04.522Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:38:04.755Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:38:08.153Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:38:23.462Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:38:23.734Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:38:24.175Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:26.132Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:29.036Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:29.061Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:32.880Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:33.499Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:34.218Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:34.299Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:34.425Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:34.680Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:34.754Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:34.881Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:35.514Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:35.683Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:35.766Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:36.025Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:36.221Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:36.276Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:36.343Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:36.999Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:37.031Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:38:58.129Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:38:58.312Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:13.193Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:39:13.375Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:39:15.858Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:19.040Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:20.253Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:26.836Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:26.883Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:26.919Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:29.222Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:38.035Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:39:42.999Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:39:43.176Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:39:43.359Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:44.512Z] [Scraper] Error inspecting link: Navigation timeout of 30000 ms exceeded
+[2026-01-15T07:39:47.001Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:39:47.073Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:39:47.107Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:39:48.815Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:49.649Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:50.679Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:39:51.109Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:58.175Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:58.376Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:58.636Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:58.680Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:39:59.214Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:39:59.833Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:40:00.539Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:03.123Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:40:03.207Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:40:05.286Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:05.317Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:05.333Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:05.829Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:40:05.865Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:40:09.226Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:40:13.183Z] [Scraper] Error inspecting link: Navigation timeout of 30000 ms exceeded
+[2026-01-15T07:40:13.416Z] [Scraper] Error inspecting link: Navigation timeout of 30000 ms exceeded
+[2026-01-15T07:40:13.966Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:40:14.027Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:40:14.270Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:14.291Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:40:14.301Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:40:15.154Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:40:16.569Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:17.587Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:18.404Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:40:18.426Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:40:21.333Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:21.409Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:22.828Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:22.921Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:27.606Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:27.644Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:27.737Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:27.766Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:27.778Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:29.121Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:31.593Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:40:36.651Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:40:37.872Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:40:40.414Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:40:52.492Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:40:52.601Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:40:53.065Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:40:55.473Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:41:00.700Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:41:00.785Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:41:03.895Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:41:05.789Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:41:38.919Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:41:38.922Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:41:45.617Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:41:47.421Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:41:52.602Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:41:54.829Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:41:54.925Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:42:05.252Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:42:05.260Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:42:32.028Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:42:47.035Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:42:57.078Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:43:04.006Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:43:04.986Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:43:09.415Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:43:31.766Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:43:33.002Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:43:37.274Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:43:45.320Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:44:00.340Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:44:10.377Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:44:13.370Z] [Scraper] Logged in as:  ()
+[2026-01-15T07:44:28.382Z] [Scraper] Inspecting 2 potential timetable links to build Connected Data.
+[2026-01-15T07:44:38.420Z] [Scraper] CRITICAL: No Schedule Grid found. Returning empty timetable.
+[2026-01-15T07:47:20.329Z] [Scraper] Starting for user: sv3824@srmist.edu.in
+[2026-01-15T07:47:23.086Z] [Scraper] Navigating to https://academia.srmist.edu.in/
+[2026-01-15T07:47:28.070Z] [Scraper] Waiting for login iframe...
+[2026-01-15T07:47:35.921Z] [Scraper Error] Attempted to use detached Frame '076A194612178EF10572B5218BA1991F'.
+[2026-01-16T04:45:21.639Z] [Scraper] Starting Advanced Scrape for: sv3824@srmist.edu.in  
+[2026-01-16T04:45:24.850Z] [Scraper] Navigating to Login... 
+[2026-01-16T04:45:43.144Z] [Scraper Error] scrapeProfile is not defined 
+[2026-01-16T05:20:41.746Z] [Scraper] Starting Advanced Scrape for: RA2511026010906  
+[2026-01-16T05:20:42.950Z] [Scraper] Navigating to Login... 
+[2026-01-16T05:21:47.957Z] [Scraper Error] Waiting for selector `#password` failed 
+[2026-01-16T06:26:23.603Z] [Scraper] Starting Advanced Scrape for: sv3824@srmist.edu.in  
+[2026-01-16T06:26:26.180Z] [Scraper] Navigating to Login... 
+[2026-01-16T06:26:46.429Z] [Scraper] Logged in as:  () 
+[2026-01-16T06:26:46.432Z] [Scraper] Visiting Unified (Metadata): https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_Batch_1 
+[2026-01-16T06:26:51.467Z] [Scraper] Warning: Timeout waiting for grid on https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_Batch_1 
+[2026-01-16T06:26:51.477Z] [Scraper] Ingested 0 slots from Unified_Time_Table_2025_Batch_1 
+[2026-01-16T06:26:51.479Z] [Scraper] Visiting Unified (Metadata): https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_batch_2 
+[2026-01-16T06:26:56.506Z] [Scraper] Warning: Timeout waiting for grid on https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_batch_2 
+[2026-01-16T06:26:56.511Z] [Scraper] Ingested 0 slots from Unified_Time_Table_2025_batch_2 
+[2026-01-16T06:26:56.514Z] [Scraper] Visiting My Time Table (Target): https://academia.srmist.edu.in/#Page:My_Time_Table_2023_24 
+[2026-01-16T06:26:58.540Z] [Scraper] My Data: Found 0 slots. 
+[2026-01-16T06:26:58.545Z] [Scraper] Finalized Grid from My_Time_Table has 0 slots. 

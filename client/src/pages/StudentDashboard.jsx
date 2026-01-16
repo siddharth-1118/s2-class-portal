@@ -8,6 +8,7 @@ import { useTheme } from '../context/ThemeContext';
 import CalendarTab from '../components/CalendarTab';
 import TimetableTab from '../components/TimetableTab';
 import MessTab from '../components/MessTab';
+import AttendanceTab from '../components/AttendanceTab';
 import VFXLayer from '../components/VFXLayer';
 // import GalleryTab from '../components/GalleryTab';
 import MobileNav from '../components/MobileNav';
@@ -47,7 +48,7 @@ const NoticesList = ({ API_URL }) => {
 };
 
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5005';
 
 // Helper to convert VAPID key
 function urlBase64ToUint8Array(base64String) {
@@ -193,11 +194,7 @@ const StudentDashboard = () => {
         setCalculatedCGPA(totalCredits === 0 ? 0 : (totalPoints / totalCredits).toFixed(2));
     };
 
-    // Profile Lock State
-    const [showProfileModal, setShowProfileModal] = useState(false);
-    const [mobile, setMobile] = useState('');
-    const [section, setSection] = useState('');
-    const [regNo, setRegNo] = useState('');
+    // Profile State
     const [studentProfile, setStudentProfile] = useState(null);
 
     useEffect(() => {
@@ -225,6 +222,25 @@ const StudentDashboard = () => {
         return () => newSocket.close();
     }, [user]);
 
+    // Check for Academia Sync Requirement
+    const [showMandatorySync, setShowMandatorySync] = useState(false);
+
+    useEffect(() => {
+        // If we have loaded timetable/attendance status and it's empty, require sync
+        if (timetable !== null && timetable.length === 0 && !loadingTimetable) {
+            setShowMandatorySync(true);
+        } else if (timetable && timetable.length > 0) {
+            setShowMandatorySync(false);
+        }
+    }, [timetable]);
+
+    // Loading state for initial checks
+    const [loadingTimetable, setLoadingTimetable] = useState(true);
+    useEffect(() => {
+        if (timetable) setLoadingTimetable(false);
+    }, [timetable]);
+
+
     const fetchStudentProfile = async () => {
         try {
             const res = await fetch(`${API_URL}/api/marks/profile`, {
@@ -234,37 +250,10 @@ const StudentDashboard = () => {
             if (res.ok) {
                 const data = await res.json();
                 setStudentProfile(data);
-                if (!data.is_locked) {
-                    setShowProfileModal(true);
-                }
+                // No longer showing manual lock modal
             }
         } catch (e) { console.error(e); }
     }
-
-    const handleProfileSave = async (e) => {
-        e.preventDefault();
-        try {
-            const res = await fetch(`${API_URL}/api/marks/profile`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({ mobile, section, register_number: regNo })
-            });
-
-            if (res.status === 403) { logout(); navigate('/'); return; }
-
-            if (res.ok) {
-                setShowProfileModal(false);
-                fetchStudentProfile(); // Refresh to get updated data
-                alert("Profile Locked. Contact Admin for changes.");
-            } else {
-                const d = await res.json();
-                alert(d.message || "Error saving profile.");
-            }
-        } catch (err) { console.error(err); }
-    };
 
     const fetchHomeworks = async () => {
         try {
@@ -329,84 +318,35 @@ const StudentDashboard = () => {
 
     return (
         <div className={`min-h-screen p-6 transition-all duration-300 ${!character ? (bgPattern || 'mesh-gradient') : 'bg-transparent'}`}>
-            {/* Approval Pending Overlay */
-                !user.is_approved && (
-                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900 text-white p-6">
-                        <div className="text-center max-w-md">
-                            <div className="w-20 h-20 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <Clock className="w-10 h-10 text-amber-500" />
+            {/* Authentication/Sync Modal (Blocking) */}
+            {showMandatorySync && (
+                <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in zoom-in">
+                    <div className="glass-panel w-full max-w-md p-8 relative rounded-2xl border border-blue-500/50 shadow-[0_0_50px_rgba(59,130,246,0.5)]">
+                        <div className="text-center mb-8">
+                            <div className="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                                <span className="text-4xl">🏛️</span>
                             </div>
-                            <h2 className="text-3xl font-bold mb-4">Approval Pending</h2>
-                            <p className="text-slate-400 mb-8">
-                                Your account is waiting for administrator approval. <br />
-                                Please contact your class teacher or admin.
-                            </p>
-                            <button onClick={() => { logout(); navigate('/'); }} className="bg-slate-800 hover:bg-slate-700 px-6 py-3 rounded-xl font-bold transition">
-                                Back to Login
-                            </button>
-                        </div>
-                    </div>
-                )}
-            {/* Profile Lock Modal */}
-            {showProfileModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl border-t-4 border-indigo-600 animate-slide-up">
-                        <div className="text-center mb-6">
-                            <div className="bg-indigo-100 p-4 rounded-full w-fit mx-auto mb-4">
-                                <Lock className="w-8 h-8 text-indigo-600" />
-                            </div>
-                            <h2 className="text-2xl font-bold text-gray-800">Complete Your Profile</h2>
-                            <p className="text-gray-500 text-sm mt-2">
-                                Please provide your details to continue. <br />
-                                <span className="text-red-500 font-medium">Note: These details will be LOCKED after saving.</span>
+                            <h2 className="text-3xl font-bold text-white mb-2">Connect Academia</h2>
+                            <p className="text-blue-200">
+                                To access the Student Portal, you must link your Academia account.
+                                We will generate your **Personal Timetable** and **Attendance** automatically.
                             </p>
                         </div>
 
-                        <form onSubmit={handleProfileSave} className="space-y-4">
-                            <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Full Name (From Google)</label>
-                                <input type="text" value={user.name} disabled className="w-full bg-gray-100 border border-gray-200 rounded-lg px-4 py-3 text-gray-500 cursor-not-allowed" />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Register Number <span className="text-red-500">*</span></label>
-                                <input
-                                    type="text"
-                                    required
-                                    placeholder="e.g. RA25..."
-                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    value={regNo}
-                                    onChange={e => setRegNo(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Section <span className="text-red-500">*</span></label>
-                                <input
-                                    type="text"
-                                    required
-                                    placeholder="e.g. A, B, CS-1"
-                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    value={section}
-                                    onChange={e => setSection(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-xs font-bold text-gray-700 uppercase mb-1">Mobile Number <span className="text-red-500">*</span></label>
-                                <input
-                                    type="tel"
-                                    required
-                                    placeholder="e.g. 9876543210"
-                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    value={mobile}
-                                    onChange={e => setMobile(e.target.value)}
-                                />
-                            </div>
-                            <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 mt-2">
-                                <Save className="w-5 h-5" /> Save & Lock Profile
-                            </button>
-                        </form>
+                        <AttendanceTab isBlocking={true} onSyncSuccess={() => {
+                            setShowMandatorySync(false);
+                            // Refresh all data
+                            fetchTimetable();
+                            fetchStudentProfile();
+                            fetchAttendance(); // Need access to this function or reload
+                            window.location.reload(); // Simplest way to refresh everything including context if needed
+                        }} />
                     </div>
                 </div>
             )}
+
+
+
             {/* Background Pattern */}
             <div className={`fixed inset-0 z-0 pointer-events-none opacity-20 bg-pattern ${bgPattern}`}></div>
             <VFXLayer />
@@ -478,7 +418,7 @@ const StudentDashboard = () => {
 
                     <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
                         <div className="hidden md:flex bg-white/10 p-1 rounded-3xl flex-wrap justify-center gap-1 border border-white/20 w-full md:w-auto">
-                            {['homework', 'marks', 'timetable', 'mess', 'analytics', 'calendar', 'cgpa', 'notices'].map((tab) => (
+                            {['homework', 'marks', 'timetable', 'attendance', 'mess', 'analytics', 'calendar', 'cgpa', 'notices'].map((tab) => (
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
@@ -602,6 +542,7 @@ const StudentDashboard = () => {
                         { id: 'homework', label: 'Home', icon: <BookOpen className="w-6 h-6" /> },
                         { id: 'marks', label: 'Grades', icon: <GraduationCap className="w-6 h-6" /> },
                         { id: 'timetable', label: 'Time', icon: <Clock className="w-6 h-6" /> },
+                        { id: 'attendance', label: 'Attendance', icon: <CheckCircle className="w-6 h-6" /> },
                         { id: 'mess', label: 'Mess', icon: <Utensils className="w-6 h-6" /> },
                         { id: 'analytics', label: 'Stats', icon: <BarChart2 className="w-6 h-6" /> },
                         { id: 'calendar', label: 'Calendar', icon: <Calendar className="w-6 h-6" /> },
@@ -672,6 +613,8 @@ const StudentDashboard = () => {
                             <TimetableTab user={user} initialDay={timetableDay} />
                         </div>
                     )}
+
+                    {activeTab === 'attendance' && <AttendanceTab />}
 
                     {activeTab === 'mess' && <MessTab />}
 
@@ -875,11 +818,11 @@ const StudentDashboard = () => {
 
                                 {studentProfile?.is_locked ? (
                                     <div className="text-center text-sm opacity-50 py-4 text-[var(--text-primary)]">
-                                        <Lock className="w-4 h-4 inline-block mr-1" /> Profile is locked. Contact admin for corrections.
+                                        <Lock className="w-4 h-4 inline-block mr-1" /> Profile is managed by your Academia Sync.
                                     </div>
                                 ) : (
-                                    <div className="text-center">
-                                        <button onClick={() => setShowProfileModal(true)} className="text-[rgb(var(--accent-color))] hover:underline font-bold">Edit Profile</button>
+                                    <div className="text-center text-sm opacity-50 py-4 text-[var(--text-primary)]">
+                                        <FaSync className="w-3 h-3 inline-block mr-1" /> Details auto-synced from Academia.
                                     </div>
                                 )}
                             </div>

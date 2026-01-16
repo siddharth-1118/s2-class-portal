@@ -54,7 +54,7 @@ const MessTab = ({ isAdmin }) => {
 
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5005';
     const [menu, setMenu] = useState([]);
 
     useEffect(() => {

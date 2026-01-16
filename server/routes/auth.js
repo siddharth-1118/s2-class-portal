@@ -8,9 +8,57 @@ const { OAuth2Client } = require('google-auth-library');
 const ADMIN_EMAILS = ['saisiddharthvooka@gmail.com', 'kothaig2@srmist.edu.in'];
 const ALLOWED_DOMAINS = ['@srmist.edu.in', '@gmail.com']; // Add your new domains here
 
+// Helper: Trigger Background Sync
+const triggerBackgroundSync = (userId, email, academiaEmail, academiaPassword) => {
+    if (!academiaEmail || !academiaPassword) return;
+
+    console.log(`[Auth] Triggering Background Sync for ${email}...`);
+    const { scrapeTimetable } = require('../utils/academiaScraper');
+
+    // Run in background
+    (async () => {
+        try {
+            const { timetable, attendance, profile } = await scrapeTimetable(academiaEmail, academiaPassword);
+
+            // Update Profile (Name/RegNo)
+            if (profile && profile.regNo) {
+                db.prepare('UPDATE users SET linked_reg_no = ?, name = COALESCE(?, name) WHERE id = ?')
+                    .run(profile.regNo, profile.name || null, userId);
+            }
+
+            // Save Timetable
+            if (timetable && timetable.length > 0) {
+                db.prepare('DELETE FROM personal_timetables WHERE user_email = ?').run(email);
+                const insert = db.prepare('INSERT INTO personal_timetables (user_email, day, period, subject, staff, type, time_range) VALUES (?, ?, ?, ?, ?, ?, ?)');
+                const update = db.transaction(() => {
+                    timetable.forEach(entry => insert.run(email, entry.day, entry.period, entry.content, '', 'Theory', ''));
+                });
+                update();
+            }
+
+            // Save Attendance
+            if (attendance && attendance.length > 0) {
+                db.prepare('DELETE FROM attendance WHERE user_email = ?').run(email);
+                const insertAtt = db.prepare('INSERT INTO attendance (user_email, course_code, course_title, category, faculty_name, slot, hours_conducted, hours_absent, attendance_percentage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+                const updateAtt = db.transaction(() => {
+                    attendance.forEach(att => insertAtt.run(email, att.course_code, att.course_title, att.category, att.faculty_name, att.slot, att.hours_conducted, att.hours_absent, att.attendance_percentage));
+                });
+                updateAtt();
+            }
+            console.log(`[Auth] Background Sync Success for ${email}`);
+
+        } catch (err) {
+            console.error(`[Auth] Background Sync Failed for ${email}:`, err.message);
+        }
+    })();
+};
+
 // REGISTER
 router.post('/register', async (req, res) => {
     const { email, password, name } = req.body;
+    // Fallback: Use main creds as Academia creds
+    const academiaEmail = req.body.academiaEmail || email;
+    const academiaPassword = req.body.academiaPassword || password;
 
     if (!email || !password || !name) {
         return res.status(400).json({ message: 'All fields are required' });
@@ -19,7 +67,6 @@ router.post('/register', async (req, res) => {
     let role = 'student';
     if (ADMIN_EMAILS.includes(email)) {
         role = 'admin';
-        // Admins auto-approved
     } else {
         const isAllowed = ALLOWED_DOMAINS.some(domain => email.endsWith(domain));
         if (!isAllowed) {
@@ -29,15 +76,40 @@ router.post('/register', async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Encrypt Academia Password
+    let encPass = null;
+    let iv = null;
+    const isSrmEmail = email.endsWith('@srmist.edu.in');
+
+    if (isSrmEmail && academiaPassword) {
+        const { encrypt } = require('../utils/crypto');
+        const encrypted = encrypt(academiaPassword);
+        encPass = encrypted.content;
+        iv = encrypted.iv;
+    }
+
     try {
-        const stmt = db.prepare('INSERT INTO users (email, password, name, role, is_approved) VALUES (?, ?, ?, ?, ?)');
-        const isApproved = role === 'admin' ? 1 : 0; // Admins approved, Students pending (0)
-        const info = stmt.run(email, hashedPassword, name, role, isApproved);
-        res.status(201).json({ message: 'User created successfully', userId: info.lastInsertRowid });
+        const stmt = db.prepare('INSERT INTO users (email, password, name, role, is_approved, linked_reg_no, academia_enc_pass, academia_iv) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+        const isApproved = 1; // Auto-approve everyone
+
+        // Use academiaEmail as initial linked_reg_no (NetID) if provided
+        const linkedId = isSrmEmail ? academiaEmail : null;
+
+        const info = stmt.run(email, hashedPassword, name, role, isApproved, linkedId, encPass, iv);
+        const userId = info.lastInsertRowid;
+
+        res.status(201).json({ message: 'User created successfully', userId });
+
+        // TRIGGER BACKGROUND SYNC
+        if (isSrmEmail) {
+            triggerBackgroundSync(userId, email, academiaEmail, academiaPassword);
+        }
+
     } catch (error) {
         if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
             return res.status(400).json({ message: 'Email already exists' });
         }
+        console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -45,6 +117,9 @@ router.post('/register', async (req, res) => {
 // LOGIN
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
+    // Fallback
+    const academiaEmail = req.body.academiaEmail || email;
+    const academiaPassword = req.body.academiaPassword || password;
 
     const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
     const user = stmt.get(email);
@@ -55,7 +130,51 @@ router.post('/login', async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-        return res.status(400).json({ message: 'Invalid credentials' });
+        // Smart Rescue: Check against Academia if it's an SRM email
+        if (email.endsWith('@srmist.edu.in')) {
+            try {
+                console.log(`[Auth] Password mismatch for ${email}. Verifying with Academia...`);
+
+                // FAST VERIFICATION
+                const { verifyCredentials } = require('../utils/academiaScraper');
+                await verifyCredentials(academiaEmail, academiaPassword);
+
+                console.log(`[Auth] Academia verification success for ${email}. Updating local credentials.`);
+
+                // Update Local DB with new Password (hashed) and Academia Creds (Encrypted)
+                const newHashed = await bcrypt.hash(password, 10);
+                const { encrypt } = require('../utils/crypto');
+                const encrypted = encrypt(academiaPassword);
+
+                db.prepare('UPDATE users SET password = ?, academia_enc_pass = ?, academia_iv = ?, linked_reg_no = ? WHERE id = ?')
+                    .run(newHashed, encrypted.content, encrypted.iv, academiaEmail, user.id);
+
+                // Trigger Full Sync in Background
+                triggerBackgroundSync(user.id, user.email, academiaEmail, academiaPassword);
+
+            } catch (e) {
+                console.error(`[Auth] Academia verification failed: ${e.message}`);
+                return res.status(400).json({ message: 'Invalid credentials (and Academia login failed)' });
+            }
+        } else {
+            return res.status(400).json({ message: 'Invalid credentials' });
+        }
+    }
+
+    // AUTO-UPDATE ACADEMIA CREDS ON LOGIN (If check passed naturally or via Rescue)
+    // If we just Rescued, we already updated. If we didn't Rescue (isMatch was true), we might still need to update Sync creds if they changed? 
+    // Actually if isMatch is true, we assume the password matches. But maybe the user changed their Academia password and updated it here?
+    // If isMatch is true, we simply update the encrypted fields to ensure they are current.
+
+    if (isMatch && email.endsWith('@srmist.edu.in')) {
+        // ... existing update logic ...
+        try {
+            const { encrypt } = require('../utils/crypto');
+            const encrypted = encrypt(academiaPassword);
+            db.prepare('UPDATE users SET academia_enc_pass = ?, academia_iv = ?, linked_reg_no = COALESCE(linked_reg_no, ?) WHERE id = ?')
+                .run(encrypted.content, encrypted.iv, academiaEmail, user.id);
+            triggerBackgroundSync(user.id, user.email, academiaEmail, academiaPassword);
+        } catch (e) { console.error("Login Sync Update Failed:", e); }
     }
 
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name, is_approved: user.is_approved }, process.env.JWT_SECRET, { expiresIn: '24h' });

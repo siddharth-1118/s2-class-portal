@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Trash2 } from 'lucide-react';
+import { Trash2, RefreshCcw } from 'lucide-react';
 
 const MarksTab = ({ user }) => {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5005';
     const [marks, setMarks] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         fetchMarks();
@@ -26,12 +27,37 @@ const MarksTab = ({ user }) => {
         }
     };
 
+    const handleRefresh = async () => {
+        setRefreshing(true);
+        try {
+            const token = localStorage.getItem('token');
+            // Trigger auto-sync (this logic includes marks scraping now)
+            await axios.post(`${API_URL}/api/academia/auto-sync`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            await fetchMarks();
+        } catch (error) {
+            console.error("Refresh failed", error);
+            alert("Refresh failed. Ensure you are logged in.");
+        } finally {
+            setRefreshing(false);
+        }
+    };
+
     return (
         <div className="space-y-6 animate-fade-in">
             {/* Chart Section */}
             <div className="bg-slate-900/50 backdrop-blur-md p-6 rounded-2xl border border-white/10 shadow-xl">
                 <h3 className="text-lg font-bold text-slate-200 mb-4 flex items-center gap-2">
                     Performance Analytics
+                    <button
+                        onClick={handleRefresh}
+                        disabled={refreshing}
+                        className="ml-2 p-2 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition"
+                        title="Refresh from Academia"
+                    >
+                        <RefreshCcw size={18} className={refreshing ? "animate-spin" : ""} />
+                    </button>
                 </h3>
                 <div className="h-[300px] w-full">
                     <ResponsiveContainer width="100%" height="100%">

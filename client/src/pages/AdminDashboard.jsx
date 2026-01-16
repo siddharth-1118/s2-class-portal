@@ -10,7 +10,7 @@ import MessTab from '../components/MessTab';
 import MobileNav from '../components/MobileNav';
 // import GalleryTab from '../components/GalleryTab';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5005';
 
 const AdminDashboard = () => {
     const { user, logout } = useAuth();
@@ -421,17 +421,10 @@ Student RA2411003010003 got 45 marks"
                         </h1>
                     </div>
                     <div className="flex items-center gap-6">
-                        <div className="hidden md:flex gap-2 p-1 bg-slate-800 rounded-full border border-slate-700 overflow-x-auto max-w-[90vw]">
+                        <div className="flex gap-2 p-1 bg-slate-800 rounded-full border border-slate-700">
                             <button onClick={() => setActiveTab('homework')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'homework' ? 'bg-violet-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><FileText className="w-4 h-4" /> Homework</button>
-                            <button onClick={() => setActiveTab('users')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'users' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Users className="w-4 h-4" /> Users</button>
                             <button onClick={() => setActiveTab('notices')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'notices' ? 'bg-yellow-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Send className="w-4 h-4" /> Notices</button>
-                            <button onClick={() => setActiveTab('students')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'students' ? 'bg-emerald-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><GraduationCap className="w-4 h-4" /> Grading Sheet</button>
-                            <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Activity className="w-4 h-4" /> History</button>
-                            <button onClick={() => setActiveTab('marks')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'marks' ? 'bg-fuchsia-600 text-white shadow-md' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Activity className="w-4 h-4" /> History</button>
-                            <button onClick={() => setActiveTab('mess')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'mess' ? 'bg-orange-500 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Utensils className="w-4 h-4" /> Mess</button>
-                            <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'timetable' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Calendar className="w-4 h-4" /> Timetable</button>
-                            <button onClick={() => setActiveTab('calendar')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'calendar' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Calendar className="w-4 h-4" /> Calendar</button>
-                            <button onClick={() => setActiveTab('analytics')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'analytics' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><BarChart2 className="w-4 h-4" /> Analytics</button>
+                            <button onClick={() => setActiveTab('analytics')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'analytics' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><BarChart2 className="w-4 h-4" /> Student Analytics</button>
                         </div>
                         <div className="h-6 w-px bg-slate-700 hidden md:block"></div>
                         <div className="flex items-center gap-3">
@@ -443,8 +436,8 @@ Student RA2411003010003 got 45 marks"
                 </header>
 
                 {activeTab === 'homework' && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <div className="space-y-8 animate-slide-up">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-slide-up">
+                        <div className="space-y-8">
                             <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl relative overflow-hidden group">
                                 <h2 className="text-lg font-semibold mb-6 text-violet-300 flex items-center gap-2">
                                     <PlusCircle className="w-5 h-5" /> Post Assignment
@@ -484,7 +477,7 @@ Student RA2411003010003 got 45 marks"
                             </div>
                         </div>
 
-                        <div className="lg:col-span-2 animate-slide-up [animation-delay:100ms]">
+                        <div className="lg:col-span-2">
                             <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl min-h-[600px] flex flex-col">
                                 <h2 className="text-xl font-semibold mb-6 text-blue-300 flex items-center gap-2">
                                     <Activity className="w-5 h-5" /> Assignments
@@ -504,69 +497,6 @@ Student RA2411003010003 got 45 marks"
                                     ))}
                                     {homeworks.length === 0 && <p className="text-center text-slate-500 mt-10">No assignments.</p>}
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'users' && (
-                    <div className="animate-slide-up">
-                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl min-h-[600px]">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-xl font-semibold text-indigo-300 flex items-center gap-2">
-                                    <Users className="w-5 h-5" /> User Management
-                                </h2>
-                                <button onClick={() => {
-                                    fetch(`${API_URL}/api/auth/users`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } }).then(res => res.json()).then(setUserList);
-                                }} className="text-sm bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded">Refresh</button>
-                            </div>
-
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-left border-collapse">
-                                    <thead className="bg-slate-950/50 text-slate-400 text-xs uppercase">
-                                        <tr>
-                                            <th className="p-4">Name</th>
-                                            <th className="p-4">Email</th>
-                                            <th className="p-4">Role</th>
-                                            <th className="p-4">Linked Reg No</th>
-                                            <th className="p-4 text-center">Status</th>
-                                            <th className="p-4 text-right">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-slate-700/50">
-                                        {userList.map(u => (
-                                            <tr key={u.id} className="hover:bg-slate-800/30 transition">
-                                                <td className="p-4 font-bold text-white">{u.name}</td>
-                                                <td className="p-4 text-slate-400 text-sm">{u.email}</td>
-                                                <td className="p-4"><span className={`px-2 py-0.5 rounded text-xs uppercase font-bold ${u.role === 'admin' ? 'bg-purple-500/20 text-purple-300' : 'bg-blue-500/20 text-blue-300'}`}>{u.role}</span></td>
-                                                <td className="p-4 font-mono text-xs">{u.linked_reg_no || '-'}</td>
-                                                <td className="p-4 text-center">
-                                                    {u.is_approved ?
-                                                        <span className="text-emerald-400 text-xs font-bold border border-emerald-500/30 px-2 py-1 rounded bg-emerald-500/10">Active</span>
-                                                        : <span className="text-amber-400 text-xs font-bold border border-amber-500/30 px-2 py-1 rounded bg-amber-500/10 animate-pulse">Pending</span>
-                                                    }
-                                                </td>
-                                                <td className="p-4 text-right">
-                                                    {u.role !== 'admin' && (
-                                                        <button
-                                                            onClick={async () => {
-                                                                await fetch(`${API_URL}/api/auth/approve/${u.id}`, {
-                                                                    method: 'POST',
-                                                                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                                                                    body: JSON.stringify({ is_approved: u.is_approved ? 0 : 1 })
-                                                                });
-                                                                setUserList(prev => prev.map(usr => usr.id === u.id ? { ...usr, is_approved: !usr.is_approved } : usr));
-                                                            }}
-                                                            className={`px-3 py-1 rounded text-xs font-bold transition ${u.is_approved ? 'bg-red-500/20 text-red-300 hover:bg-red-500/30' : 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30'}`}
-                                                        >
-                                                            {u.is_approved ? 'Revoke' : 'Approve'}
-                                                        </button>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
@@ -620,323 +550,148 @@ Student RA2411003010003 got 45 marks"
                                 >
                                     {targetStudent === 'all' ? 'Send to All' : 'Send to Student'}
                                 </button>
-
-                                <button
-                                    onClick={async () => {
-                                        try {
-                                            await fetch(`${API_URL}/api/notices`, {
-                                                method: 'POST',
-                                                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                                                body: JSON.stringify({ message: "This is a test notification to verify push services.", category: 'urgent', target: 'all' })
-                                            });
-                                            alert('Test Notification Triggered!');
-                                        } catch (e) { alert('Error triggering test'); }
-                                    }}
-                                    className="bg-slate-700 text-slate-300 px-4 rounded-xl hover:bg-slate-600 transition text-sm font-bold"
-                                >
-                                    Test Push
-                                </button>
                             </div>
                         </div>
 
                         <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl h-fit">
-                            <h2 className="text-xl font-semibold mb-6 text-slate-300">Recent Notices</h2>
+                            <h2 className="text-xl font-semibold mb-6 text-slate-300">Previous Notices</h2>
                             <div className="text-center text-slate-500 py-10">
-                                View logic implemented in Student Dashboard. <br /> This tab is mainly for broadcasting.
+                                Notices are delivered to student dashboards.
                             </div>
                         </div>
                     </div>
                 )}
 
-                {activeTab === 'marks' && (
-                    <div className="animate-slide-up">
-                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl min-h-[600px]">
-                            <div className="flex flex-col gap-4 mb-6">
-                                <h2 className="text-xl font-semibold text-pink-300 flex items-center gap-2"><Activity className="w-5 h-5" /> Detailed Grading History</h2>
-                                <div className="flex flex-wrap items-center gap-2">
-                                    {['All', ...new Set(marksList.map(m => m.exam_type || 'Unspecified'))].map(type => (
-                                        <button
-                                            key={type}
-                                            onClick={() => setActiveExamTab(type)}
-                                            className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${activeExamTab === type ? 'bg-pink-600 text-white shadow-lg' : 'bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700'}`}
+                {activeTab === 'analytics' && (
+                    <div className="animate-slide-up grid grid-cols-1 lg:grid-cols-4 gap-8">
+                        {/* Student Selector */}
+                        <div className="lg:col-span-1 bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl min-h-[600px] flex flex-col">
+                            <h2 className="text-xl font-semibold mb-4 text-blue-300 flex items-center gap-2">
+                                <Users className="w-5 h-5" /> Select Student
+                            </h2>
+                            <div className="relative mb-4">
+                                <Search className="w-4 h-4 absolute left-3 top-3 text-slate-500" />
+                                <input
+                                    type="text"
+                                    placeholder="Search Name/RegNo"
+                                    className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 py-2.5 text-white focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
+                                    value={searchTerm}
+                                    onChange={e => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex-1 overflow-y-auto custom-scrollbar space-y-2">
+                                {students
+                                    .filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()) || s.register_number.toLowerCase().includes(searchTerm.toLowerCase()))
+                                    .map(s => (
+                                        <div
+                                            key={s.register_number}
+                                            onClick={() => setTargetStudent(s.register_number)}
+                                            className={`p-3 rounded-xl cursor-pointer transition border border-transparent ${targetStudent === s.register_number ? 'bg-blue-600/20 border-blue-500 text-white' : 'hover:bg-slate-700 text-slate-300'}`}
                                         >
-                                            {type}
-                                        </button>
-                                    ))}
-                                </div>
-                                <div className="flex items-center gap-2 self-end">
-                                    <button onClick={() => setAddMarkModalOpen(true)} className="bg-pink-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-pink-700 transition flex items-center gap-1 shadow-lg">
-                                        <PlusCircle className="w-4 h-4" /> Add Grade
-                                    </button>
-                                    {marksList.filter(m => activeExamTab === 'All' || (m.exam_type || 'Unspecified') === activeExamTab).length > 0 && (
-                                        <button
-                                            onClick={async () => {
-                                                const visibleMarks = marksList.filter(m => activeExamTab === 'All' || (m.exam_type || 'Unspecified') === activeExamTab);
-                                                if (!confirm(`Are you sure you want to DELETE ALL ${visibleMarks.length} marks currently visible? This cannot be undone.`)) return;
-                                                try {
-                                                    const ids = visibleMarks.map(m => m.id);
-                                                    const res = await fetch(`${API_URL}/api/marks/bulk-delete`, {
-                                                        method: 'POST',
-                                                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                                                        body: JSON.stringify({ ids })
-                                                    });
-                                                    if (res.ok) {
-                                                        alert("All marks deleted.");
-                                                        fetchMarks();
-                                                    } else {
-                                                        alert("Failed to delete marks.");
-                                                    }
-                                                } catch (e) { console.error(e); alert("Failed to delete."); }
-                                            }}
-                                            className="bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-red-700 transition flex items-center gap-1 shadow-lg ml-2"
-                                        >
-                                            <Trash2 className="w-4 h-4" /> Delete All ({marksList.filter(m => activeExamTab === 'All' || (m.exam_type || 'Unspecified') === activeExamTab).length})
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="overflow-x-auto custom-scrollbar">
-                                <table className="w-full text-left border-collapse">
-                                    <thead>
-                                        <tr className="text-slate-400 border-b border-slate-700 text-sm">
-                                            <th className="pb-3 pl-2">Student</th>
-                                            <th className="pb-3">Subject</th>
-                                            <th className="pb-3">Exam</th>
-                                            <th className="pb-3">Score</th>
-                                            <th className="pb-3 text-right pr-2">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-slate-700/50">
-                                        {marksList.filter(m => activeExamTab === 'All' || (m.exam_type || 'Unspecified') === activeExamTab).map((m) => (
-                                            <tr key={m.id} className="text-slate-300 hover:bg-slate-700/30 transition">
-                                                <td className="py-4 pl-2">
-                                                    <div className="font-semibold text-white">{m.student_name}</div>
-                                                    <div className="text-xs text-slate-500">{m.student_reg_no}</div>
-                                                </td>
-                                                <td className="py-4">{m.subject}</td>
-                                                <td className="py-4 text-sm text-slate-400">{m.exam_type || '-'}</td>
-                                                <td className="py-4">
-                                                    <span className="bg-fuchsia-500/20 text-fuchsia-300 px-2 py-1 rounded text-sm font-bold">
-                                                        {m.score} / {m.max_marks}
-                                                    </span>
-                                                </td>
-                                                <td className="py-4 text-right pr-2 flex justify-end gap-2">
-                                                    <button onClick={() => { setMarkToEdit(m); setEditMarkModalOpen(true); }} className="text-blue-400 hover:bg-blue-500/10 p-2 rounded">
-                                                        <Edit2 className="w-4 h-4" />
-                                                    </button>
-                                                    <button onClick={() => handleDeleteMark(m.id)} className="text-red-400 hover:bg-red-500/10 p-2 rounded">
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                {marksList.length === 0 && <p className="text-center text-slate-500 py-10">No grades recorded.</p>}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'mess' && (
-                    <div className="animate-slide-up">
-                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl min-h-[600px]">
-                            <MessTab isAdmin={true} />
-                        </div>
-                    </div>
-                )}
-
-                {activeTab === 'students' && (
-                    <div className="animate-slide-up">
-                        <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl min-h-[600px]">
-                            <div className="flex flex-col space-y-6 mb-6">
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-slate-700 pb-6">
-                                    <div>
-                                        <h2 className="text-xl font-semibold text-emerald-300 flex items-center gap-2 mb-1">
-                                            <GraduationCap className="w-6 h-6" /> Class Grading Sheet
-                                        </h2>
-                                        <p className="text-slate-400 text-sm">
-                                            Manually enter grades below <span className="text-slate-500">or</span> use <strong className="text-yellow-500">AI Import</strong> to fill from text.
-                                        </p>
-                                    </div>
-                                    <div className="flex gap-3">
-                                        <button onClick={() => setImportModalOpen(true)} className="bg-slate-700 text-yellow-400 border border-yellow-500/30 px-4 py-2 rounded-lg text-sm font-bold shadow-lg hover:bg-slate-600 transition flex items-center gap-2">
-                                            <Zap className="w-4 h-4" /> AI Import
-                                        </button>
-                                        <button onClick={handleBulkSubmit} className="bg-emerald-600 text-white px-6 py-2 rounded-lg text-sm font-bold shadow-lg hover:bg-emerald-700 transition flex items-center gap-2">
-                                            <Save className="w-4 h-4" /> Save All Filled
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-                                    <div className="space-y-1">
-                                        <label className="text-xs font-bold text-slate-500 uppercase">Subject</label>
-                                        <input type="text" placeholder="e.g. Physics" className="w-full bg-slate-800 border-none rounded-lg px-3 py-2 text-white focus:ring-1 focus:ring-emerald-500" value={bulkSubject} onChange={e => setBulkSubject(e.target.value)} />
-                                    </div>
-                                    <div className="space-y-1">
-                                        <label className="text-xs font-bold text-slate-500 uppercase">Max Marks</label>
-                                        <input type="number" placeholder="100" className="w-full bg-slate-800 border-none rounded-lg px-3 py-2 text-white focus:ring-1 focus:ring-emerald-500" value={bulkMaxMarks} onChange={e => setBulkMaxMarks(e.target.value)} />
-                                    </div>
-                                    <div className="space-y-1">
-                                        <label className="text-xs font-bold text-slate-500 uppercase">Exam Type</label>
-                                        <input type="text" placeholder="e.g. Internal 1" className="w-full bg-slate-800 border-none rounded-lg px-3 py-2 text-white focus:ring-1 focus:ring-emerald-500" value={bulkExamType} onChange={e => setBulkExamType(e.target.value)} />
-                                    </div>
-                                    <div className="space-y-1">
-                                        <label className="text-xs font-bold text-slate-500 uppercase">Filter Student</label>
-                                        <div className="relative">
-                                            <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-500" />
-                                            <input type="text" placeholder="Reg No / Name" className="w-full bg-slate-800 border-none rounded-lg pl-9 pr-3 py-2 text-white focus:ring-1 focus:ring-emerald-500" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                                            <div className="font-bold text-sm truncate">{s.name}</div>
+                                            <div className="text-xs opacity-70 font-mono">{s.register_number}</div>
                                         </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex justify-end mt-4 mb-4">
-                                    <button
-                                        onClick={async () => {
-                                            const payload = {
-                                                marks: Object.entries(stagedMarks).map(([reg, score]) => ({
-                                                    student_reg_no: reg,
-                                                    subject: bulkSubject,
-                                                    score: score,
-                                                    max_marks: bulkMaxMarks,
-                                                    exam_type: bulkExamType
-                                                }))
-                                            };
-
-                                            if (payload.marks.length === 0) return alert("No changes to save!");
-
-                                            try {
-                                                const res = await fetch(`${API_URL}/api/marks/bulk`, {
-                                                    method: 'POST',
-                                                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                                                    body: JSON.stringify(payload)
-                                                });
-                                                if (res.ok) {
-                                                    alert("All grades saved successfully!");
-                                                    setStagedMarks({});
-                                                    fetchMarks(); // Refresh
-                                                } else {
-                                                    alert("Failed to save grades.");
-                                                }
-                                            } catch (e) { console.error(e); alert("Error saving"); }
-                                        }}
-                                        className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg flex items-center gap-2 transition"
-                                    >
-                                        <Save className="w-5 h-5" /> Save All
-                                    </button>
-                                </div>
+                                    ))
+                                }
                             </div>
+                        </div>
 
-                            <div className="overflow-hidden rounded-xl border border-slate-700 shadow-lg relative bg-slate-900">
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-left border-collapse">
-                                        <thead className="bg-slate-950/50 border-b border-slate-700">
-                                            <tr>
-                                                <th className="p-4 w-40 font-semibold text-xs uppercase text-slate-400">Reg No</th>
-                                                <th className="p-4 font-semibold text-xs uppercase text-slate-400">Name</th>
-                                                <th className="p-4 w-40 font-semibold text-xs uppercase text-slate-400">Score Entry</th>
-                                                <th className="p-4 w-24 text-center font-semibold text-xs uppercase text-slate-400">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-slate-700/50">
-                                            {filteredStudents.map((s, i) => (
-                                                <tr key={s.register_number} className="hover:bg-slate-800/50 transition">
-                                                    <td className="p-4 font-mono text-emerald-400 text-sm">{s.register_number}</td>
-                                                    <td className="p-4 text-slate-200 font-medium flex items-center gap-2">
-                                                        {s.name}
-                                                        <div className="flex gap-1">
-                                                            <button onClick={() => openEditModal(s.register_number)} className="text-slate-500 hover:text-violet-400 transition" title="Edit Profile">
-                                                                <Edit2 className="w-3 h-3" />
-                                                            </button>
-                                                            <button
-                                                                onClick={async () => {
-                                                                    if (confirm(`Reset/Unlink profile for ${s.name}? This allows them to claim it again.`)) {
-                                                                        await fetch(`${API_URL}/api/marks/student/${s.register_number}/unlink`, {
-                                                                            method: 'POST',
-                                                                            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-                                                                        });
-                                                                        alert("Profile Unlinked/Reset");
-                                                                    }
-                                                                }}
-                                                                className="text-slate-500 hover:text-red-400 transition"
-                                                                title="Unlink/Reset Profile"
-                                                            >
-                                                                <RotateCcw className="w-3 h-3" />
-                                                            </button>
+                        {/* Analytics Detail */}
+                        <div className="lg:col-span-3 space-y-6">
+                            {targetStudent && targetStudent !== 'all' ? (
+                                <>
+                                    {(() => {
+                                        const s = students.find(st => st.register_number === targetStudent);
+                                        const sMarks = marksList.filter(m => m.student_reg_no === targetStudent);
+                                        // Calc Avgs
+                                        const avg = sMarks.length > 0 ? (sMarks.reduce((acc, curr) => acc + (parseFloat(curr.score) / parseFloat(curr.max_marks) * 100), 0) / sMarks.length).toFixed(1) : 0;
+
+                                        // Chart Data
+                                        const chartData = sMarks.map(m => ({
+                                            subject: m.subject.substring(0, 10) + '...',
+                                            fullSubject: m.subject,
+                                            score: (parseFloat(m.score) / parseFloat(m.max_marks) * 100).toFixed(1),
+                                            raw: m.score,
+                                            max: m.max_marks
+                                        }));
+
+                                        return (
+                                            <>
+                                                {/* Profile Header */}
+                                                <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                                                    <div>
+                                                        <h2 className="text-2xl font-bold text-white mb-1">{s?.name || 'Unknown Student'}</h2>
+                                                        <div className="flex flex-wrap gap-4 text-sm text-slate-400 font-mono">
+                                                            <span className="bg-slate-900 px-2 py-1 rounded border border-slate-700">{s?.register_number}</span>
+                                                            <span className="bg-slate-900 px-2 py-1 rounded border border-slate-700">{s?.section ? `Sec: ${s.section}` : 'No Section'}</span>
+                                                            <span className="bg-slate-900 px-2 py-1 rounded border border-slate-700">{s?.mobile || 'No Mobile'}</span>
                                                         </div>
-                                                    </td>
-                                                    <td className="p-4">
-                                                        <div className="flex items-center gap-2">
-                                                            <input
-                                                                type="text"
-                                                                inputMode="numeric"
-                                                                pattern="[0-9]*"
-                                                                placeholder="-"
-                                                                value={stagedMarks[s.register_number] !== undefined ? stagedMarks[s.register_number] : (marksList.find(m => m.student_reg_no === s.register_number && m.subject === bulkSubject && m.exam_type === bulkExamType)?.score || '')}
-                                                                onChange={(e) => setStagedMarks(prev => ({ ...prev, [s.register_number]: e.target.value }))}
-                                                                className="bg-slate-800 border border-slate-600 rounded px-3 py-1.5 text-white w-20 text-center focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 transition no-spinner"
-                                                                onKeyDown={(e) => {
-                                                                    if (e.key === 'Enter' || e.key === 'ArrowDown') {
-                                                                        e.preventDefault();
-                                                                        // Focus Next
-                                                                        const nextIdx = i + 1;
-                                                                        if (nextIdx < filteredStudents.length) {
-                                                                            const nextReg = filteredStudents[nextIdx].register_number;
-                                                                            const nextInput = document.getElementById(`input-${nextReg}`);
-                                                                            if (nextInput) nextInput.focus();
-                                                                        }
-                                                                    }
-                                                                    if (e.key === 'ArrowUp') {
-                                                                        e.preventDefault();
-                                                                        // Focus Previous
-                                                                        const prevIdx = i - 1;
-                                                                        if (prevIdx >= 0) {
-                                                                            const prevReg = filteredStudents[prevIdx].register_number;
-                                                                            const prevInput = document.getElementById(`input-${prevReg}`);
-                                                                            if (prevInput) prevInput.focus();
-                                                                        }
-                                                                    }
-                                                                }}
-                                                                onWheel={(e) => e.target.blur()}
-                                                                id={`input-${s.register_number}`}
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">{avg}%</div>
+                                                        <div className="text-xs text-slate-500 uppercase font-bold tracking-wider">Overall Perf.</div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Charts */}
+                                                <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl h-80">
+                                                    <h3 className="text-sm font-bold text-slate-400 uppercase mb-4">Performance Trend</h3>
+                                                    <ResponsiveContainer width="100%" height="100%">
+                                                        <BarChart data={chartData}>
+                                                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                                                            <XAxis dataKey="subject" stroke="#94a3b8" fontSize={10} />
+                                                            <YAxis stroke="#94a3b8" domain={[0, 100]} />
+                                                            <Tooltip
+                                                                contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155' }}
+                                                                formatter={(val, name, props) => [`${props.payload.raw}/${props.payload.max}`, props.payload.fullSubject]}
                                                             />
-                                                            {/* Individual Save Removed */}
-                                                        </div>
-                                                    </td>
-                                                    <td className="p-4 text-center">
-                                                        {gradingStatus[s.register_number] === 'saved' && <span className="text-emerald-400 flex justify-center animate-bounce"><Check className="w-5 h-5" /></span>}
-                                                        {gradingStatus[s.register_number] === 'error' && <span className="text-red-400 text-xs font-bold">Error</span>}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                                            <Bar dataKey="score" fill="#3b82f6" radius={[4, 4, 0, 0]} name="%" />
+                                                        </BarChart>
+                                                    </ResponsiveContainer>
+                                                </div>
+
+                                                {/* Details Table */}
+                                                <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl">
+                                                    <h3 className="text-sm font-bold text-slate-400 uppercase mb-4">Detailed Marks</h3>
+                                                    <div className="overflow-x-auto">
+                                                        <table className="w-full text-left">
+                                                            <thead className="bg-slate-950/30 text-xs uppercase text-slate-500">
+                                                                <tr>
+                                                                    <th className="p-3">Subject</th>
+                                                                    <th className="p-3">Exam</th>
+                                                                    <th className="p-3">Score</th>
+                                                                    <th className="p-3 text-right">Max</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody className="divide-y divide-slate-700/50 text-sm text-slate-300">
+                                                                {sMarks.map((m, i) => (
+                                                                    <tr key={i} className="hover:bg-slate-700/50">
+                                                                        <td className="p-3 font-medium">{m.subject}</td>
+                                                                        <td className="p-3 opacity-70">{m.exam_type}</td>
+                                                                        <td className="p-3 font-bold text-emerald-400">{m.score}</td>
+                                                                        <td className="p-3 text-right opacity-70">{m.max_marks}</td>
+                                                                    </tr>
+                                                                ))}
+                                                                {sMarks.length === 0 && <tr><td colSpan="4" className="p-6 text-center text-slate-500">No marks recorded.</td></tr>}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        );
+                                    })()}
+                                </>
+                            ) : (
+                                <div className="h-full flex flex-col items-center justify-center text-slate-500 opacity-50">
+                                    <BarChart2 className="w-16 h-16 mb-4" />
+                                    <p className="text-lg">Select a student to view analytics</p>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 )}
-
-                {
-                    activeTab === 'timetable' && (
-                        <div className="animate-slide-up">
-                            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-xl">
-                                <TimetableTab user={{ ...user, role: 'admin' }} />
-                            </div>
-                        </div>
-                    )
-                }
-
-                {
-                    activeTab === 'calendar' && (
-                        <div className="animate-slide-up">
-                            <CalendarTab user={{ ...user, role: 'admin' }} />
-                        </div>
-                    )
-                }
             </div >
+
 
             {
                 editMarkModalOpen && markToEdit && (

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Clock, Calendar, User, Edit2, Save, X, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Clock, Calendar, User, Edit2, Save, X, ChevronRight, ChevronLeft, RefreshCcw } from 'lucide-react';
 
 const TimetableTab = ({ user, initialDay }) => {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5005';
     const [schedule, setSchedule] = useState([]);
     const [meta, setMeta] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [adminBatch, setAdminBatch] = useState('GROUP_1'); // Default for admin view
+    const [refreshing, setRefreshing] = useState(false);
+    const [adminBatch, setAdminBatch] = useState('GROUP_2'); // Default: Batch 2 Only
     const [activeDay, setActiveDay] = useState('Day 1');
 
     // Day Colors
@@ -29,63 +30,23 @@ const TimetableTab = ({ user, initialDay }) => {
         fetchTimetable();
     }, [adminBatch]);
 
-    useEffect(() => {
-        if (initialDay) {
-            setActiveDay(initialDay);
-        } else {
-            // Calculate Day Order on Load
-            const today = new Date();
-            const dayOrder = calculateDayOrder(today);
-            if (dayOrder) {
-                setActiveDay(dayOrder);
-            }
-        }
-    }, [initialDay]);
+    // ... (useEffect for initialDay)
 
-    // Helper: Calculate Day Order (1-5) based on Anchor
-    // Anchor: Jan 13, 2026 (Tuesday) = Day 4
-    const calculateDayOrder = (date) => {
-        const anchorDate = new Date('2026-01-13T00:00:00'); // Day 4
-        // Reset hours for accurate diff
-        date.setHours(0, 0, 0, 0);
-        anchorDate.setHours(0, 0, 0, 0);
-
-        // Count ONLY weekdays (Mon-Fri) between anchor and date
-        let currentDate = new Date(anchorDate);
-        let daysDiff = 0;
-
-        // Direction
-        const isFuture = date >= anchorDate;
-
-        while (currentDate.getTime() !== date.getTime()) {
-            if (isFuture) {
-                currentDate.setDate(currentDate.getDate() + 1);
-                const day = currentDate.getDay();
-                if (day !== 0 && day !== 6) daysDiff++; // Skip Sun=0, Sat=6
-            } else {
-                const day = currentDate.getDay();
-                if (day !== 0 && day !== 6) daysDiff--;
-                currentDate.setDate(currentDate.getDate() - 1);
-            }
-        }
-
-        // Anchor is Day 4. 
-        // Formula: (BeginningDay + diff) % 5
-        // If result is 0, it means Day 5.
-        // We need 1-based index properly handled.
-
-        // 4 + diff
-        let calculated = (4 + daysDiff) % 5;
-        if (calculated <= 0) calculated += 5; // Handle negative modulo or 0
-
-        return `Day ${calculated}`;
-    };
+    // ... (calculateDayOrder)
 
     const fetchTimetable = async () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const params = isAdmin ? { batch: adminBatch } : {};
+            // Fix: Send batch param for students too, allowing them to switch views
+            const params = adminBatch ? { batch: adminBatch } : {};
+
+            // Special handling for "Personal" request if explicit
+            if (adminBatch === '' && !isAdmin) {
+                // If empty, backend defaults to auto-detect or personal.
+                // We can explicitly send 'PERSONAL' if we want to force it, but empty works for "Default behavior"
+            }
+
             const res = await axios.get(`${API_URL}/api/timetable`, {
                 headers: { Authorization: `Bearer ${token}` },
                 params
@@ -101,6 +62,23 @@ const TimetableTab = ({ user, initialDay }) => {
         } catch (error) {
             console.error("Failed to fetch timetable", error);
             setLoading(false);
+        }
+    };
+
+    const handleRefresh = async () => {
+        setRefreshing(true);
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post(`${API_URL}/api/academia/auto-sync`, {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            await fetchTimetable();
+            alert("Timetable refreshed successfully!");
+        } catch (error) {
+            console.error("Refresh failed", error);
+            alert("Refresh failed. Ensure you have synced manually at least once.");
+        } finally {
+            setRefreshing(false);
         }
     };
 
@@ -131,20 +109,70 @@ const TimetableTab = ({ user, initialDay }) => {
         }
     };
 
-    // Helper to organize by day
+    // Helper to organize by day with normalization
     const organizeByDay = () => {
         const days = {};
         ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'].forEach(d => days[d] = []);
+
         schedule.forEach(entry => {
+            // Normalize Period (1.0 -> 1)
+            let pStr = entry.period.toString();
+            if (pStr.endsWith('.0')) pStr = pStr.replace('.0', '');
+
+            // Normalize Time Range if missing
+            let tRange = entry.time_range;
+            if (!tRange || tRange.trim() === '') {
+                tRange = defaultTimeRanges[pStr] || '';
+            }
+
+            const cleanEntry = {
+                ...entry,
+                period: pStr,
+                time_range: tRange,
+                // If subject is just "A" or similar short code and fetch failed, showing it is better than nothing, 
+                // but we can make it look nicer.
+                subject: entry.subject
+            };
+
             if (!days[entry.day]) days[entry.day] = [];
-            days[entry.day].push(entry);
+            days[entry.day].push(cleanEntry);
         });
         return days;
     };
 
+    // Default Time Slots for Empty/Default View (SRM Standard)
+    const defaultTimeRanges = {
+        1: '08:00 - 08:50',
+        2: '08:50 - 09:40',
+        3: '09:45 - 10:35',
+        4: '10:40 - 11:30',
+        5: '11:35 - 12:25',
+        6: '12:30 - 01:20',
+        7: '01:25 - 02:15',
+        8: '02:20 - 03:10',
+        9: '03:10 - 04:00',
+        10: '04:00 - 04:50'
+    };
+
+    const getDefaultSchedule = (day) => {
+        return Array.from({ length: 10 }, (_, i) => ({
+            day: day,
+            period: (i + 1).toString(),
+            time_range: defaultTimeRanges[i + 1],
+            subject: 'Free Slot',
+            type: 'Theory',
+            teacher: '-',
+            room: '-',
+            code: ''
+        }));
+    };
+
     const daysData = organizeByDay();
     const sortedDays = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'];
-    const currentDaySchedule = daysData[activeDay]?.sort((a, b) => parseInt(a.period) - parseInt(b.period)) || [];
+
+    // Use fetched data if available, otherwise fallback to default structure
+    const fetchedSchedule = daysData[activeDay]?.sort((a, b) => parseInt(a.period) - parseInt(b.period)) || [];
+    const currentDaySchedule = fetchedSchedule.length > 0 ? fetchedSchedule : getDefaultSchedule(activeDay);
 
     return (
         <div className="space-y-6 animate-fade-in text-[var(--text-primary)]">
@@ -153,6 +181,16 @@ const TimetableTab = ({ user, initialDay }) => {
                     <h2 className="text-2xl font-bold flex items-center gap-2">
                         <Clock className="w-6 h-6" style={{ color: 'rgb(var(--accent-color))' }} />
                         {isAdmin ? 'Manage Timetable' : 'Class Schedule'}
+                        {!isAdmin && (
+                            <button
+                                onClick={handleRefresh}
+                                disabled={refreshing}
+                                className="ml-4 p-2 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition"
+                                title="Refresh Timetable from Academia"
+                            >
+                                <RefreshCcw size={18} className={refreshing ? "animate-spin" : ""} />
+                            </button>
+                        )}
                     </h2>
                     {meta && (
                         <div className="text-sm opacity-60 mt-1 flex items-center gap-3">
@@ -168,12 +206,11 @@ const TimetableTab = ({ user, initialDay }) => {
                     )}
                 </div>
 
-                {isAdmin && (
-                    <div className="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
-                        <button onClick={() => setAdminBatch('GROUP_1')} className={`px-4 py-1.5 rounded-md text-sm font-bold transition ${adminBatch === 'GROUP_1' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}>Group 1</button>
-                        <button onClick={() => setAdminBatch('GROUP_2')} className={`px-4 py-1.5 rounded-md text-sm font-bold transition ${adminBatch === 'GROUP_2' ? 'bg-blue-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}>Group 2</button>
+                <div className="flex bg-white/5 backdrop-blur-sm rounded-lg p-1 border border-white/10">
+                    <div className="px-3 py-1.5 rounded-md text-xs font-bold bg-purple-600 text-white shadow cursor-default">
+                        Batch 2
                     </div>
-                )}
+                </div>
             </div>
 
             {/* Day Selector Tabs */}
@@ -228,8 +265,11 @@ const TimetableTab = ({ user, initialDay }) => {
                                                 <td className="p-4 font-mono text-sm opacity-80 border-r border-white/5 text-center bg-white/5">{slot.period}</td>
                                                 <td className="p-4 text-xs font-bold opacity-60 whitespace-nowrap">{slot.time_range}</td>
                                                 <td className="p-4">
-                                                    <div className={`font-bold text-lg mb-1 ${slot.type === 'Lab' ? 'text-emerald-400' : 'text-[var(--text-primary)]'}`}>
-                                                        {slot.subject}
+                                                    <div className="flex flex-col">
+                                                        <span className="text-xs font-mono opacity-50 mb-0.5">{slot.code}</span>
+                                                        <div className={`font-bold text-lg mb-1 leading-tight ${slot.type === 'Lab' ? 'text-emerald-400' : 'text-[var(--text-primary)]'}`}>
+                                                            {slot.subject}
+                                                        </div>
                                                     </div>
                                                     {slot.type !== 'Theory' && (
                                                         <span className={`text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider ${slot.type === 'Lab' ? 'bg-emerald-500/20 text-emerald-300' :
@@ -240,9 +280,16 @@ const TimetableTab = ({ user, initialDay }) => {
                                                     )}
                                                 </td>
                                                 <td className="p-4 opacity-80 text-sm">
-                                                    <div className="flex items-center gap-2">
-                                                        {slot.teacher && <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px]"><User size={12} /></div>}
-                                                        {slot.teacher || slot.staff || '-'}
+                                                    <div className="flex flex-col gap-1">
+                                                        <div className="flex items-center gap-2">
+                                                            {slot.teacher && <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-[10px]"><User size={10} /></div>}
+                                                            <span className="truncate max-w-[150px]">{slot.teacher || slot.staff || '-'}</span>
+                                                        </div>
+                                                        {slot.room && (
+                                                            <div className="flex items-center gap-2 text-xs font-mono text-amber-400/80">
+                                                                <span className="bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">Room: {slot.room}</span>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </td>
                                                 {isAdmin && (
@@ -282,6 +329,7 @@ const TimetableTab = ({ user, initialDay }) => {
                                                     <span className="text-xl font-bold font-mono">{slot.period}</span>
                                                 </div>
                                                 <div>
+                                                    {slot.code && <div className="text-[10px] font-mono opacity-50">{slot.code}</div>}
                                                     <div className={`font-bold text-lg leading-tight ${slot.type === 'Lab' ? 'text-emerald-400' : 'text-[var(--text-primary)]'}`}>
                                                         {slot.subject}
                                                     </div>
@@ -294,9 +342,16 @@ const TimetableTab = ({ user, initialDay }) => {
                                         </div>
 
                                         <div className="flex items-center justify-between pl-[60px]"> {/* Indent to align with text */}
-                                            <div className="flex items-center gap-2 text-sm opacity-70">
-                                                <User size={14} className="opacity-50" />
-                                                {slot.teacher || slot.staff || 'No Staff'}
+                                            <div className="flex flex-col gap-1">
+                                                <div className="flex items-center gap-2 text-sm opacity-70">
+                                                    <User size={14} className="opacity-50" />
+                                                    {slot.teacher || slot.staff || 'No Staff'}
+                                                </div>
+                                                {slot.room && (
+                                                    <div className="flex items-center gap-2 text-xs font-mono text-amber-400/80">
+                                                        <span className="bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20">Room: {slot.room}</span>
+                                                    </div>
+                                                )}
                                             </div>
 
                                             {slot.type !== 'Theory' && (
