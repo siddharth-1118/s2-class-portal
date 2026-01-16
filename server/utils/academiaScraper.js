@@ -76,8 +76,27 @@ async function scrapeTimetable(username, password) {
     let browser;
     try {
         log(`[Scraper] Starting Advanced Scrape for: ${username} `);
+        const execPath = puppeteer.executablePath();
+        log(`[Scraper] Puppeteer Executable Path: ${execPath}`);
+
+        try {
+            if (fs.existsSync(execPath)) {
+                log('[Scraper] Chrome binary exists at path.');
+            } else {
+                log('[Scraper] Chrome binary NOT found at path. Listing .cache dir...');
+                // Debug listing
+                const cacheDir = require('path').join(__dirname, '..', '.cache', 'puppeteer');
+                if (fs.existsSync(cacheDir)) {
+                    log(`Contents of ${cacheDir}: ${fs.readdirSync(cacheDir)}`);
+                } else {
+                    log(`Cache dir ${cacheDir} does not exist.`);
+                }
+            }
+        } catch (e) { log(`[Debug] Path check error: ${e.message}`); }
+
         browser = await puppeteer.launch({
             headless: 'new',
+            executablePath: execPath,
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
 
