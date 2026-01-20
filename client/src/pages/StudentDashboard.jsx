@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
-import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save, Calendar, BarChart2, Settings, Palette, User, Utensils, Award, Menu } from 'lucide-react';
+import { Bell, LogOut, BookOpen, Clock, AlertCircle, CheckCircle, GraduationCap, Lock, Save, Calendar, BarChart2, Settings, Palette, User, Utensils, Award, Menu, Sparkles } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
 import CalendarTab from '../components/CalendarTab';
@@ -302,9 +302,13 @@ const StudentDashboard = () => {
                     userVisibleOnly: true,
                     applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
                 });
+
+                // Fix: Serialize subscription correctly
+                const subJson = subscription.toJSON();
+
                 await fetch(`${API_URL}/api/notifications/subscribe`, {
                     method: 'POST',
-                    body: JSON.stringify({ ...subscription, user_email: user.email }),
+                    body: JSON.stringify({ ...subJson, user_email: user.email }),
                     headers: { 'Content-Type': 'application/json' }
                 });
                 setIsSubscribed(true);
@@ -338,7 +342,6 @@ const StudentDashboard = () => {
                             // Refresh all data
                             fetchTimetable();
                             fetchStudentProfile();
-                            fetchAttendance(); // Need access to this function or reload
                             window.location.reload(); // Simplest way to refresh everything including context if needed
                         }} />
                     </div>
@@ -822,7 +825,7 @@ const StudentDashboard = () => {
                                     </div>
                                 ) : (
                                     <div className="text-center text-sm opacity-50 py-4 text-[var(--text-primary)]">
-                                        <FaSync className="w-3 h-3 inline-block mr-1" /> Details auto-synced from Academia.
+                                        <Sparkles className="w-3 h-3 inline-block mr-1" /> Details auto-synced from Academia.
                                     </div>
                                 )}
                             </div>

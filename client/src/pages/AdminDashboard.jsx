@@ -50,9 +50,8 @@ const AdminDashboard = () => {
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [editForm, setEditForm] = useState({ register_number: '', name: '', mobile: '', section: '' });
 
-    // Timetable State
-    const [timetable, setTimetable] = useState([]);
-    const [ttForm, setTtForm] = useState({ day: 'Day 1', period: '1', time_range: '09:00 - 10:00', subject: '', teacher: '' });
+    // Timetable State - REMOVED legacy form state, using TimetableTab component instead
+
 
     // Edit Mark State
     const [editMarkModalOpen, setEditMarkModalOpen] = useState(false);
@@ -86,7 +85,8 @@ const AdminDashboard = () => {
         fetchHomeworks();
         fetchStudents();
         fetchMarks();
-        fetchTimetable();
+        // fetchTimetable(); // Handled by TimetableTab component
+
 
         // Initial Fetch for Users or Notices (to populate student list)
         // Initial Fetch for Users or Notices (to populate student list)
@@ -124,25 +124,11 @@ const AdminDashboard = () => {
         } catch (e) { console.error(e); }
     }
 
-    const fetchTimetable = async () => {
-        try {
-            const res = await fetch(`${API_URL}/api/timetable`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } });
-            setTimetable(await res.json());
-        } catch (e) { console.error(e); }
-    }
+    // const fetchTimetable = async () => { ... } // Removed legacy fetch
 
-    const handleTimetableSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await fetch(`${API_URL}/api/timetable`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-                body: JSON.stringify(ttForm)
-            });
-            alert('Schedule Updated');
-            fetchTimetable();
-        } catch (e) { console.error(e); }
-    }
+
+    // handleTimetableSubmit removed
+
 
     const handleDeleteHomework = async (id) => {
         if (!confirm('Delete assignment?')) return;
@@ -407,6 +393,8 @@ Student RA2411003010003 got 45 marks"
                     { id: 'users', label: 'Users', icon: <Users className="w-5 h-5" /> },
                     { id: 'notices', label: 'Notices', icon: <Send className="w-5 h-5" /> },
                     { id: 'mess', label: 'Mess', icon: <Utensils className="w-5 h-5" /> },
+                    { id: 'calendar', label: 'Calendar', icon: <Calendar className="w-5 h-5" /> },
+                    { id: 'timetable', label: 'Timetable', icon: <Calendar className="w-5 h-5" /> },
                     { id: 'students', label: 'Grading', icon: <GraduationCap className="w-5 h-5" /> },
                 ]}
             />
@@ -424,6 +412,9 @@ Student RA2411003010003 got 45 marks"
                         <div className="flex gap-2 p-1 bg-slate-800 rounded-full border border-slate-700">
                             <button onClick={() => setActiveTab('homework')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'homework' ? 'bg-violet-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><FileText className="w-4 h-4" /> Homework</button>
                             <button onClick={() => setActiveTab('notices')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'notices' ? 'bg-yellow-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Send className="w-4 h-4" /> Notices</button>
+                            <button onClick={() => setActiveTab('mess')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'mess' ? 'bg-pink-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Utensils className="w-4 h-4" /> Mess</button>
+                            <button onClick={() => setActiveTab('calendar')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'calendar' ? 'bg-orange-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Calendar className="w-4 h-4" /> Calendar</button>
+                            <button onClick={() => setActiveTab('timetable')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'timetable' ? 'bg-purple-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><Calendar className="w-4 h-4" /> Timetable</button>
                             <button onClick={() => setActiveTab('analytics')} className={`px-4 py-2 rounded-full text-sm font-medium transition flex items-center gap-2 whitespace-nowrap ${activeTab === 'analytics' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-700/50'}`}><BarChart2 className="w-4 h-4" /> Student Analytics</button>
                         </div>
                         <div className="h-6 w-px bg-slate-700 hidden md:block"></div>
@@ -690,6 +681,23 @@ Student RA2411003010003 got 45 marks"
                         </div>
                     </div>
                 )}
+                {activeTab === 'timetable' && (
+                    <div className="animate-slide-up">
+                        <TimetableTab user={user} />
+                    </div>
+                )}
+
+                {activeTab === 'mess' && (
+                    <div className="animate-slide-up">
+                        <MessTab isAdmin={true} />
+                    </div>
+                )}
+
+                {activeTab === 'calendar' && (
+                    <div className="animate-slide-up">
+                        <CalendarTab user={user} />
+                    </div>
+                )}
             </div >
 
 
@@ -743,6 +751,12 @@ Student RA2411003010003 got 45 marks"
                     </div>
                 )
             }
+
+            {activeTab === 'timetable' && (
+                <div className="animate-slide-up">
+                    <TimetableTab user={user} />
+                </div>
+            )}
 
         </div >
     );

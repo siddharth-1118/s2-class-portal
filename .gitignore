@@ -8,3 +8,8 @@ database.sqlite
 debug_output.txt
 debug_result.txt
 .env.local
+.cache/
+server/.cache/
+client/.cache/
+npm-debug.log
+yarn-error.log

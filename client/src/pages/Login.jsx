@@ -37,7 +37,14 @@ const Login = () => {
             });
 
             const data = await res.json();
+            console.log("Login Response Data:", data); // DEBUG
+
             if (!res.ok) throw new Error(data.message || 'Login failed');
+
+            if (!data.user) {
+                console.error("Login successful but no user data:", data);
+                throw new Error("Invalid server response: Missing user data");
+            }
 
             login(data);
             navigate(data.user.role === 'admin' ? '/admin' : '/student');

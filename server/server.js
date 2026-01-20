@@ -88,6 +88,16 @@ const PORT = process.env.PORT || 5000;
 const seed = require('./scripts/seed_students');
 seed(); // Auto-seed on startup
 
-server.listen(PORT, () => {
+const instance = server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+});
+
+instance.on('error', (e) => {
+    if (e.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use!!`);
+        process.exit(1);
+    } else {
+        console.error("Server Error:", e);
+        process.exit(1);
+    }
 });

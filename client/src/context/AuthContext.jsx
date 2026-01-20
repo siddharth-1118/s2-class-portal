@@ -11,13 +11,33 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         const storedUser = localStorage.getItem('user');
-        if (token && storedUser) {
-            setUser(JSON.parse(storedUser));
+
+        if (token && storedUser && storedUser !== "undefined") {
+            try {
+                const parsedUser = JSON.parse(storedUser);
+                setUser(parsedUser);
+            } catch (e) {
+                console.error("Failed to parse stored user:", e);
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                setUser(null);
+            }
+        } else {
+            // clean up if partial data
+            if (!token || !storedUser || storedUser === "undefined") {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                setUser(null);
+            }
         }
         setLoading(false);
     }, []);
 
     const login = (data) => {
+        if (!data.user) {
+            console.error("Attempted to login with no user data");
+            return;
+        }
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
         setUser(data.user);

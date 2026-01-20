@@ -222,6 +222,9 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role, name: user.name, is_approved: user.is_approved }, process.env.JWT_SECRET, { expiresIn: '24h' });
+
+    console.log(`[Auth] Login Successful for ${email}. Role: ${user.role}, Name: ${user.name}`);
+
     res.json({ token, user: { id: user.id, email: user.email, role: user.role, name: user.name, is_approved: user.is_approved } });
 });
 

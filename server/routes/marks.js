@@ -180,15 +180,34 @@ router.put('/:id', authenticateToken, requireAdmin, (req, res) => {
 // STUDENT PROFILE MANAGEMENT
 
 // GET Profile (Student)
+// GET Profile (Student)
 router.get('/profile', authenticateToken, (req, res) => {
+    // Fetch from USERS table (primary source)
     const user = db.prepare('SELECT * FROM users WHERE email = ?').get(req.user.email);
     if (!user) return res.sendStatus(401);
-    if (!user.linked_reg_no) {
-        return res.json({ name: user.name, register_number: null, is_locked: false });
+
+    const responseData = {
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+        section: user.section,
+        register_number: user.linked_reg_no || null,
+        is_locked: false // Default to unlocked if only in users table
+    };
+
+    // If linked, try to fetch/merge details from students_list (legacy/admin source)
+    if (user.linked_reg_no) {
+        const student = db.prepare('SELECT * FROM students_list WHERE register_number = ?').get(user.linked_reg_no);
+        if (student) {
+            // Prioritize USERS table data if set, otherwise fallback to student list
+            responseData.mobile = responseData.mobile || student.mobile;
+            responseData.section = responseData.section || student.section;
+            responseData.name = responseData.name || student.name; // Keep name synced? User table name is usually definitive after login.
+            responseData.is_locked = true; // Lock if linked to official record
+        }
     }
-    const student = db.prepare('SELECT * FROM students_list WHERE register_number = ?').get(user.linked_reg_no);
-    if (!student) return res.status(404).json({ message: 'Linked record missing' });
-    res.json({ ...student, is_locked: true });
+
+    res.json(responseData);
 });
 
 // UPDATE Profile (Student - One Time Link)
