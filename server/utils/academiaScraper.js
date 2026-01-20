@@ -3,10 +3,10 @@ const fs = require('fs');
 
 // Shared Browser Launcher
 async function launchBrowser() {
-    const execPath = puppeteer.executablePath();
+    // const execPath = puppeteer.executablePath(); // Let Puppeteer resolve the default path automatically
     return await puppeteer.launch({
         headless: 'new',
-        executablePath: execPath,
+        // executablePath: execPath, 
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
