@@ -25,8 +25,8 @@ const SUBJECT_MAP = {
 // Group 1 (Register Nos: 869 - 906)
 // Using the transcribed schedule data for now (to be updated if different)
 const GROUP_1_SCHEDULE = {
-    1: ['B', 'B', 'G', 'G', 'A', 'A', 'A', 'A', 'A', 'A'],
-    2: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'F', 'F', 'G'],
+    1: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'F', 'F', 'G'],
+    2: ['B', 'B', 'G', 'G', 'A', 'A', 'A', 'A', 'A', 'A'],
     3: ['A', 'A', 'P_PHY', 'P_PHY', 'A', 'C', 'C', 'A', 'D', 'B'],
     4: ['D', 'D', 'B', 'A', 'C', 'A', 'P_EG', 'P_EG', 'P_EG', 'P_EG'],
     5: ['A', 'ENV', 'COI', 'A', 'A', 'A', 'A', 'C', 'F', 'D']
@@ -35,8 +35,8 @@ const GROUP_1_SCHEDULE = {
 // Group 2 (Register Nos: 907 - 940 & 603)
 // Currently identical to Group 1
 const GROUP_2_SCHEDULE = {
-    1: ['B', 'B', 'G', 'G', 'A', 'A', 'A', 'A', 'A', 'A'],
-    2: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'F', 'F', 'G'],
+    1: ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'F', 'F', 'G'],
+    2: ['B', 'B', 'G', 'G', 'A', 'A', 'A', 'A', 'A', 'A'],
     3: ['A', 'A', 'P_PHY', 'P_PHY', 'A', 'C', 'C', 'A', 'D', 'B'],
     4: ['D', 'D', 'B', 'A', 'C', 'A', 'P_EG', 'P_EG', 'P_EG', 'P_EG'],
     5: ['A', 'ENV', 'COI', 'A', 'A', 'A', 'A', 'C', 'F', 'D']

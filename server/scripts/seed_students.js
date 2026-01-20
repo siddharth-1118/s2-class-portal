@@ -92,6 +92,20 @@ const seed = () => {
 
     insertMany(students);
     console.log(`Seeded ${students.length} students.`);
+
+    // --- Seed Admin User ---
+    const bcrypt = require('bcryptjs');
+    const adminEmail = 'saisiddharthvooka@gmail.com';
+    const adminPassword = 'vSs@11182007';
+    const hashedPassword = bcrypt.hashSync(adminPassword, 10);
+
+    const insertUser = db.prepare(`
+        INSERT OR IGNORE INTO users (email, password, role, name) 
+        VALUES (?, ?, ?, ?)
+    `);
+
+    insertUser.run(adminEmail, hashedPassword, 'admin', 'Sidharth Vooka');
+    console.log('Seeded Admin User successfully.');
 };
 
 if (require.main === module) {
