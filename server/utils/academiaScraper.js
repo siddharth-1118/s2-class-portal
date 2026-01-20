@@ -158,17 +158,95 @@ async function scrapeTimetable(username, password) {
         await loginToAcademia(page, username, password, log);
         if (page.url().includes('login')) throw new Error('Login failed. Check credentials.');
 
-        // 1.1 Scrape Profile
-        const profile = await scrapeProfile(page);
-        log(`[Scraper] Logged in as: ${profile.name} (${profile.regNo})`);
+        // 2. Scrape My_Time_Table_2023_24 (Target)
+        log(`Visiting My Time Table (Target): https://academia.srmist.edu.in/#Page:My_Time_Table_2023_24`);
+        await page.goto('https://academia.srmist.edu.in/#Page:My_Time_Table_2023_24', { waitUntil: 'networkidle2' });
 
-        // Phase 1: Unified Timetables (Metadata)
-        // Skip for now to save memory/time if not critical
-        // const batch1Map = await scrapeUnifiedTimetable(page, 'https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_Batch_1', log); 
-        // const batch2Map = await scrapeUnifiedTimetable(page, 'https://academia.srmist.edu.in/#Page:Unified_Time_Table_2025_batch_2', log); 
+        try {
+            await page.waitForSelector('table', { timeout: 20000 });
+        } catch (e) {
+            log("My Data: Found 0 slots (Timeout).");
+        }
 
-        // Phase 2: Personal My_Time_Table (Structure)
-        const myTimetable = await scrapeMyTimeTable(page, log);
+        // 3. Extract Profile Data from Timetable Page (Fallback)
+        const profile = await page.evaluate(() => {
+            const data = { name: '', regNo: '', mobile: '', section: '', email: '' }; // Defaults
+            const bodyText = document.body.innerText;
+
+            // Regex Extraction for Robustness
+            const regMatch = bodyText.match(/Register\s*No\.?\s*[:\-]?\s*([A-Z0-9]+)/i);
+            const nameMatch = bodyText.match(/Name\s*[:\-]?\s*([A-Z\s\.]+)/i);
+
+            if (regMatch) data.regNo = regMatch[1].trim();
+            if (nameMatch) data.name = nameMatch[1].trim();
+
+            // Fallback: Try finding tables with specific headers if regex fails
+            if (!data.regNo) {
+                const tds = Array.from(document.querySelectorAll('td'));
+                const find = (label) => {
+                    const el = tds.find(td => td.innerText.includes(label));
+                    return el && el.nextElementSibling ? el.nextElementSibling.innerText.trim() : '';
+                };
+                data.regNo = find('Register No');
+                data.name = find('Name');
+            }
+
+            return data;
+        });
+
+        log(`[Scraper] Extracted Profile: ${JSON.stringify(profile)}`);
+
+        // 4. Scrape Timetable Data (Robust Parsing)
+        const myTimetable = await page.evaluate(() => {
+            const slots = [];
+            const tables = Array.from(document.querySelectorAll('table'));
+
+            // Find the main timetable grid (biggest table usually)
+            // Or look for specific headers like 'Day' or '1', '2', '3'
+
+            for (const table of tables) {
+                const rows = Array.from(table.querySelectorAll('tr'));
+                let dayCounter = 1;
+
+                rows.forEach((row) => {
+                    const cells = Array.from(row.querySelectorAll('td'));
+
+                    // Filter for valid timetable rows (usually many columns)
+                    if (cells.length > 5) {
+                        cells.forEach((cell, colIndex) => {
+                            const text = cell.innerText.trim();
+
+                            // "AI" Logic: Identify Course Codes
+                            // Matches: 2 digits, 2+ letters, etc. (e.g., 21PYB102J, 18CSC207J)
+                            // Or standard patterns like 'P_PHY'
+                            const codeMatch = text.match(/(\d{2}[A-Z]{3}\d{3}[A-Z]?)|([A-Z]+_\w+)/);
+
+                            if (codeMatch || (text.length > 5 && text.includes('-'))) {
+                                const code = codeMatch ? codeMatch[0] : (text.split(' ')[0] || text);
+                                const subjectName = text.replace(code, '').trim() || text;
+
+                                slots.push({
+                                    day: dayCounter, // We might need to map row index to Day Name if present
+                                    period: colIndex,
+                                    content: text,
+                                    code: code,
+                                    subject: subjectName,
+                                    type: text.toLowerCase().includes('lab') ? 'Lab' : 'Theory',
+                                    staff: '',
+                                    room: ''
+                                });
+                            }
+                        });
+                        // Only increment day if we actually found something or it looks like a day row
+                        if (cells.some(c => c.innerText.match(/\d{2}[A-Z]{3}/))) {
+                            dayCounter++;
+                        }
+                    }
+                });
+            }
+            return slots;
+        });
+
         log(`[Scraper] My Data: Found ${myTimetable.length} slots.`);
 
         return { timetable: myTimetable, attendance: [], profile: profile, batch1Grid: [], batch2Grid: [] };
@@ -181,220 +259,14 @@ async function scrapeTimetable(username, password) {
     }
 }
 
-// Scrape Profile
-async function scrapeProfile(page) {
-    const log = (msg) => console.log(`[ProfileScraper] ${msg}`);
-    try {
-        log("Navigating to My Profile...");
-        await page.goto('https://academia.srmist.edu.in/#Page:My_Profile', { waitUntil: 'networkidle2' });
-
-        // Robust Wait
-        try {
-            await page.waitForFunction(
-                () => document.body.innerText.includes('Register Number') || document.body.innerText.includes('Student Name'),
-                { timeout: 30000 }
-            );
-        } catch (e) {
-            log("Profile text not found.");
-        }
-
-        const profileData = await page.evaluate(() => {
-            const data = { name: '', regNo: '', mobile: '', section: '', email: '' };
-            const tds = Array.from(document.querySelectorAll('td'));
-            const findValue = (label) => {
-                const labelTd = tds.find(td => td.innerText.includes(label));
-                if (labelTd && labelTd.nextElementSibling) {
-                    return labelTd.nextElementSibling.innerText.trim();
-                }
-                return '';
-            };
-            data.regNo = findValue('Register Number');
-            data.name = findValue('Student Name');
-            data.mobile = findValue('Mobile Number');
-            data.email = findValue('Email ID');
-            return data;
-        });
-
-        if (!profileData.regNo) log("Profile table not found.");
-        else log(`Extracted: ${JSON.stringify(profileData)}`);
-
-        return profileData;
-    } catch (e) {
-        log(`Profile Error: ${e.message}`);
-        return { name: '', regNo: '' };
-    }
-}
-
-// Helper: Scrape Unified (Metadata)
-async function scrapeUnifiedTimetable(page, url, log) {
-    try {
-        log(`Visiting Unified (Metadata): ${url}`);
-        await page.goto(url, { waitUntil: 'networkidle2' });
-        // Wait for grid?
-        try {
-            await page.waitForSelector('table', { timeout: 10000 });
-        } catch (e) {
-            log(`Warning: Timeout waiting for grid on ${url}`);
-            return { map: {} };
-        }
-
-        // Simpler: Just return empty map if too complex to restore blindly. 
-        // The user cares about Personal Timetable mainly.
-        return { map: {} };
-    } catch (e) {
-        return { map: {} };
-    }
-}
-
-// Helper: Scrape My Table
-async function scrapeMyTimeTable(page, log) {
-    log(`Visiting My Time Table (Target): https://academia.srmist.edu.in/#Page:My_Time_Table_2023_24`);
-    await page.goto('https://academia.srmist.edu.in/#Page:My_Time_Table_2023_24', { waitUntil: 'networkidle2' });
-
-    try {
-        await page.waitForSelector('table', { timeout: 20000 });
-    } catch (e) {
-        log("My Data: Found 0 slots (Timeout).");
-        return [];
-    }
-
-    // Evaluate
-    return await page.evaluate(() => {
-        const slots = [];
-        const rows = Array.from(document.querySelectorAll('table tbody tr'));
-
-        // standard day mapping if rows don't have day names
-        let dayCounter = 1;
-
-        rows.forEach((row, rowIndex) => {
-            const cells = Array.from(row.querySelectorAll('td'));
-            // Heuristic: Timetable rows usually have many columns (e.g., > 8)
-            if (cells.length > 5) {
-                cells.forEach((cell, colIndex) => {
-                    const text = cell.innerText.trim();
-                    // Regex for Course Code (e.g., 21PYB102J or 18CS...)
-                    // Matches 2 digits + 3 letters + ...
-                    if (text.match(/\d{2}[A-Z]{3}/) || (text.length > 5 && text.includes('-'))) {
-                        slots.push({
-                            day: dayCounter,
-                            period: colIndex, // Approximate period
-                            content: text,
-                            code: text.split(' ')[0] || text,
-                            type: 'Theory', // Default
-                            staff: '',
-                            room: ''
-                        });
-                    }
-                });
-                dayCounter++;
-            }
-        });
-        return slots;
-    });
-}
-
-// Scrape Attendance
-async function scrapeAttendance(username, password) {
-    const log = (msg) => console.log(`[AttendanceScraper] ${msg}`);
-    let browser;
-    try {
-        log(`Scraping Attendance & Marks for ${username}...`);
-        const execPath = puppeteer.executablePath();
-        browser = await puppeteer.launch({
-            headless: 'new',
-            executablePath: execPath,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
-        });
-        const page = await browser.newPage();
-        await page.setViewport({ width: 1280, height: 800 });
-        await loginToAcademia(page, username, password, log);
-
-        // Navigate
-        // Navigate
-        await page.goto('https://academia.srmist.edu.in/#Page:My_Attendance', { waitUntil: 'networkidle2' });
-
-        // Wait for specific header to ensure data loaded
-        try {
-            await page.waitForFunction(
-                () => Array.from(document.querySelectorAll('th, td')).some(el => el.innerText.includes('Course Code')),
-                { timeout: 20000 }
-            );
-        } catch (e) {
-            log("Attendance table not found.");
-            return { attendance: [], marks: [] };
-        }
-
-        const data = await page.evaluate(() => {
-            const tables = Array.from(document.querySelectorAll('table'));
-            let targetTable = null;
-
-            // Find the exact table containing 'Course Code'
-            for (const table of tables) {
-                if (table.innerText.includes('Course Code') && table.innerText.includes('Attendance')) {
-                    targetTable = table;
-                    break;
-                }
-            }
-
-            if (!targetTable) return { attendance: [], marks: [] };
-
-            const rows = Array.from(targetTable.querySelectorAll('tr'));
-            const attendance = [];
-            const marks = [];
-
-            // Skip header (find index of header row)
-            let headerFound = false;
-
-            rows.forEach(row => {
-                const cols = Array.from(row.querySelectorAll('td'));
-                const textContent = row.innerText;
-
-                if (textContent.includes('Course Code') && textContent.includes('Attn %')) {
-                    headerFound = true;
-                    return; // Skip the header row itself
-                }
-
-                if (headerFound && cols.length >= 8) {
-                    // Filter out rows that are usually "Total" or garbage
-                    const code = cols[0]?.innerText.trim();
-                    if (code && code.match(/\d{2}[A-Z]{3}/)) {
-                        attendance.push({
-                            course_code: code,
-                            course_title: cols[1]?.innerText.trim(),
-                            category: cols[2]?.innerText.trim(),
-                            faculty_name: cols[3]?.innerText.trim(),
-                            slot: cols[4]?.innerText.trim(),
-                            hours_conducted: cols[5]?.innerText.trim(),
-                            hours_absent: cols[6]?.innerText.trim(),
-                            attendance_percentage: cols[7]?.innerText.trim()
-                        });
-                    }
-                }
-            });
-            return { attendance, marks };
-        });
-
-        return data;
-
-    } catch (e) {
-        log(`Error: ${e.message}`);
-        return { attendance: [], marks: [] };
-    } finally {
-        if (browser) await browser.close();
-    }
-}
-
+// Scrape Marks
 async function scrapeMarks(username, password) {
     const log = (msg) => console.log(`[MarksScraper] ${msg}`);
     let browser;
     try {
         log(`Scraping Marks for ${username}...`);
         const execPath = puppeteer.executablePath();
-        browser = await puppeteer.launch({
-            headless: 'new',
-            executablePath: execPath,
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1280,800']
-        });
+        browser = await launchBrowser(); // Use shared launcher logic
         const page = await browser.newPage();
         await page.setViewport({ width: 1280, height: 800 });
         page.setDefaultTimeout(60000);
@@ -408,7 +280,7 @@ async function scrapeMarks(username, password) {
         try {
             await page.waitForSelector('table', { timeout: 15000 });
         } catch (e) {
-            log("Standard detailed logic failed/timed out. Trying Internal Marks page...");
+            log("Standard failed. Trying Internal Marks...");
             await page.goto('https://academia.srmist.edu.in/#Page:Internal_Marks', { waitUntil: 'networkidle2' });
             await page.waitForSelector('table', { timeout: 15000 });
         }
@@ -416,31 +288,23 @@ async function scrapeMarks(username, password) {
         const marks = await page.evaluate(() => {
             const rows = Array.from(document.querySelectorAll('table tbody tr'));
             const data = [];
-            // Header heuristics: look for "Subject", "Total", "Max"
-            // Since structure varies, we'll exact robustly
             rows.forEach(row => {
                 const cols = Array.from(row.querySelectorAll('td'));
                 if (cols.length > 3) {
                     const textContent = cols.map(c => c.innerText.trim());
-                    // Heuristic: A valid mark row usually has a subject code and a score
-                    // Example: [18CSC207J, OS, ..., 48, 50, ...]
+                    // Heuristic: Subject + Scores
+                    // Look for Subject Name (text) and Scores (numbers)
 
-                    // Simple parsing for now - adjust based on real table structure
-                    // Assuming columns: Code, Name, ... Score, Max ...
-                    // We will grab the first string-like as subject, and numbers as score
-
-                    // Better: Try to find specific columns? 
-                    // Let's grab specific indices common in SRM portal
-                    // Index 0: Code, Index 1: Name, Index 4/5: Marks?
-
+                    // Simple parser: 
+                    // [Code, Name, ..., Score, Max, ...]
                     const subject = textContent[1] || textContent[0];
                     const possibleNums = textContent.filter(t => !isNaN(parseFloat(t)) && t.length < 4);
 
                     if (subject && possibleNums.length >= 2) {
                         data.push({
                             subject: subject,
-                            score: parseFloat(possibleNums[possibleNums.length - 2]), // Second to last number (often score)
-                            max_marks: parseFloat(possibleNums[possibleNums.length - 1]), // Last number (often max)
+                            score: parseFloat(possibleNums[possibleNums.length - 2]),
+                            max_marks: parseFloat(possibleNums[possibleNums.length - 1]),
                             exam_type: 'Internal'
                         });
                     }

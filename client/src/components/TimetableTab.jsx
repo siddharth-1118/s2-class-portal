@@ -30,9 +30,11 @@ const TimetableTab = ({ user, initialDay }) => {
         fetchTimetable();
     }, [adminBatch]);
 
-    // ... (useEffect for initialDay)
-
-    // ... (calculateDayOrder)
+    useEffect(() => {
+        if (initialDay) {
+            setActiveDay(initialDay);
+        }
+    }, [initialDay]);
 
     const fetchTimetable = async () => {
         setLoading(true);
